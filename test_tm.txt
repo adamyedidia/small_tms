@@ -1,0 +1,104 @@
+States: 17
+
+START start:
+	_ -> write_counter_1; R; E
+	1 -> ERROR; -; 1
+	H -> ERROR; -; H
+	E -> ERROR; -; E
+
+write_counter_H:
+	_ -> write_counter_out; R; H
+	1 -> ERROR; -; 1
+	H -> ERROR; -; H
+	E -> ERROR; -; E
+
+write_counter_1:
+	_ -> write_counter_H; R; 1
+	1 -> ERROR; -; 1
+	H -> ERROR; -; H
+	E -> ERROR; -; E
+
+write_counter_out:
+	_ -> write_var_value_underscore_2; R; _
+	1 -> ERROR; -; 1
+	H -> ERROR; -; H
+	E -> ERROR; -; E
+
+write_var_value_underscore_2:
+	_ -> write_var_value_name; R; _
+	1 -> ERROR; -; 1
+	H -> ERROR; -; H
+	E -> ERROR; -; E
+
+write_var_value_name:
+	_ -> write_var_value_underscore_3; R; E
+	1 -> ERROR; -; 1
+	H -> ERROR; -; H
+	E -> ERROR; -; E
+
+write_var_value_underscore_3:
+	_ -> write_var_value_underscore_4; R; _
+	1 -> ERROR; -; 1
+	H -> ERROR; -; H
+	E -> ERROR; -; E
+
+write_var_value_underscore_4:
+	_ -> write_var_value_underscore_5; R; _
+	1 -> ERROR; -; 1
+	H -> ERROR; -; H
+	E -> ERROR; -; E
+
+write_var_value_underscore_5:
+	_ -> write_var_value_underscore_6; R; _
+	1 -> ERROR; -; 1
+	H -> ERROR; -; H
+	E -> ERROR; -; E
+
+write_var_value_underscore_6:
+	_ -> write_var_value_initvalue_0; R; _
+	1 -> ERROR; -; 1
+	H -> ERROR; -; H
+	E -> ERROR; -; E
+
+write_var_value_find_H_1:
+	_ -> write_var_value_find_H_1; L; _
+	1 -> write_var_value_find_H_1; L; 1
+	H -> write_var_value_decrement_counter; L; H
+	E -> write_var_value_find_H_1; L; E
+
+write_var_value_decrement_counter:
+	_ -> write_var_value_delete_1; R; _
+	1 -> write_var_value_find_H_2; -; E
+	H -> ERROR; -; H
+	E -> write_var_value_decrement_counter; L; 1
+
+write_var_value_delete_1:
+	_ -> ERROR; -; _
+	1 -> write_var_value_find_H_2; -; _
+	H -> ACCEPT; -; _
+	E -> ERROR; -; E
+
+write_var_value_find_H_2:
+	_ -> write_var_value_find_H_2; R; _
+	1 -> write_var_value_find_H_2; R; 1
+	H -> write_var_value_find_H_3; R; H
+	E -> write_var_value_find_H_2; R; E
+
+write_var_value_find_H_3:
+	_ -> write_var_value_find_H_3; R; _
+	1 -> write_var_value_find_H_3; R; 1
+	H -> write_counter_out; R; _
+	E -> write_var_value_find_H_3; R; E
+
+write_var_value_initvalue_0:
+	_ -> write_var_value_initvalue_1; R; 1
+	1 -> ERROR; -; 1
+	H -> ERROR; -; H
+	E -> ERROR; -; E
+
+write_var_value_initvalue_1:
+	_ -> write_var_value_find_H_1; L; H
+	1 -> ERROR; -; 1
+	H -> ERROR; -; H
+	E -> ERROR; -; E
+

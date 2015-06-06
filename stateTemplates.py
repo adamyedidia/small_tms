@@ -1,0 +1,96 @@
+from state import *
+import sys
+
+def moveBy(state, name, amount, direction, nextState, alphabet=["_", "1", "H", "E"]):
+	returnList = [state]
+	
+	if amount == 0:
+		state.setAllNextStates(nextState)
+
+	elif amount == 1:
+		state.setAllNextStates(nextState)
+		state.setAllHeadMoves(direction)
+
+	else:
+		prevState = state
+		for i in range(amount - 1):
+			currentState = State(name + "move_by." + str(i+1), None, alphabet)
+
+			returnList.append(currentState)
+			prevState.setAllNextStates(currentState)
+			prevState.setAllHeadMoves(direction)
+			
+			prevState = currentState
+	
+		currentState.setAllNextStates(nextState)
+		currentState.setAllHeadMoves(direction)
+
+	return returnList
+
+def findEnd(state, nextState):
+	findSymbol(state, "E", "R", "-", nextState)
+
+def findSymbol(state, symbol, direction, lastDirection, nextState):
+	findSymbolW(state, symbol, direction, lastDirection, symbol, nextState)
+	
+
+def findSymbolW(state, symbol, direction, lastDirection, lastWrite, nextState):
+
+	state.setAllNextStates(state)
+	state.setNextState(symbol, nextState)
+
+	state.setAllHeadMoves(direction)
+	state.setHeadMove(symbol, lastDirection)
+	
+	state.setWrite(symbol, lastWrite)
+
+# Helper function for findPattern.
+# if string1 is "bbab", and string2 is "abb", then it returns "bb"; in other words, it finds the longest match between the start of string1 and the end of string2.
+def getBestPrefix(string1, string2):
+	# if string2 ends in string1
+#	print string1, string2
+	
+	if string1 == "":	
+		return ""
+
+	elif string1 == string2[-len(string1):]:
+		return string1
+	
+	else:
+		return getBestPrefix(string1[:-1], string2)
+
+def findPattern(state, nextState, listOfStates, name, pattern, direction, lastDirection, lastWrite, alphabet=["_", "1", "H", "E"]):
+
+	# reverse the pattern's order if we're going left
+	if direction == "L":
+		truePattern = pattern[::-1]
+
+	else:
+		truePattern = pattern
+
+	stringSeenToStateDict = {"": state, truePattern: nextState}
+
+	stringSoFar = ""	
+	for char in truePattern[-1]:
+		stringSoFar += char
+		
+		stringSeenToStateDict[stringSoFar] = State(name + "_recog_pattern_" + stringSoFar)
+		listOfStates.append(stringSeenToStateDict[stringSoFar])
+
+	stringSoFar = ""
+	for char in truePattern[-1]:
+		stringSoFar += char
+		stateSoFar = stringSeenToStateDict[stringSoFar]
+
+		# for each possible next transition, go to the longest prefix of the pattern from what's been seen
+		for symbol in alphabet:
+			newString = stringSoFar + symbol
+	
+			if newString == truePattern:
+				stateSoFar.setNextState(symbol, nextState)
+				stateSoFar.setHeadMove(symbol, lastDirection)
+				stateSoFar.setWrite(symbol, lastWrite)
+
+			else:
+				stateSoFar.setNextState(symbol, stringSeenToStateDict[getBestPrefix(pattern, newString)])
+				stateSoFar.setHeadMove(symbol, direction)
