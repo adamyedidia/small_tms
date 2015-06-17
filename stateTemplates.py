@@ -59,6 +59,7 @@ def getBestPrefix(string1, string2):
 	else:
 		return getBestPrefix(string1[:-1], string2)
 
+# Finds the pattern, for example "H_". You can find it from the left or the right; you should NOT reverse the input if you're going left. (The function does it for you)
 def findPattern(state, nextState, listOfStates, name, pattern, direction, lastDirection, lastWrite, alphabet=["_", "1", "H", "E"]):
 
 	# reverse the pattern's order if we're going left
@@ -71,15 +72,15 @@ def findPattern(state, nextState, listOfStates, name, pattern, direction, lastDi
 	stringSeenToStateDict = {"": state, truePattern: nextState}
 
 	stringSoFar = ""	
-	for char in truePattern[-1]:
+	for char in truePattern[:-1]:
 		stringSoFar += char
 		
 		stringSeenToStateDict[stringSoFar] = State(name + "_recog_pattern_" + stringSoFar)
 		listOfStates.append(stringSeenToStateDict[stringSoFar])
 
 	stringSoFar = ""
-	for char in truePattern[-1]:
-		stringSoFar += char
+	for char in truePattern:
+
 		stateSoFar = stringSeenToStateDict[stringSoFar]
 
 		# for each possible next transition, go to the longest prefix of the pattern from what's been seen
@@ -94,3 +95,5 @@ def findPattern(state, nextState, listOfStates, name, pattern, direction, lastDi
 			else:
 				stateSoFar.setNextState(symbol, stringSeenToStateDict[getBestPrefix(pattern, newString)])
 				stateSoFar.setHeadMove(symbol, direction)
+
+		stringSoFar += char

@@ -1,5 +1,6 @@
 import sys
 import string
+import math
 from state import *
 from stateTemplates import *
 
@@ -92,17 +93,17 @@ def writeCounter(listOfStates, inState, x):
 	barCode = convertNumberToBarCode(x)
 	listOfCounterWritingStates = [inState]
 
-	writeHState = State("write_counter_H")
+	writeHState = State("write_var_counter_H")
 	
 	listOfStates.append(inState)
 	listOfStates.append(writeHState)
 
 	for i in range(1, len(barCode)):
-		newState = State("write_counter_" + str(i))
+		newState = State("write__var_counter_" + str(i))
 		listOfCounterWritingStates.append(newState)
 		listOfStates.append(newState)
 
-	outState = State("write_counter_out")
+	outState = State("write_var_counter_out")
 	
 	listOfCounterWritingStates.append(writeHState)
 
@@ -113,7 +114,7 @@ def writeCounter(listOfStates, inState, x):
 
 	return outState
 
-def writeEachVariableValue(listOfStates, inState, initValueString):
+def writeEachVariableValue(listOfStates, inState, initValueString, numberOfVariables):
 
 	# inState might have been called write_State1
 	write_State2 = State("write_var_value_underscore_2")
@@ -127,7 +128,7 @@ def writeEachVariableValue(listOfStates, inState, initValueString):
 	delete1State = State("write_var_value_delete_1")
 	findHState2 = State("write_var_value_find_H_2")
 	findHState3 = State("write_var_value_find_H_3")
-	outState = SimpleState("ACCEPT") #Change this!!
+	outState = State("write_var_value_out")
 
 	listOfStates.extend([inState, write_State2, writeNameState, write_State3, write_State4, write_State5, write_State6, \
 		findHState1, decrementCounterState, delete1State, findHState2, findHState3])
@@ -138,7 +139,18 @@ def writeEachVariableValue(listOfStates, inState, initValueString):
 		listOfInitValueStates.append(State("write_var_value_initvalue_" + str(i)))
 			
 	inState.set3("_", write_State2, "R", "_")
-	write_State2.set3("_", writeNameState, "R", "_")
+
+	listOfNameSpaceStates = []
+	for i in range(int(math.log(numberOfVariables, 2))):
+		listOfNameSpaceStates.append(State("write_var_value_name_space_" + str(i)))
+	listOfNameSpaceStates.append(writeNameState)
+
+	write_State2.set3("_", listOfNameSpaceStates[0], "R", "_")
+
+	for i, state in enumerate(listOfNameSpaceStates[:-1]):
+		state.set3("_", listOfNameSpaceStates[i+1], "R", "_")
+		listOfStates.append(state)
+
 	writeNameState.set3("_", write_State3, "R", "E")
 	write_State3.set3("_", write_State4, "R", "_")
 	write_State4.set3("_", write_State5, "R", "_")
@@ -159,18 +171,156 @@ def writeEachVariableValue(listOfStates, inState, initValueString):
 	decrementCounterState.set3("_", delete1State, "R", "_")
 	
 	delete1State.set3("1", findHState2, "-", "_")
-	delete1State.set3("H", outState, "-", "_")
+	delete1State.set3("H", outState, "R", "H")
 
 	findSymbol(findHState2, "H", "R", "R", findHState3)
 	findSymbolW(findHState3, "H", "R", "R", "_", inState) 	
 
 	return outState
 
+def incrementEachIdentifier(listOfStates, inState):
+
+	markState = State("write_var_incr_mark")
+	findFinState = State("write_var_incr_find_fin")
+	getPastValueLeftState = State("write_var_incr_get_past_value_left")
+	findIdentifierState = State("write_var_incr_find_id")
+	incrementIdentifierState = State("write_var_incr_id")
+	find_State = State("write_var_incr_find_underscore")
+	findValueLeftState = State("write_var_incr_find_value_left")
+	findValueRightState = State("write_var_incr_find_value_right")
+	getPastValueRightState = State("write_var_incr_get_past_value_right")
+#	outState = SimpleState("ACCEPT")
+	outState = State("write_var_incr_out")
+
+	listOfStates.extend([inState, markState, findFinState, getPastValueLeftState, findIdentifierState, incrementIdentifierState, \
+		find_State, findValueLeftState, findValueRightState, getPastValueRightState])
+
+	# inState might have been called findNot_State
+	inState.set3("_", inState, "R", "_")
+	inState.set3("1", markState, "-", "1")
+	inState.set3("E", markState, "-", "E")
+
+	findSymbolW(markState, "_", "R", "R", "H", findFinState)
+	
+	findSymbol(findFinState, "H", "R", "L", getPastValueLeftState)
+	
+	findSymbol(getPastValueLeftState, "_", "L", "-", findIdentifierState)
+	
+	findIdentifierState.set3("_", findIdentifierState, "L", "_")
+	findIdentifierState.set3("1", incrementIdentifierState, "-", "1")
+	findIdentifierState.set3("E", incrementIdentifierState, "-", "E")
+	findIdentifierState.set3("H", findValueRightState, "-", "_")
+
+	incrementIdentifierState.set3("_", findValueLeftState, "L", "E")
+	incrementIdentifierState.set3("1", incrementIdentifierState, "L", "E")
+	incrementIdentifierState.set3("E", find_State, "-", "1")
+
+	findSymbol(find_State, "_", "L", "-", findValueLeftState)
+
+	findValueLeftState.set3("_", findValueLeftState, "L", "_")
+	findValueLeftState.set3("1", getPastValueLeftState, "-", "1")
+	findValueLeftState.set3("E", getPastValueLeftState, "-", "E")
+
+	findValueRightState.set3("_", findValueRightState, "R", "_")
+	findValueRightState.set3("1", getPastValueRightState, "-", "1")
+	findValueRightState.set3("E", getPastValueRightState, "-", "E")
+	
+	getPastValueRightState.set3("_", inState, "-", "_")
+	getPastValueRightState.set3("1", getPastValueRightState, "R", "1")
+	getPastValueRightState.set3("E", getPastValueRightState, "R", "E")
+	getPastValueRightState.set3("H", outState, "R", "_")
+
+	return outState
+
+# Puts heads in front of all the values, and puts the HH symbol to signal end of variable values
+def putHeadsEverywhere(listOfStates, inState):
+
+	# inState might have been called write_State
+	writeHState = State("write_var_heads_write_H")
+	findValueState = State("write_var_heads_find_value")
+	getPastValueState = State("write_var_heads_get_past_value")
+	findIdentifierState = State("write_var_heads_find_id")
+	getPastIdentifierState = State("write_var_heads_get_past_id")
+	getToFinState = State("write_var_heads_get_to_fin")
+	outState = State("write_var_heads_out")
+#	outState = SimpleState("ACCEPT")
+
+	listOfStates.extend([inState, writeHState, findValueState, getPastValueState, findIdentifierState, getPastIdentifierState, getToFinState])
+
+	inState.set3("_", writeHState, "R", "_")
+
+	writeHState.set3("_", findValueState, "L", "H")
+	
+	findValueState.set3("_", findValueState, "L", "_")
+	findValueState.set3("1", getPastValueState, "-", "1")
+	findValueState.set3("E", getPastValueState, "-", "E")
+	findValueState.set3("H", getToFinState, "R", "H")
+
+	findSymbolW(getPastValueState, "_", "L", "L", "H", findIdentifierState)
+
+	findIdentifierState.set3("_", findIdentifierState, "L", "_")
+	findIdentifierState.set3("1", getPastIdentifierState, "-", "1")
+	findIdentifierState.set3("E", getPastIdentifierState, "-", "E")
+	
+	findSymbol(getPastIdentifierState, "_", "L", "-", findValueState)
+
+	findPattern(getToFinState, outState, listOfStates, "write_var_heads", "H_", "R", "R", "H")
+
+	return outState
+
 def writeVariableValuesSkeleton(listOfStates, inState, numberOfVariables, initValueString):
 	inState = writeCounter(listOfStates, inState, numberOfVariables)
-	inState = writeEachVariableValue(listOfStates, inState, initValueString)
+	inState = writeEachVariableValue(listOfStates, inState, initValueString, numberOfVariables)
+	inState = incrementEachIdentifier(listOfStates, inState)
+	inState = putHeadsEverywhere(listOfStates, inState)
 	return inState
 	
+def writeAuxValues(listOfStates, inState, numberOfVariables, numberOfFunctions):
+	# Write "Keep head in place, write _, line 1, function 1"
+
+	# inState might have been called write_State1
+	write_State2 = State("write_aux_underscore_2")
+	write_State3 = State("write_aux_underscore_3")
+	writeEState1 = State("write_aux_E_1")
+	write_State4 = State("write_aux_underscore_4")
+	writeEState2 = State("write_aux_E_2")
+#	outState = State("write_aux_out")
+	outState = SimpleState("ACCEPT")	
+
+	listOfStates.extend([inState, write_State2, write_State3, writeEState1, write_State4, writeEState2])
+
+	inState.set3("_", write_State2, "R", "_")
+	write_State2.set3("_", write_State3, "R", "_")
+
+	listOfLineNumberSpaceStates = []
+	for i in range(int(math.log(numberOfVariables, 2))):
+		listOfLineNumberSpaceStates.append(State("write_aux_line_number_space_" + str(i)))
+	listOfLineNumberSpaceStates.append(writeEState1)
+
+	write_State3.set3("_", listOfLineNumberSpaceStates[0], "R", "_")
+
+	for i, state in enumerate(listOfLineNumberSpaceStates[:-1]):
+		state.set3("_", listOfLineNumberSpaceStates[i+1], "R", "_")
+		listOfStates.append(state)
+
+	writeEState1.set3("_", write_State4, "R", "E")
+
+	listOfFunctionNameSpaceStates = []
+	for i in range(int(math.log(numberOfFunctions, 2))):
+		listOfFunctionNameSpaceStates.append(State("write_aux_function_name_space_" + str(i)))
+	listOfFunctionNameSpaceStates.append(writeEState2)
+	
+	write_State4.set3("_", listOfFunctionNameSpaceStates[0], "R", "_")
+
+	for i, state in enumerate(listOfFunctionNameSpaceStates[:-1]):
+		state.set3("_", listOfFunctionNameSpaceStates[i+1], "R", "_")
+		listOfStates.append(state)
+	
+	writeEState2.set3("_", outState, "R", "E")
+
+	return outState
+
+def writeProgram(listOfStates, inState):
 
 def main():
 
@@ -222,9 +372,16 @@ def main():
 
 	listOfStates = []
 
-	writeVariableValuesSkeleton(listOfStates, inState, 4, initValueString)	
+	numberOfVariables = 4
+	numberOfFunctions = 2
+
+	inState = writeVariableValuesSkeleton(listOfStates, inState, numberOfVariables, initValueString)	
+	inState = writeAuxValues(listOfStates, inState, numberOfVariables, numberOfFunctions)
+	inState = writeProgram(listOfStates, inState)
 
 	convertStatesToString(listOfStates, open("test_tm.txt", "w"))
+
+
 
 ################################################################
 

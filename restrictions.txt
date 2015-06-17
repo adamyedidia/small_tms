@@ -1,0 +1,5 @@
+restrictions:
+-initvar cannot contain underscores (reason: initialization function writeVariableValuesSkeleton in writer.py will be screwed up otherwise)
+
+todo: 
+-make the number of underscores in the value zone logarithmic in the number of variables; make sure we haven't forgotten anything.

@@ -1,6 +1,6 @@
 
 
-[variable values] [aux info, line number] [function stack] [program description] 
+[variable values]__HH__[aux info, line number] [function stack] [program description] 
 
 
 variable values:
@@ -13,12 +13,14 @@ program:
 
 1 = L
 E = R
-
+_ = -
 
 "LABEL: x: _ (L, LABEL); 1 (_, R)..."
 
 
 [lineNumber]_1[varName]_[symbolRead][symbolWritten][headMove][lineNumber]_[symbolRead][symbolWritten][headMove][lineNumber]__[lineNumber]_[varName]...
+
+___[fnctionName]...
 
 1EE1E1_
 
