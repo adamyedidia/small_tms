@@ -15,12 +15,12 @@ program:
 E = R
 _ = -
 
-"LABEL: x: _ (L, LABEL); 1 (_, R)..."
+"LABEL: [x] _ (L, LABEL); 1 (_, R)..."
 
 
 [lineNumber]_1[varName]_[symbolRead][symbolWritten][headMove][lineNumber]_[symbolRead][symbolWritten][headMove][lineNumber]__[lineNumber]_[varName]...
 
-___[fnctionName]...
+___[functionName]...
 
 1EE1E1_
 
@@ -28,7 +28,7 @@ HH1EE1E1__H_H1H1EE1E1_1H_HE_H...
 
 "function f x1 x2 x3"
 
-[lineNumber]_E[functionName]_[varName1]_[varname2]...
+[lineNumber]_E[functionName]_[varName1]_[varName2]...
 
 HH1E1E11H1EE1EH1E1H11EH1EE
 

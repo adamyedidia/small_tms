@@ -1,0 +1,6 @@
+input x y z
+
+FIRST: [x] _ (L, SECOND); 1 (_, R)
+function mult x y z
+SECOND: function add y z x
+return

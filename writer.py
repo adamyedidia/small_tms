@@ -34,6 +34,49 @@ def convertStatesToString(listOfStates, output):
 				state.getHeadMove(symbol) + "; " + state.getWrite(symbol) + "\n")
 		
 		output.write("\n")
+        
+def getFunctionLabelDictionary(functions, path):
+
+	functionLabelDictionary = {}
+	functionDictionary = {}
+
+	functionCounter = 1
+
+	for function in functions:
+
+		functionLabelDictionary[function] = {}		
+		functionDictionary[function] = functionCounter
+ 
+		functionLines = open(path + string.strip(function) + ".tfn", "r")
+
+		lineCounter = 1
+		
+		for line in functionLines:
+			if ":" in line:
+				label = string.split(line, ":")[0]
+				functionLabelDictionary[function][label] = lineCounter
+
+			lineCounter += 1
+
+		functionCounter += 1
+        
+	return functionLabelDictionary, functionDictionary
+    
+def getFunctionVariableDictionary(functions, path):
+    functionVariableDictionary = {}
+    
+    for function in functions:
+        
+        functionVariableDictionary[function] = {}
+        
+        functionLines = open(path + string.strip(function) + ".tfn", "r").readlines()
+        
+        firstLine = functionLines[0]
+        
+        for i, variableName in enumerate(string.split(firstLine)[1:]):
+            functionVariableDictionary[function][variableName] = i+1
+            
+    return functionVariableDictionary
 
 def convertNumberToBarCode(number, setOfSymbols = ["E", "1"]):
 
@@ -284,8 +327,8 @@ def writeAuxValues(listOfStates, inState, numberOfVariables, numberOfFunctions):
 	writeEState1 = State("write_aux_E_1")
 	write_State4 = State("write_aux_underscore_4")
 	writeEState2 = State("write_aux_E_2")
-#	outState = State("write_aux_out")
-	outState = SimpleState("ACCEPT")	
+	outState = State("write_aux_out")
+#	outState = SimpleState("ACCEPT")	
 
 	listOfStates.extend([inState, write_State2, write_State3, writeEState1, write_State4, writeEState2])
 
@@ -320,7 +363,43 @@ def writeAuxValues(listOfStates, inState, numberOfVariables, numberOfFunctions):
 
 	return outState
 
-def writeProgram(listOfStates, inState):
+def writeProgram(listOfStates, inState, functions, functionVariableDictionary, \
+	functionLabelDictionary, functionDictionary, path):
+
+    inState = writeProgramSkeleton(listOfStates, inState, functions, functionVariableDictionary, \
+		functionLabelDictionary, functionDictionary, path)
+    
+    return inState
+    
+def writeProgramSkeleton(listOfStates, inState, functions, functionVariableDictionary, \
+	functionLabelDictionary, functionDictionary, path):
+    
+	listOfFunctionGroups = []
+	characteristicString = ""
+	    		
+	for i, function in enumerate(functions):
+		functionName = function
+		functionLines = open(path + functionName + ".tfn", "r").readlines()
+		if i == 0:
+			functionGroup = FunctionGroup(functionName, functionLines, functionVariableDictionary, \
+				functionLabelDictionary, functionDictionary, convertNumberToBarCode, \
+				listOfStates, inState)
+		else:
+			functionGroup = FunctionGroup(functionName, functionLines, functionVariableDictionary, \
+				functionLabelDictionary, functionDictionary, convertNumberToBarCode, \
+				listOfStates)			
+		listOfFunctionGroups.append(functionGroup)
+		characteristicString += functionGroup.charString
+        
+	for i, functionGroup in enumerate(listOfFunctionGroups[:-1]):
+		functionGroup.attach(listOfFunctionGroups[i+1])
+		
+	outState = SimpleState("ACCEPT")
+# Change this
+
+	listOfFunctionGroups[-1].outState.setNextState("_", outState)
+    
+	return outState
 
 def main():
 
@@ -328,35 +407,16 @@ def main():
 
 ### Setting up the functionLabelDictionary
 
-	functionLabelDictionary = {}
-	functionDictionary = {}
 	
 	path = sys.argv[1]
 
 	try:
-		functions = open(path + "functions.tff", "r").readlines()
+		functions = [string.strip(x) for x in open(path + "functions.tff", "r").readlines()]
 	except:  
 		raise Exception("No functions.tff file found in directory " + path) 
 
-	functionCounter = 0
-
-	for function in functions:
-
-		functionLabelDictionary[function] = {}		
-		functionDictionary[function] = functionCounter
- 
-		functionLines = open(function[:-1] + ".tfn", "r")
-
-		lineCounter = 0
-		
-		for line in functionLines:
-			if ":" in line:
-				label = string.split(line, ":")[0]
-				functionLabelDictionary[function][label] = lineCounter
-
-			lineCounter += 1
-
-		functionCounter += 1
+	functionLabelDictionary, functionDictionary = getFunctionLabelDictionary(functions, path)
+	functionVariableDictionary = getFunctionVariableDictionary(functions, path)
 
 ###################################################################
 
@@ -377,7 +437,8 @@ def main():
 
 	inState = writeVariableValuesSkeleton(listOfStates, inState, numberOfVariables, initValueString)	
 	inState = writeAuxValues(listOfStates, inState, numberOfVariables, numberOfFunctions)
-	inState = writeProgram(listOfStates, inState)
+	inState = writeProgram(listOfStates, inState, functions, functionVariableDictionary,
+		functionLabelDictionary, functionDictionary, path)
 
 	convertStatesToString(listOfStates, open("test_tm.txt", "w"))
 
