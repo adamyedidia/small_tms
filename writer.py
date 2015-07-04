@@ -52,11 +52,12 @@ def getFunctionLabelDictionary(functions, path):
 		lineCounter = 1
 		
 		for line in functionLines:
-			if ":" in line:
-				label = string.split(line, ":")[0]
-				functionLabelDictionary[function][label] = lineCounter
+			if not ("input" in line or "//" in line or line == "\n"):
+				if ":" in line:
+					label = string.split(line, ":")[0]
+					functionLabelDictionary[function][label] = lineCounter
 
-			lineCounter += 1
+				lineCounter += 1
 
 		functionCounter += 1
         
@@ -327,10 +328,11 @@ def writeAuxValues(listOfStates, inState, numberOfVariables, numberOfFunctions):
 	writeEState1 = State("write_aux_E_1")
 	write_State4 = State("write_aux_underscore_4")
 	writeEState2 = State("write_aux_E_2")
+	writeHState = State("write_aux_H")
 	outState = State("write_aux_out")
 #	outState = SimpleState("ACCEPT")	
 
-	listOfStates.extend([inState, write_State2, write_State3, writeEState1, write_State4, writeEState2])
+	listOfStates.extend([inState, write_State2, write_State3, writeEState1, write_State4, writeEState2, writeHState])
 
 	inState.set3("_", write_State2, "R", "_")
 	write_State2.set3("_", write_State3, "R", "_")
@@ -359,18 +361,23 @@ def writeAuxValues(listOfStates, inState, numberOfVariables, numberOfFunctions):
 		state.set3("_", listOfFunctionNameSpaceStates[i+1], "R", "_")
 		listOfStates.append(state)
 	
-	writeEState2.set3("_", outState, "R", "E")
+	writeEState2.set3("_", writeHState, "R", "E")
+	
+	writeHState.set3("_", outState, "R", "H")
 
 	return outState
 
 def writeProgram(listOfStates, inState, functions, functionVariableDictionary, \
 	functionLabelDictionary, functionDictionary, path):
 
-    inState = writeProgramSkeleton(listOfStates, inState, functions, functionVariableDictionary, \
+	inState = writeProgramSkeleton(listOfStates, inState, functions, functionVariableDictionary, \
 		functionLabelDictionary, functionDictionary, path)
-    
-    return inState
-    
+	inState = incrementLineNumberIDs(listOfStates, inState)
+	inState = markFunctionNames(listOfStates, inState)
+#	inState = incrementFunctionIDs(listOfStates, inState)
+	
+	return inState
+
 def writeProgramSkeleton(listOfStates, inState, functions, functionVariableDictionary, \
 	functionLabelDictionary, functionDictionary, path):
     
@@ -383,7 +390,7 @@ def writeProgramSkeleton(listOfStates, inState, functions, functionVariableDicti
 		if i == 0:
 			functionGroup = FunctionGroup(functionName, functionLines, functionVariableDictionary, \
 				functionLabelDictionary, functionDictionary, convertNumberToBarCode, \
-				listOfStates, inState)
+				listOfStates, inState, True)
 		else:
 			functionGroup = FunctionGroup(functionName, functionLines, functionVariableDictionary, \
 				functionLabelDictionary, functionDictionary, convertNumberToBarCode, \
@@ -394,12 +401,134 @@ def writeProgramSkeleton(listOfStates, inState, functions, functionVariableDicti
 	for i, functionGroup in enumerate(listOfFunctionGroups[:-1]):
 		functionGroup.attach(listOfFunctionGroups[i+1])
 		
-	outState = SimpleState("ACCEPT")
-# Change this
+	outState = State("write_code_skeleton_out")
 
 	listOfFunctionGroups[-1].outState.setNextState("_", outState)
     
 	return outState
+	
+def incrementLineNumberIDs(listOfStates, inState):
+	# inState might have been called "write_code_incr_ln_underscore"
+	writeHState = State("write_code_incr_ln_H")
+	findLineNumberState = State("write_code_incr_ln_find_ln")
+	incrementLineNumberState = State("write_code_incr_ln_incr_ln")
+	pushEverythingDown_State = State("write_code_incr_ln_push__")
+	pushEverythingDown1State = State("write_code_incr_ln_push_1")
+	pushEverythingDownHState = State("write_code_incr_ln_push_H")
+	pushEverythingDownEState = State("write_code_incr_ln_push_E")
+	exitPushState = State("write_code_incr_ln_exit_push")
+	findPushyLineNumberState1 = State("write_code_incr_ln_find_pushy_ln_1")
+	findPushyLineNumberState2 = State("write_code_incr_ln_find_pushy_ln_2")
+	moveIncrementEnderState1 = State("write_code_incr_ln_move_incr_end_1")
+	moveIncrementEnderState2 = State("write_code_incr_ln_move_incr_end_2")
+	checkForFinState = State("write_code_incr_ln_check_for_fin")
+	getToFinState = State("write_code_incr_ln_get_to_fin")
+	getToNextFunctionState = State("write_code_incr_ln_get_to_next_function")
+	checkIfLastFunctionState = State("write_code_incr_ln_check_if_last_function")
+#	outState = State("write_code_incr_ln_out")
+	outState = SimpleState("ACCEPT")
+	
+	listOfStates.extend([inState, writeHState, findLineNumberState, incrementLineNumberState, \
+		pushEverythingDown_State, pushEverythingDown1State, pushEverythingDownHState, \
+		pushEverythingDownEState, exitPushState, findPushyLineNumberState1, findPushyLineNumberState2, \
+		moveIncrementEnderState1, moveIncrementEnderState2, \
+		checkForFinState, getToFinState, getToNextFunctionState, checkIfLastFunctionState])
+	
+	inState.set3("_", writeHState, "R", "_")
+	writeHState.set3("_", findLineNumberState, "L", "H")
+	
+	findSymbol(findLineNumberState, "H", "L", "L", incrementLineNumberState)
+	
+	incrementLineNumberState.set3("_", pushEverythingDownEState, "R", "_")
+	incrementLineNumberState.set3("1", incrementLineNumberState, "L", "E")
+	incrementLineNumberState.set3("H", moveIncrementEnderState1, "R", "H")
+	incrementLineNumberState.set3("E", findLineNumberState, "L", "1")
+	
+	# push everything down until "_H_" is found
+	pushEverythingDown_State.set3("_", pushEverythingDown_State, "R", "_")
+	pushEverythingDown_State.set3("1", pushEverythingDown1State, "R", "_")
+	pushEverythingDown_State.set3("H", exitPushState, "R", "_")
+	pushEverythingDown_State.set3("E", pushEverythingDownEState, "R", "_")
+
+	pushEverythingDown1State.set3("_", pushEverythingDown_State, "R", "1")
+	pushEverythingDown1State.set3("1", pushEverythingDown1State, "R", "1")
+	pushEverythingDown1State.set3("H", pushEverythingDownHState, "R", "1")
+	pushEverythingDown1State.set3("E", pushEverythingDownEState, "R", "1")
+	
+	pushEverythingDownHState.set3("_", pushEverythingDown_State, "R", "H")
+	pushEverythingDownHState.set3("1", pushEverythingDown1State, "R", "H")
+	pushEverythingDownHState.set3("H", pushEverythingDownHState, "R", "H")
+	pushEverythingDownHState.set3("E", pushEverythingDownEState, "R", "H")
+	
+	pushEverythingDownEState.set3("_", pushEverythingDown_State, "R", "E")
+	pushEverythingDownEState.set3("1", pushEverythingDown1State, "R", "E")
+	pushEverythingDownEState.set3("H", pushEverythingDownHState, "R", "E")
+	pushEverythingDownEState.set3("E", pushEverythingDownEState, "R", "E")	
+	
+	exitPushState.set3("_", findPushyLineNumberState1, "L", "H")
+	exitPushState.set3("1", pushEverythingDown1State, "R", "H")
+	exitPushState.set3("H", pushEverythingDownHState, "R", "H")
+	exitPushState.set3("E", pushEverythingDownEState, "R", "H")
+		
+	# need to find a "1H" or "_H" pattern; this indicates something that hasn't 
+	# already been incremented
+	findSymbol(findPushyLineNumberState1, "H", "L", "L", findPushyLineNumberState2)
+	
+	findPushyLineNumberState2.set3("_", incrementLineNumberState, "-", "_")
+	findPushyLineNumberState2.set3("1", incrementLineNumberState, "-", "1")
+	findPushyLineNumberState2.set3("H", moveIncrementEnderState1, "R", "H")
+	findPushyLineNumberState2.set3("E", findPushyLineNumberState1, "L", "E")
+	
+	moveIncrementEnderState1.set3("H", moveIncrementEnderState2, "R", "H")
+	
+	# if we find a "_H" pattern then we know we're done
+	# otherwise we delete the first H we see and go another round
+	
+	moveIncrementEnderState2.set3("_", checkForFinState, "R", "_")
+	moveIncrementEnderState2.set3("1", moveIncrementEnderState2, "R", "1")
+	moveIncrementEnderState2.set3("H", getToFinState, "R", "_")
+	moveIncrementEnderState2.set3("E", moveIncrementEnderState2, "R", "E")
+	
+	checkForFinState.set3("_", checkForFinState, "R", "_")
+	checkForFinState.set3("1", moveIncrementEnderState2, "R", "1")
+	checkForFinState.set3("H", getToNextFunctionState, "L", "H")
+	checkForFinState.set3("E", moveIncrementEnderState2, "R", "E")
+	
+	findPattern(getToFinState, findLineNumberState, listOfStates, "write_code_incr_ln_get_to_fin", \
+		"_H", "R", "L", "H")
+		
+	findPattern(getToNextFunctionState, checkIfLastFunctionState, listOfStates, "write_code_incr_ln_get_to_next_function", "HH", "L", "L", "_")	
+	getToNextFunctionState.setWrite("H", "_")
+	
+	checkIfLastFunctionState.set3("_", findLineNumberState, "-", "_")
+	checkIfLastFunctionState.set3("H", outState, "R", "_")
+	
+	return outState
+	
+def incrementFunctionIDs(listOfStates, inState):
+	return None
+	
+	# inState might have been called findHState
+	
+#	findSymbol(inState, "H", "L", "R", checkForFuncNameState1)
+	
+#	checkForFuncNameState1.set3("_", checkForFuncNameState2, "R", "_")
+#	checkForFuncNameState2.set3("_", checkForFuncNameState3, "R", "_")
+	
+#	checkForFuncNameState3.set3("_", getToEndFuncNameState, "R", "_")
+#	checkForFuncNameState3.set3("1", getToEnds)
+	
+#	findSymbol(getToEndFuncNameState, "_", "R", "L", incrFuncNameState)
+	
+#	incrFuncNameState.set3("_", doneIncrementingState, "-", "E")
+#	incrFuncNameState.set3("1", incrFuncNameState, "L", "E")
+#	incrFuncNameState.set3("E", doneIncrementingState, "-", "1")
+#	
+#	findSymbol(doneIncrementingState, "_", "R", "R", checkForFuncNameState1)
+	
+#	recognizeState.set3("_", )
+
+	
 
 def main():
 

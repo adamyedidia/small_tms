@@ -22,6 +22,11 @@ _ = -
 
 ___[functionName]...
 
+
+stack format:
+
+[functionName]_[returnAddress]_[ID of first var]_[ID of second var]_[functionName]
+
 1EE1E1_
 
 HH1EE1E1__H_H1H1EE1E1_1H_HE_H...
@@ -43,6 +48,10 @@ HH1E1E1E
 HH_1E1EE1 
 (function name)
 
+list of steps:
+
+-go to function at the top of the stack
+-go to line of code 
 
 
 

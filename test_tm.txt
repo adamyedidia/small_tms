@@ -1,4 +1,4 @@
-States: 115
+States: 130
 
 START start:
 	_ -> write__var_counter_1; R; E
@@ -253,7 +253,13 @@ write_aux_underscore_4:
 	E -> ERROR; -; E
 
 write_aux_E_2:
-	_ -> write_aux_out; R; E
+	_ -> write_aux_H; R; E
+	1 -> ERROR; -; 1
+	H -> ERROR; -; H
+	E -> ERROR; -; E
+
+write_aux_H:
+	_ -> write_aux_out; R; H
 	1 -> ERROR; -; 1
 	H -> ERROR; -; H
 	E -> ERROR; -; E
@@ -283,13 +289,13 @@ write_code_add_3_underscore_1:
 	E -> ERROR; -; E
 
 write_code_add_3_ln_underscore_2:
-	_ -> write_code_add_3_ln_E; R; _
+	_ -> write_code_add_3ln_H; R; _
 	1 -> ERROR; -; 1
 	H -> ERROR; -; H
 	E -> ERROR; -; E
 
-write_code_add_3_ln_E:
-	_ -> write_code_add_3_varname_preamble_underscore; R; E
+write_code_add_3ln_H:
+	_ -> write_code_add_3_varname_preamble_1; R; H
 	1 -> ERROR; -; 1
 	H -> ERROR; -; H
 	E -> ERROR; -; E
@@ -319,19 +325,7 @@ write_code_add_3___headmove:
 	E -> ERROR; -; E
 
 write_code_add_3___linenumber_0:
-	_ -> write_code_add_3___linenumber_1; R; E
-	1 -> ERROR; -; 1
-	H -> ERROR; -; H
-	E -> ERROR; -; E
-
-write_code_add_3___linenumber_1:
 	_ -> write_code_add_4_underscore_1; R; 1
-	1 -> ERROR; -; 1
-	H -> ERROR; -; H
-	E -> ERROR; -; E
-
-write_code_add_3_varname_preamble_underscore:
-	_ -> write_code_add_3_varname_preamble_1; R; _
 	1 -> ERROR; -; 1
 	H -> ERROR; -; H
 	E -> ERROR; -; E
@@ -355,31 +349,31 @@ write_code_add_4_underscore_1:
 	E -> ERROR; -; E
 
 write_code_add_4_ln_underscore_2:
-	_ -> write_code_add_4_ln_E; R; _
+	_ -> write_code_add_4ln_H; R; _
 	1 -> ERROR; -; 1
 	H -> ERROR; -; H
 	E -> ERROR; -; E
 
-write_code_add_4_ln_E:
-	_ -> write_code_mult_underscore_1; R; E
+write_code_add_4ln_H:
+	_ -> write_code_mult_underscore_1; R; H
 	1 -> ERROR; -; 1
 	H -> ERROR; -; H
 	E -> ERROR; -; E
 
 write_aux_out:
-	_ -> write_code_add_underscore_2; R; _
+	_ -> write_code_add_underscore_2; R; H
 	1 -> ERROR; -; 1
 	H -> ERROR; -; H
 	E -> ERROR; -; E
 
 write_code_add_underscore_2:
-	_ -> write_code_add_underscore_3; R; _
+	_ -> write_code_add_underscore_3; R; H
 	1 -> ERROR; -; 1
 	H -> ERROR; -; H
 	E -> ERROR; -; E
 
 write_code_add_underscore_3:
-	_ -> write_code_add_0; R; _
+	_ -> write_code_add_0; R; H
 	1 -> ERROR; -; 1
 	H -> ERROR; -; H
 	E -> ERROR; -; E
@@ -397,13 +391,13 @@ write_code_mult_3_underscore_1:
 	E -> ERROR; -; E
 
 write_code_mult_3_ln_underscore_2:
-	_ -> write_code_mult_3_ln_E; R; _
+	_ -> write_code_mult_3ln_H; R; _
 	1 -> ERROR; -; 1
 	H -> ERROR; -; H
 	E -> ERROR; -; E
 
-write_code_mult_3_ln_E:
-	_ -> write_code_mult_3_varname_preamble_underscore; R; E
+write_code_mult_3ln_H:
+	_ -> write_code_mult_3_varname_preamble_1; R; H
 	1 -> ERROR; -; 1
 	H -> ERROR; -; H
 	E -> ERROR; -; E
@@ -433,7 +427,7 @@ write_code_mult_3___headmove:
 	E -> ERROR; -; E
 
 write_code_mult_3___linenumber_0:
-	_ -> write_code_mult_3___linenumber_1; R; 1
+	_ -> write_code_mult_3___linenumber_1; R; E
 	1 -> ERROR; -; 1
 	H -> ERROR; -; H
 	E -> ERROR; -; E
@@ -474,12 +468,6 @@ write_code_mult_3_1_linenumber_0:
 	H -> ERROR; -; H
 	E -> ERROR; -; E
 
-write_code_mult_3_varname_preamble_underscore:
-	_ -> write_code_mult_3_varname_preamble_1; R; _
-	1 -> ERROR; -; 1
-	H -> ERROR; -; H
-	E -> ERROR; -; E
-
 write_code_mult_3_varname_preamble_1:
 	_ -> write_code_mult_3_varname_0; R; 1
 	1 -> ERROR; -; 1
@@ -499,13 +487,13 @@ write_code_mult_4_underscore_1:
 	E -> ERROR; -; E
 
 write_code_mult_4_ln_underscore_2:
-	_ -> write_code_mult_4_ln_E; R; _
+	_ -> write_code_mult_4ln_H; R; _
 	1 -> ERROR; -; 1
 	H -> ERROR; -; H
 	E -> ERROR; -; E
 
-write_code_mult_4_ln_E:
-	_ -> write_code_mult_4_funcname_preamble_underscore; R; E
+write_code_mult_4ln_H:
+	_ -> write_code_mult_4_funcname_preamble_E; R; H
 	1 -> ERROR; -; 1
 	H -> ERROR; -; H
 	E -> ERROR; -; E
@@ -552,12 +540,6 @@ write_code_mult_4_z_name_1:
 	H -> ERROR; -; H
 	E -> ERROR; -; E
 
-write_code_mult_4_funcname_preamble_underscore:
-	_ -> write_code_mult_4_funcname_preamble_E; R; _
-	1 -> ERROR; -; 1
-	H -> ERROR; -; H
-	E -> ERROR; -; E
-
 write_code_mult_4_funcname_preamble_E:
 	_ -> write_code_mult_4_funcname_0; R; E
 	1 -> ERROR; -; 1
@@ -577,13 +559,13 @@ write_code_mult_5_underscore_1:
 	E -> ERROR; -; E
 
 write_code_mult_5_ln_underscore_2:
-	_ -> write_code_mult_5_ln_E; R; _
+	_ -> write_code_mult_5ln_H; R; _
 	1 -> ERROR; -; 1
 	H -> ERROR; -; H
 	E -> ERROR; -; E
 
-write_code_mult_5_ln_E:
-	_ -> write_code_mult_5_funcname_preamble_underscore; R; E
+write_code_mult_5ln_H:
+	_ -> write_code_mult_5_funcname_preamble_E; R; H
 	1 -> ERROR; -; 1
 	H -> ERROR; -; H
 	E -> ERROR; -; E
@@ -630,12 +612,6 @@ write_code_mult_5_x_name_0:
 	H -> ERROR; -; H
 	E -> ERROR; -; E
 
-write_code_mult_5_funcname_preamble_underscore:
-	_ -> write_code_mult_5_funcname_preamble_E; R; _
-	1 -> ERROR; -; 1
-	H -> ERROR; -; H
-	E -> ERROR; -; E
-
 write_code_mult_5_funcname_preamble_E:
 	_ -> write_code_mult_5_funcname_0; R; E
 	1 -> ERROR; -; 1
@@ -655,13 +631,13 @@ write_code_mult_6_underscore_1:
 	E -> ERROR; -; E
 
 write_code_mult_6_ln_underscore_2:
-	_ -> write_code_mult_6_ln_E; R; _
+	_ -> write_code_mult_6ln_H; R; _
 	1 -> ERROR; -; 1
 	H -> ERROR; -; H
 	E -> ERROR; -; E
 
-write_code_mult_6_ln_E:
-	_ -> ACCEPT; R; E
+write_code_mult_6ln_H:
+	_ -> write_code_skeleton_out; R; H
 	1 -> ERROR; -; 1
 	H -> ERROR; -; H
 	E -> ERROR; -; E
@@ -673,20 +649,134 @@ write_code_mult_underscore_1:
 	E -> ERROR; -; E
 
 write_code_mult_underscore_2:
-	_ -> write_code_mult_underscore_3; R; _
+	_ -> write_code_mult_underscore_3; R; H
 	1 -> ERROR; -; 1
 	H -> ERROR; -; H
 	E -> ERROR; -; E
 
 write_code_mult_underscore_3:
-	_ -> write_code_mult_0; R; _
+	_ -> write_code_mult_0; R; H
 	1 -> ERROR; -; 1
 	H -> ERROR; -; H
 	E -> ERROR; -; E
 
 write_code_mult_0:
-	_ -> write_code_mult_3_underscore_1; R; 1
+	_ -> write_code_mult_3_underscore_1; R; E
 	1 -> ERROR; -; 1
 	H -> ERROR; -; H
 	E -> ERROR; -; E
+
+write_code_skeleton_out:
+	_ -> write_code_incr_ln_H; R; _
+	1 -> ERROR; -; 1
+	H -> ERROR; -; H
+	E -> ERROR; -; E
+
+write_code_incr_ln_H:
+	_ -> write_code_incr_ln_find_ln; L; H
+	1 -> ERROR; -; 1
+	H -> ERROR; -; H
+	E -> ERROR; -; E
+
+write_code_incr_ln_find_ln:
+	_ -> write_code_incr_ln_find_ln; L; _
+	1 -> write_code_incr_ln_find_ln; L; 1
+	H -> write_code_incr_ln_incr_ln; L; H
+	E -> write_code_incr_ln_find_ln; L; E
+
+write_code_incr_ln_incr_ln:
+	_ -> write_code_incr_ln_push_E; R; _
+	1 -> write_code_incr_ln_incr_ln; L; E
+	H -> write_code_incr_ln_move_incr_end_1; R; H
+	E -> write_code_incr_ln_find_ln; L; 1
+
+write_code_incr_ln_push__:
+	_ -> write_code_incr_ln_push__; R; _
+	1 -> write_code_incr_ln_push_1; R; _
+	H -> write_code_incr_ln_exit_push; R; _
+	E -> write_code_incr_ln_push_E; R; _
+
+write_code_incr_ln_push_1:
+	_ -> write_code_incr_ln_push__; R; 1
+	1 -> write_code_incr_ln_push_1; R; 1
+	H -> write_code_incr_ln_push_H; R; 1
+	E -> write_code_incr_ln_push_E; R; 1
+
+write_code_incr_ln_push_H:
+	_ -> write_code_incr_ln_push__; R; H
+	1 -> write_code_incr_ln_push_1; R; H
+	H -> write_code_incr_ln_push_H; R; H
+	E -> write_code_incr_ln_push_E; R; H
+
+write_code_incr_ln_push_E:
+	_ -> write_code_incr_ln_push__; R; E
+	1 -> write_code_incr_ln_push_1; R; E
+	H -> write_code_incr_ln_push_H; R; E
+	E -> write_code_incr_ln_push_E; R; E
+
+write_code_incr_ln_exit_push:
+	_ -> write_code_incr_ln_find_pushy_ln_1; L; H
+	1 -> write_code_incr_ln_push_1; R; H
+	H -> write_code_incr_ln_push_H; R; H
+	E -> write_code_incr_ln_push_E; R; H
+
+write_code_incr_ln_find_pushy_ln_1:
+	_ -> write_code_incr_ln_find_pushy_ln_1; L; _
+	1 -> write_code_incr_ln_find_pushy_ln_1; L; 1
+	H -> write_code_incr_ln_find_pushy_ln_2; L; H
+	E -> write_code_incr_ln_find_pushy_ln_1; L; E
+
+write_code_incr_ln_find_pushy_ln_2:
+	_ -> write_code_incr_ln_incr_ln; -; _
+	1 -> write_code_incr_ln_incr_ln; -; 1
+	H -> write_code_incr_ln_move_incr_end_1; R; H
+	E -> write_code_incr_ln_find_pushy_ln_1; L; E
+
+write_code_incr_ln_move_incr_end_1:
+	_ -> ERROR; -; _
+	1 -> ERROR; -; 1
+	H -> write_code_incr_ln_move_incr_end_2; R; H
+	E -> ERROR; -; E
+
+write_code_incr_ln_move_incr_end_2:
+	_ -> write_code_incr_ln_check_for_fin; R; _
+	1 -> write_code_incr_ln_move_incr_end_2; R; 1
+	H -> write_code_incr_ln_get_to_fin; R; _
+	E -> write_code_incr_ln_move_incr_end_2; R; E
+
+write_code_incr_ln_check_for_fin:
+	_ -> write_code_incr_ln_check_for_fin; R; _
+	1 -> write_code_incr_ln_move_incr_end_2; R; 1
+	H -> write_code_incr_ln_get_to_next_function; L; H
+	E -> write_code_incr_ln_move_incr_end_2; R; E
+
+write_code_incr_ln_get_to_fin:
+	_ -> write_code_incr_ln_get_to_fin_recog_pattern__; R; _
+	1 -> write_code_incr_ln_get_to_fin; R; 1
+	H -> write_code_incr_ln_get_to_fin; R; H
+	E -> write_code_incr_ln_get_to_fin; R; E
+
+write_code_incr_ln_get_to_next_function:
+	_ -> write_code_incr_ln_get_to_next_function; L; _
+	1 -> write_code_incr_ln_get_to_next_function; L; 1
+	H -> write_code_incr_ln_get_to_next_function_recog_pattern_H; L; _
+	E -> write_code_incr_ln_get_to_next_function; L; E
+
+write_code_incr_ln_check_if_last_function:
+	_ -> write_code_incr_ln_find_ln; -; _
+	1 -> ERROR; -; 1
+	H -> ACCEPT; R; _
+	E -> ERROR; -; E
+
+write_code_incr_ln_get_to_fin_recog_pattern__:
+	_ -> write_code_incr_ln_get_to_fin_recog_pattern__; R; _
+	1 -> write_code_incr_ln_get_to_fin; R; 1
+	H -> write_code_incr_ln_find_ln; L; H
+	E -> write_code_incr_ln_get_to_fin; R; E
+
+write_code_incr_ln_get_to_next_function_recog_pattern_H:
+	_ -> write_code_incr_ln_get_to_next_function; L; _
+	1 -> write_code_incr_ln_get_to_next_function; L; 1
+	H -> write_code_incr_ln_check_if_last_function; L; _
+	E -> write_code_incr_ln_get_to_next_function; L; E
 

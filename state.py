@@ -3,11 +3,11 @@ import re
 
 # removes all entries equal to x from list l
 def removeAll(l, x):
-    while True:
-        try:
-            l.remove(x)
-        except:
-            return l
+	while True:
+		try:
+			l.remove(x)
+		except:
+			return l
 
 class SimpleState:
 	def __init__(self, stateName, alphabet=["_", "1", "H", "E"]):
@@ -33,283 +33,283 @@ class SimpleState:
 
 # a group of states associated with writing a function
 class FunctionGroup:
-    def __init__(self, functionName, functionLines, functionVariableDictionary, 
-        functionLabelDictionary, functionDictionary, convertNumberToBarCode, listOfStates,
-        inState=None):
-        
-        name = "write_code_" + functionName
-        
-        if inState == None:
-            self.inState = State(name + "_underscore_1")
-        else:
-            self.inState = inState
-        funcName_State2 = State(name + "_underscore_2")
-        funcName_State3 = State(name + "_underscore_3")
-        
-        self.inState.set3("_", funcName_State2, "R", "_")
-        funcName_State2.set3("_", funcName_State3, "R", "_")
+	def __init__(self, functionName, functionLines, functionVariableDictionary, 
+		functionLabelDictionary, functionDictionary, convertNumberToBarCode, listOfStates,
+		inState=None, firstFunction=False):
+		
+		name = "write_code_" + functionName
+		
+		if inState == None:
+			self.inState = State(name + "_underscore_1")
+		else:
+			self.inState = inState
+		funcName_State2 = State(name + "_underscore_2")
+		funcName_State3 = State(name + "_underscore_3")
+		
+		if firstFunction:
+			self.inState.set3("_", funcName_State2, "R", "H")
+		else:
+			self.inState.set3("_", funcName_State2, "R", "_")
+			
+		funcName_State2.set3("_", funcName_State3, "R", "H")
 
-        functionBarCode = convertNumberToBarCode(functionDictionary[functionName])
-        
-        self.charString = "___" + functionBarCode
-        
-        listOfBarCodeStates = []
-        
-        for i, char in enumerate(functionBarCode):
-            listOfBarCodeStates.append(State(name + "_" + str(i)))
-        
-        funcName_State3.set3("_", listOfBarCodeStates[0], "R", "_")    
-            
-        for state in listOfBarCodeStates[:-1]:
-            state.set3("_", listOfBarCodeStates[i+1], "R", functionBarCode[i])
-        
-        listOfLineGroups = []
-        
-        lineNumber = 1
-        
-        for line in functionLines:
-            if not (line == "\n" or line[0:2] == "//" or line[0:5] == "input"):
-                listOfLineGroups.append(LineGroup(line, functionName, lineNumber, \
-                    functionVariableDictionary, functionLabelDictionary, functionDictionary, \
-                    convertNumberToBarCode, listOfStates))
-            
-            lineNumber += 1
+		functionBarCode = "E"
+		
+		self.charString = "___" + functionBarCode
+		
+		listOfBarCodeStates = []
+		
+		for i, char in enumerate(functionBarCode):
+			listOfBarCodeStates.append(State(name + "_" + str(i)))
+		
+		funcName_State3.set3("_", listOfBarCodeStates[0], "R", "H")	
+			
+		for state in listOfBarCodeStates[:-1]:
+			state.set3("_", listOfBarCodeStates[i+1], "R", functionBarCode[i])
+		
+		listOfLineGroups = []
+		
+		lineNumber = 1
+		
+		for line in functionLines:
+			if not (line == "\n" or line[0:2] == "//" or line[0:5] == "input"):
+				listOfLineGroups.append(LineGroup(line, functionName, lineNumber, \
+					functionVariableDictionary, functionLabelDictionary, functionDictionary, \
+					convertNumberToBarCode, listOfStates))
+			
+			lineNumber += 1
 
-        listOfBarCodeStates[-1].set3("_", listOfLineGroups[0].inState, "R", functionBarCode[-1])
-        
-        for i, lineGroup in enumerate(listOfLineGroups[:-1]):
-            lineGroup.attach(listOfLineGroups[i+1])
-            self.charString += lineGroup.charString
-            
-        self.charString += listOfLineGroups[-1].charString
-            
-        self.outState = listOfLineGroups[-1].outState
-        
-        listOfStates.extend([self.inState, funcName_State2, funcName_State3])
-        listOfStates.extend(listOfBarCodeStates)
-            
-    def attach(self, otherFunctionGroup):
-        self.outState.setNextState("_", otherFunctionGroup.inState)
+		listOfBarCodeStates[-1].set3("_", listOfLineGroups[0].inState, "R", functionBarCode[-1])
+		
+		for i, lineGroup in enumerate(listOfLineGroups[:-1]):
+			lineGroup.attach(listOfLineGroups[i+1])
+			self.charString += lineGroup.charString
+			
+		self.charString += listOfLineGroups[-1].charString
+			
+		self.outState = listOfLineGroups[-1].outState
+		
+		listOfStates.extend([self.inState, funcName_State2, funcName_State3])
+		listOfStates.extend(listOfBarCodeStates)
+			
+	def attach(self, otherFunctionGroup):
+		self.outState.setNextState("_", otherFunctionGroup.inState)
 
 # a group of states associated with writing a line of code
 class LineGroup:
-    def __init__(self, lineString, functionName, lineNumber, functionVariableDictionary, \
-        functionLabelDictionary, functionDictionary, convertNumberToBarCode, listOfStates):
-        name = "write_code_" + functionName + "_" + str(lineNumber)
-        
-        self.inState = State(name + "_underscore_1")
-        lineNumber_State2 = State(name + "_ln_underscore_2")
-        lineNumberEState = State(name + "_ln_E")
-        
-        self.inState.set3("_", lineNumber_State2, "R", "_")
-        lineNumber_State2.set3("_", lineNumberEState, "R", "_")
-        
-        listOfStates.extend([self.inState, lineNumber_State2, lineNumberEState])
-        
-        self.charString = "__E"
-        
-        if "[" in lineString:
-            # then it must be a direct tape command
-            
-            splitLine = re.split("[\[|\]]", lineString)
-            
-            variableName = splitLine[1]
-            reactions = string.split(splitLine[2], ";")
-            
-            listOfReactionGroups = []
-            
-            for reaction in reactions:
-                listOfReactionGroups.append(ReactionGroup(reaction, functionName, \
-                    lineNumber, convertNumberToBarCode, functionLabelDictionary, listOfStates))
-        
-            variableBarCode = convertNumberToBarCode( \
-            functionVariableDictionary[functionName][variableName])
-            
-            varName_State = State(name + "_varname_preamble_underscore")
-            varName1State = State(name + "_varname_preamble_1")
-            
-            self.charString += "_1" + variableBarCode
-            
-            lineNumberEState.set3("_", varName_State, "R", "E")
-            varName_State.set3("_", varName1State, "R", "_")
-            
-            listOfBarCodeStates = [State(name + "_varname_" + str(i)) for i in \
-                range(len(variableBarCode))]
-            
-            assert len(variableBarCode) > 0
-                
-            varName1State.set3("_", listOfBarCodeStates[0], "R", "1")
-            
-            for i, state in enumerate(listOfBarCodeStates[:-1]):
-                state.set3("_", listOfBarCodeStates[i+1], "R", variableBarCode[i])
+	def __init__(self, lineString, functionName, lineNumber, functionVariableDictionary, \
+		functionLabelDictionary, functionDictionary, convertNumberToBarCode, listOfStates):
+		name = "write_code_" + functionName + "_" + str(lineNumber)
+		
+		self.inState = State(name + "_underscore_1")
+		lineNumber_State2 = State(name + "_ln_underscore_2")
+		lineNumberHState = State(name + "ln_H")
+		
+		self.inState.set3("_", lineNumber_State2, "R", "_")
+		lineNumber_State2.set3("_", lineNumberHState, "R", "_")
 
-            listOfBarCodeStates[-1].set3("_", listOfReactionGroups[0].inState, \
-                "R", variableBarCode[-1])
-                
-            for i, reactionGroup in enumerate(listOfReactionGroups[:-1]):
-                reactionGroup.attach(listOfReactionGroups[i+1])
-                self.charString += reactionGroup.charString
-            
-            self.charString += listOfReactionGroups[-1].charString    
-                
-            self.outState = listOfReactionGroups[-1].outState
-            
-            listOfStates.extend([varName_State, varName1State])
-            listOfStates.extend(listOfBarCodeStates)
-        
-        elif "function" in lineString:
-            if ":" in lineString:
-                everythingButLabel = string.split(lineString, ":")[1]
-            else:
-                everythingButLabel = lineString
-            
-            splitLine = string.split(everythingButLabel)
-            
-            listOfVarGroups = []
-            
-            for variableName in splitLine[2:]:
-                listOfVarGroups.append(VarGroup(variableName, functionName, lineNumber, \
-                    convertNumberToBarCode, functionVariableDictionary, listOfStates))
-            
-            funcName_State = State(name + "_funcname_preamble_underscore")
-            funcNameEState = State(name + "_funcname_preamble_E")
-            
-            lineNumberEState.set3("_", funcName_State, "R", "E")
-            funcName_State.set3("_", funcNameEState, "R", "_")
-            
-            functionBarCode = convertNumberToBarCode(functionDictionary[splitLine[1]])
-            
-            self.charString += "_E" + functionBarCode
-            
-            listOfBarCodeStates = []
-            
-            for i, char in enumerate(functionBarCode):
-                listOfBarCodeStates.append(State(name + "_funcname_" + str(i)))
-                
-            funcNameEState.set3("_", listOfBarCodeStates[0], "R", "E")
-                
-            for i, state in enumerate(listOfBarCodeStates[:-1]):
-                state.set3("_", listOfBarCodeStates[i+1], "R", functionBarCode[i])
-                
-            listOfBarCodeStates[-1].set3("_", listOfVarGroups[0].inState, "R", functionBarCode[-1])
-            
-            for i, varGroup in enumerate(listOfVarGroups[:-1]):
-                varGroup.attach(listOfVarGroups[i+1])    
-                self.charString += varGroup.charString
-            
-            self.charString += listOfVarGroups[-1].charString
-            
-            self.outState = listOfVarGroups[-1].outState
-            
-            listOfStates.extend([funcName_State, funcNameEState])
-            listOfStates.extend(listOfBarCodeStates)
-            
-        elif "return" in lineString:
-            lineNumberEState.setHeadMove("_", "R")
-            lineNumberEState.setWrite("_", "E")
-            
-            self.outState = lineNumberEState
-        
-        else:
-            "Line", str(lineNumber), "is incomprehensible:", lineString
-            raise 
-            
-    def attach(self, otherLineGroup):
-        self.outState.setNextState("_", otherLineGroup.inState)
-        
+		listOfStates.extend([self.inState, lineNumber_State2, lineNumberHState])
+		
+		self.charString = "__H"
+		
+		if "[" in lineString:
+			# then it must be a direct tape command
+			
+			splitLine = re.split("[\[|\]]", lineString)
+			
+			variableName = splitLine[1]
+			reactions = string.split(splitLine[2], ";")
+			
+			listOfReactionGroups = []
+			
+			for reaction in reactions:
+				listOfReactionGroups.append(ReactionGroup(reaction, functionName, \
+					lineNumber, convertNumberToBarCode, functionLabelDictionary, listOfStates))
+		
+			variableBarCode = convertNumberToBarCode( \
+			functionVariableDictionary[functionName][variableName])
+			
+			varName1State = State(name + "_varname_preamble_1")
+			
+			self.charString += "_1" + variableBarCode
+			
+			lineNumberHState.set3("_", varName1State, "R", "H")
+			
+			listOfBarCodeStates = [State(name + "_varname_" + str(i)) for i in \
+				range(len(variableBarCode))]
+			
+			assert len(variableBarCode) > 0
+				
+			varName1State.set3("_", listOfBarCodeStates[0], "R", "1")
+			
+			for i, state in enumerate(listOfBarCodeStates[:-1]):
+				state.set3("_", listOfBarCodeStates[i+1], "R", variableBarCode[i])
+
+			listOfBarCodeStates[-1].set3("_", listOfReactionGroups[0].inState, \
+				"R", variableBarCode[-1])
+				
+			for i, reactionGroup in enumerate(listOfReactionGroups[:-1]):
+				reactionGroup.attach(listOfReactionGroups[i+1])
+				self.charString += reactionGroup.charString
+			
+			self.charString += listOfReactionGroups[-1].charString	
+				
+			self.outState = listOfReactionGroups[-1].outState
+			
+			listOfStates.extend([varName1State])
+			listOfStates.extend(listOfBarCodeStates)
+		
+		elif "function" in lineString:
+			if ":" in lineString:
+				everythingButLabel = string.split(lineString, ":")[1]
+			else:
+				everythingButLabel = lineString
+			
+			splitLine = string.split(everythingButLabel)
+			
+			listOfVarGroups = []
+			
+			for variableName in splitLine[2:]:
+				listOfVarGroups.append(VarGroup(variableName, functionName, lineNumber, \
+					convertNumberToBarCode, functionVariableDictionary, listOfStates))
+			
+			funcNameEState = State(name + "_funcname_preamble_E")
+			
+			lineNumberHState.set3("_", funcNameEState, "R", "H")
+			
+			functionBarCode = convertNumberToBarCode(functionDictionary[splitLine[1]])
+			
+			self.charString += "_E" + functionBarCode
+			
+			listOfBarCodeStates = []
+			
+			for i, char in enumerate(functionBarCode):
+				listOfBarCodeStates.append(State(name + "_funcname_" + str(i)))
+				
+			funcNameEState.set3("_", listOfBarCodeStates[0], "R", "E")
+				
+			for i, state in enumerate(listOfBarCodeStates[:-1]):
+				state.set3("_", listOfBarCodeStates[i+1], "R", functionBarCode[i])
+				
+			listOfBarCodeStates[-1].set3("_", listOfVarGroups[0].inState, "R", functionBarCode[-1])
+			
+			for i, varGroup in enumerate(listOfVarGroups[:-1]):
+				varGroup.attach(listOfVarGroups[i+1])	
+				self.charString += varGroup.charString
+			
+			self.charString += listOfVarGroups[-1].charString
+			
+			self.outState = listOfVarGroups[-1].outState
+			
+			listOfStates.extend([funcNameEState])
+			listOfStates.extend(listOfBarCodeStates)
+			
+		elif "return" in lineString:
+			lineNumberHState.setHeadMove("_", "R")
+			lineNumberHState.setWrite("_", "H")
+			
+			self.outState = lineNumberHState
+		
+		else:
+			"Line", str(lineNumber), "is incomprehensible:", lineString
+			raise 
+			
+	def attach(self, otherLineGroup):
+		self.outState.setNextState("_", otherLineGroup.inState)
+		
 class ReactionGroup:
-    
-    def __init__(self, reactionString, functionName, lineNumber, convertNumberToBarCode, \
-        functionLabelDictionary, listOfStates):
-        
-        splitReaction = removeAll(re.split("[ |(|,|)]", reactionString.strip()), "")
-        symbolRead = splitReaction[0]
-        name = "write_code_" + functionName + "_" + str(lineNumber) + "_" + symbolRead
-    
-        write = symbolRead
-        headMove = "-"
-        nextLine = None
-    
-        for x in splitReaction[1:]:
-            if x in ["_", "1", "E"]:
-                write = x
-            elif x in ["-", "L", "R"]:
-                headMove = x
-            else:
-                nextLine = x
-    
-        headMoveToSymbol = {"L": "1", "R": "E", "-": "_"}
-        
-        self.inState = State(name + "_underscore")
-        readState = State(name + "_read")
-        writeState = State(name + "_write")
-        headMoveState = State(name + "_headmove")
-        
-        
-        self.inState.set3("_", readState, "R", "_")
-        readState.set3("_", writeState, "R", symbolRead)
-        writeState.set3("_", headMoveState, "R", write)
-        
-        self.charString = "_" + symbolRead + write
-        
-        listOfNextLineStates = []
-        
-        if nextLine == None:
-            lineBarCode = "_"
-            
-        else:
-            lineBarCode = convertNumberToBarCode(functionLabelDictionary[functionName][nextLine])
+	
+	def __init__(self, reactionString, functionName, lineNumber, convertNumberToBarCode, \
+		functionLabelDictionary, listOfStates):
+		
+		splitReaction = removeAll(re.split("[ |(|,|)]", reactionString.strip()), "")
+		symbolRead = splitReaction[0]
+		name = "write_code_" + functionName + "_" + str(lineNumber) + "_" + symbolRead
+	
+		write = symbolRead
+		headMove = "-"
+		nextLine = None
+	
+		for x in splitReaction[1:]:
+			if x in ["_", "1", "E"]:
+				write = x
+			elif x in ["-", "L", "R"]:
+				headMove = x
+			else:
+				nextLine = x
+	
+		headMoveToSymbol = {"L": "1", "R": "E", "-": "_"}
+		
+		self.inState = State(name + "_underscore")
+		readState = State(name + "_read")
+		writeState = State(name + "_write")
+		headMoveState = State(name + "_headmove")
+		
+		
+		self.inState.set3("_", readState, "R", "_")
+		readState.set3("_", writeState, "R", symbolRead)
+		writeState.set3("_", headMoveState, "R", write)
+		
+		self.charString = "_" + symbolRead + write + headMoveToSymbol[headMove]
+		
+		listOfNextLineStates = []
+		
+		if nextLine == None:
+			lineBarCode = "_"
+			
+		else:
+			lineBarCode = convertNumberToBarCode(functionLabelDictionary[functionName][nextLine])
 
-        for i, char in enumerate(lineBarCode):
-            listOfNextLineStates.append(State(name + "_linenumber_" + str(i)))
-            self.charString += char
-        
-        headMoveState.set3("_", listOfNextLineStates[0], "R", headMoveToSymbol[headMove])    
-        
-        for i, state in enumerate(listOfNextLineStates[:-1]):
-            state.set3("_", listOfNextLineStates[i+1], "R", lineBarCode[i])
-                        
-        self.outState = listOfNextLineStates[-1]                
-        self.outState.setHeadMove("_", "R")
-        self.outState.setWrite("_", lineBarCode[-1])
-        
-        listOfStates.extend([self.inState, readState, writeState, headMoveState])
-        listOfStates.extend(listOfNextLineStates)
-    
-    def attach(self, otherReactionGroup):
-        self.outState.setNextState("_", otherReactionGroup.inState)
-        
+		for i, char in enumerate(lineBarCode):
+			listOfNextLineStates.append(State(name + "_linenumber_" + str(i)))
+			self.charString += char
+		
+		headMoveState.set3("_", listOfNextLineStates[0], "R", headMoveToSymbol[headMove])	
+		
+		for i, state in enumerate(listOfNextLineStates[:-1]):
+			state.set3("_", listOfNextLineStates[i+1], "R", lineBarCode[i])
+						
+		self.outState = listOfNextLineStates[-1]				
+		self.outState.setHeadMove("_", "R")
+		self.outState.setWrite("_", lineBarCode[-1])
+		
+		listOfStates.extend([self.inState, readState, writeState, headMoveState])
+		listOfStates.extend(listOfNextLineStates)
+	
+	def attach(self, otherReactionGroup):
+		self.outState.setNextState("_", otherReactionGroup.inState)
+		
 class VarGroup:
 
-    def __init__(self, variableName, functionName, lineNumber, convertNumberToBarCode, 
-        functionVariableDictionary, listOfStates):
-        
-        name = "write_code_" + functionName + "_" + str(lineNumber) + "_" + variableName
-        
-        self.inState = State(name + "_underscore")
-        self.charString = "_"
-        
-        variableBarCode = convertNumberToBarCode(functionVariableDictionary[functionName][variableName])
+	def __init__(self, variableName, functionName, lineNumber, convertNumberToBarCode, 
+		functionVariableDictionary, listOfStates):
+		
+		name = "write_code_" + functionName + "_" + str(lineNumber) + "_" + variableName
+		
+		self.inState = State(name + "_underscore")
+		self.charString = "_"
+		
+		variableBarCode = convertNumberToBarCode(functionVariableDictionary[functionName][variableName])
 
-        listOfBarCodeStates = []
-        for i, char in enumerate(variableBarCode):
-            listOfBarCodeStates.append(State(name + "_name_" + str(i)))
-            self.charString += char
+		listOfBarCodeStates = []
+		for i, char in enumerate(variableBarCode):
+			listOfBarCodeStates.append(State(name + "_name_" + str(i)))
+			self.charString += char
 
-        self.inState.set3("_", listOfBarCodeStates[0], "R", "_")
-        
-        for i, state in enumerate(listOfBarCodeStates[:-1]):
-            state.set3("_", listOfBarCodeStates[i+1], "R", variableBarCode[i])
-            
-        self.outState = listOfBarCodeStates[-1]
-        self.outState.setHeadMove("_", "R")
-        self.outState.setWrite("_", variableBarCode[-1])
-        
-        listOfStates.append(self.inState)
-        listOfStates.extend(listOfBarCodeStates)
+		self.inState.set3("_", listOfBarCodeStates[0], "R", "_")
+		
+		for i, state in enumerate(listOfBarCodeStates[:-1]):
+			state.set3("_", listOfBarCodeStates[i+1], "R", variableBarCode[i])
+			
+		self.outState = listOfBarCodeStates[-1]
+		self.outState.setHeadMove("_", "R")
+		self.outState.setWrite("_", variableBarCode[-1])
+		
+		listOfStates.append(self.inState)
+		listOfStates.extend(listOfBarCodeStates)
 
-    def attach(self, otherReactionGroup):
-        self.outState.setNextState("_", otherReactionGroup.inState)
+	def attach(self, otherReactionGroup):
+		self.outState.setNextState("_", otherReactionGroup.inState)
 
 class State:
 	def __init__(self, stateName, description="", alphabet=["_", "1", "H", "E"]):
