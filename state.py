@@ -241,39 +241,43 @@ class ReactionGroup:
 		headMoveToSymbol = {"L": "1", "R": "E", "-": "_"}
 		
 		self.inState = State(name + "_underscore")
+		oneState = State(name + "_one")
 		readState = State(name + "_read")
 		writeState = State(name + "_write")
 		headMoveState = State(name + "_headmove")
 		
-		
-		self.inState.set3("_", readState, "R", "_")
+		self.inState.set3("_", oneState, "R", "_")
+		oneState.set3("_", readState, "R", "1")
 		readState.set3("_", writeState, "R", symbolRead)
 		writeState.set3("_", headMoveState, "R", write)
 		
-		self.charString = "_" + symbolRead + write + headMoveToSymbol[headMove]
+		self.charString = "_1" + symbolRead + write + headMoveToSymbol[headMove]
 		
 		listOfNextLineStates = []
 		
 		if nextLine == None:
-			lineBarCode = "_"
+			lineBarCode = ""
+			self.outState = headMoveState
+			self.outState.setHeadMove("_", "R")
+			self.outState.setWrite("_", headMoveToSymbol[headMove])
 			
 		else:
 			lineBarCode = convertNumberToBarCode(functionLabelDictionary[functionName][nextLine])
 
-		for i, char in enumerate(lineBarCode):
-			listOfNextLineStates.append(State(name + "_linenumber_" + str(i)))
-			self.charString += char
+			for i, char in enumerate(lineBarCode):
+				listOfNextLineStates.append(State(name + "_linenumber_" + str(i)))
+				self.charString += char
 		
-		headMoveState.set3("_", listOfNextLineStates[0], "R", headMoveToSymbol[headMove])	
+			headMoveState.set3("_", listOfNextLineStates[0], "R", headMoveToSymbol[headMove])	
 		
-		for i, state in enumerate(listOfNextLineStates[:-1]):
-			state.set3("_", listOfNextLineStates[i+1], "R", lineBarCode[i])
+			for i, state in enumerate(listOfNextLineStates[:-1]):
+				state.set3("_", listOfNextLineStates[i+1], "R", lineBarCode[i])
 						
-		self.outState = listOfNextLineStates[-1]				
-		self.outState.setHeadMove("_", "R")
-		self.outState.setWrite("_", lineBarCode[-1])
+			self.outState = listOfNextLineStates[-1]				
+			self.outState.setHeadMove("_", "R")
+			self.outState.setWrite("_", lineBarCode[-1])
 		
-		listOfStates.extend([self.inState, readState, writeState, headMoveState])
+		listOfStates.extend([self.inState, oneState, readState, writeState, headMoveState])
 		listOfStates.extend(listOfNextLineStates)
 	
 	def attach(self, otherReactionGroup):

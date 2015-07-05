@@ -1,4 +1,4 @@
-States: 130
+States: 159
 
 START start:
 	_ -> write__var_counter_1; R; E
@@ -301,7 +301,13 @@ write_code_add_3ln_H:
 	E -> ERROR; -; E
 
 write_code_add_3___underscore:
-	_ -> write_code_add_3___read; R; _
+	_ -> write_code_add_3___one; R; _
+	1 -> ERROR; -; 1
+	H -> ERROR; -; H
+	E -> ERROR; -; E
+
+write_code_add_3___one:
+	_ -> write_code_add_3___read; R; 1
 	1 -> ERROR; -; 1
 	H -> ERROR; -; H
 	E -> ERROR; -; E
@@ -403,7 +409,13 @@ write_code_mult_3ln_H:
 	E -> ERROR; -; E
 
 write_code_mult_3___underscore:
-	_ -> write_code_mult_3___read; R; _
+	_ -> write_code_mult_3___one; R; _
+	1 -> ERROR; -; 1
+	H -> ERROR; -; H
+	E -> ERROR; -; E
+
+write_code_mult_3___one:
+	_ -> write_code_mult_3___read; R; 1
 	1 -> ERROR; -; 1
 	H -> ERROR; -; H
 	E -> ERROR; -; E
@@ -439,7 +451,13 @@ write_code_mult_3___linenumber_1:
 	E -> ERROR; -; E
 
 write_code_mult_3_1_underscore:
-	_ -> write_code_mult_3_1_read; R; _
+	_ -> write_code_mult_3_1_one; R; _
+	1 -> ERROR; -; 1
+	H -> ERROR; -; H
+	E -> ERROR; -; E
+
+write_code_mult_3_1_one:
+	_ -> write_code_mult_3_1_read; R; 1
 	1 -> ERROR; -; 1
 	H -> ERROR; -; H
 	E -> ERROR; -; E
@@ -457,13 +475,7 @@ write_code_mult_3_1_write:
 	E -> ERROR; -; E
 
 write_code_mult_3_1_headmove:
-	_ -> write_code_mult_3_1_linenumber_0; R; E
-	1 -> ERROR; -; 1
-	H -> ERROR; -; H
-	E -> ERROR; -; E
-
-write_code_mult_3_1_linenumber_0:
-	_ -> write_code_mult_4_underscore_1; R; _
+	_ -> write_code_mult_4_underscore_1; R; E
 	1 -> ERROR; -; 1
 	H -> ERROR; -; H
 	E -> ERROR; -; E
@@ -765,7 +777,7 @@ write_code_incr_ln_get_to_next_function:
 write_code_incr_ln_check_if_last_function:
 	_ -> write_code_incr_ln_find_ln; -; _
 	1 -> ERROR; -; 1
-	H -> ACCEPT; R; _
+	H -> write_code_incr_ln_out; R; H
 	E -> ERROR; -; E
 
 write_code_incr_ln_get_to_fin_recog_pattern__:
@@ -779,4 +791,166 @@ write_code_incr_ln_get_to_next_function_recog_pattern_H:
 	1 -> write_code_incr_ln_get_to_next_function; L; 1
 	H -> write_code_incr_ln_check_if_last_function; L; _
 	E -> write_code_incr_ln_get_to_next_function; L; E
+
+write_code_incr_ln_out:
+	_ -> write_code_mark_fn_check_for_line; R; _
+	1 -> write_code_mark_fn_read_symbol_read; R; 1
+	H -> write_code_mark_fn_out; L; H
+	E -> ERROR; -; E
+
+write_code_mark_fn_read_symbol_read:
+	_ -> write_code_mark_fn_read_symbol_written; R; _
+	1 -> write_code_mark_fn_read_symbol_written; R; 1
+	H -> write_code_mark_fn_read_symbol_written; R; H
+	E -> write_code_mark_fn_read_symbol_written; R; E
+
+write_code_mark_fn_read_symbol_written:
+	_ -> write_code_mark_fn_read_head_move; R; _
+	1 -> write_code_mark_fn_read_head_move; R; 1
+	H -> write_code_mark_fn_read_head_move; R; H
+	E -> write_code_mark_fn_read_head_move; R; E
+
+write_code_mark_fn_read_head_move:
+	_ -> write_code_mark_fn_get_past_goto; R; _
+	1 -> write_code_mark_fn_get_past_goto; R; 1
+	H -> write_code_mark_fn_get_past_goto; R; H
+	E -> write_code_mark_fn_get_past_goto; R; E
+
+write_code_mark_fn_get_past_goto:
+	_ -> write_code_incr_ln_out; R; _
+	1 -> write_code_mark_fn_get_past_goto; R; 1
+	H -> write_code_mark_fn_get_past_goto; R; H
+	E -> write_code_mark_fn_get_past_goto; R; E
+
+write_code_mark_fn_check_for_line:
+	_ -> write_code_mark_fn_check_for_func; R; _
+	1 -> write_code_mark_fn_get_past_ln; R; 1
+	H -> ERROR; -; H
+	E -> write_code_mark_fn_get_past_ln; R; E
+
+write_code_mark_fn_get_past_ln:
+	_ -> write_code_mark_fn_check_for_line_type; R; _
+	1 -> write_code_mark_fn_get_past_ln; R; 1
+	H -> write_code_mark_fn_get_past_ln; R; H
+	E -> write_code_mark_fn_get_past_ln; R; E
+
+write_code_mark_fn_check_for_line_type:
+	_ -> write_code_incr_ln_out; R; _
+	1 -> write_code_mark_fn_get_past_var_name; -; 1
+	H -> ERROR; -; H
+	E -> write_code_mark_fn_get_past_arg_name; -; E
+
+write_code_mark_fn_get_past_var_name:
+	_ -> write_code_incr_ln_out; R; _
+	1 -> write_code_mark_fn_get_past_var_name; R; 1
+	H -> write_code_mark_fn_get_past_var_name; R; H
+	E -> write_code_mark_fn_get_past_var_name; R; E
+
+write_code_mark_fn_get_past_arg_name:
+	_ -> write_code_mark_fn_check_for_arg; R; _
+	1 -> write_code_mark_fn_get_past_arg_name; R; 1
+	H -> write_code_mark_fn_get_past_arg_name; R; H
+	E -> write_code_mark_fn_get_past_arg_name; R; E
+
+write_code_mark_fn_check_for_arg:
+	_ -> write_code_mark_fn_check_for_line; R; _
+	1 -> write_code_mark_fn_get_past_arg_name; -; 1
+	H -> ERROR; -; H
+	E -> write_code_mark_fn_get_past_arg_name; -; E
+
+write_code_mark_fn_check_for_func:
+	_ -> ERROR; -; _
+	1 -> ERROR; -; 1
+	H -> ERROR; -; H
+	E -> write_code_mark_fn_go_right; R; H
+
+write_code_mark_fn_go_right:
+	_ -> write_code_incr_ln_out; R; _
+	1 -> ERROR; -; 1
+	H -> ERROR; -; H
+	E -> ERROR; -; E
+
+write_code_mark_fn_out:
+	_ -> write_code_mark_fn_out; L; _
+	1 -> write_code_mark_fn_out; L; 1
+	H -> write_code_incr_fn_incr; L; H
+	E -> write_code_mark_fn_out; L; E
+
+write_code_incr_fn_incr:
+	_ -> write_code_incr_fn_push_E; R; _
+	1 -> write_code_incr_fn_incr; L; E
+	H -> write_code_incr_fn_move_incr_end_1; R; H
+	E -> write_code_mark_fn_out; L; 1
+
+write_code_incr_fn_push__:
+	_ -> write_code_incr_fn_push__; R; _
+	1 -> write_code_incr_fn_push_1; R; _
+	H -> write_code_incr_fn_exit_push; R; _
+	E -> write_code_incr_fn_push_E; R; _
+
+write_code_incr_fn_push_1:
+	_ -> write_code_incr_fn_push__; R; 1
+	1 -> write_code_incr_fn_push_1; R; 1
+	H -> write_code_incr_fn_push_H; R; 1
+	E -> write_code_incr_fn_push_E; R; 1
+
+write_code_incr_fn_push_H:
+	_ -> write_code_incr_fn_push__; R; H
+	1 -> write_code_incr_fn_push_1; R; H
+	H -> write_code_incr_fn_push_H; R; H
+	E -> write_code_incr_fn_push_E; R; H
+
+write_code_incr_fn_push_E:
+	_ -> write_code_incr_fn_push__; R; E
+	1 -> write_code_incr_fn_push_1; R; E
+	H -> write_code_incr_fn_push_H; R; E
+	E -> write_code_incr_fn_push_E; R; E
+
+write_code_incr_fn_exit_push:
+	_ -> write_code_incr_fn_find_pushy_1; L; H
+	1 -> ERROR; -; 1
+	H -> ERROR; -; H
+	E -> ERROR; -; E
+
+write_code_incr_fn_find_pushy_1:
+	_ -> write_code_incr_fn_find_pushy_1; L; _
+	1 -> write_code_incr_fn_find_pushy_1; L; 1
+	H -> write_code_incr_fn_find_pushy_2; L; H
+	E -> write_code_incr_fn_find_pushy_1; L; E
+
+write_code_incr_fn_find_pushy_2:
+	_ -> write_code_incr_fn_incr; -; _
+	1 -> write_code_incr_fn_incr; -; 1
+	H -> write_code_incr_fn_move_incr_end_1; R; H
+	E -> write_code_incr_fn_find_pushy_1; -; E
+
+write_code_incr_fn_move_incr_end_1:
+	_ -> ERROR; -; _
+	1 -> ERROR; -; 1
+	H -> write_code_incr_fn_move_incr_end_2; R; H
+	E -> ERROR; -; E
+
+write_code_incr_fn_move_incr_end_2:
+	_ -> write_code_incr_fn_check_for_fin; R; _
+	1 -> write_code_incr_fn_move_incr_end_2; R; 1
+	H -> write_code_incr_fn_get_to_fin; R; _
+	E -> write_code_incr_fn_move_incr_end_2; R; E
+
+write_code_incr_fn_check_for_fin:
+	_ -> write_code_incr_fn_move_incr_end_2; -; _
+	1 -> write_code_incr_fn_move_incr_end_2; -; 1
+	H -> ACCEPT; L; H
+	E -> write_code_incr_fn_move_incr_end_2; -; E
+
+write_code_incr_fn_get_to_fin:
+	_ -> write_code_incr_fn_recog_pattern__; R; _
+	1 -> write_code_incr_fn_get_to_fin; R; 1
+	H -> write_code_incr_fn_get_to_fin; R; H
+	E -> write_code_incr_fn_get_to_fin; R; E
+
+write_code_incr_fn_recog_pattern__:
+	_ -> write_code_incr_fn_recog_pattern__; R; _
+	1 -> write_code_incr_fn_get_to_fin; R; 1
+	H -> write_code_mark_fn_out; L; H
+	E -> write_code_incr_fn_get_to_fin; R; E
 

@@ -374,7 +374,7 @@ def writeProgram(listOfStates, inState, functions, functionVariableDictionary, \
 		functionLabelDictionary, functionDictionary, path)
 	inState = incrementLineNumberIDs(listOfStates, inState)
 	inState = markFunctionNames(listOfStates, inState)
-#	inState = incrementFunctionIDs(listOfStates, inState)
+	inState = incrementFunctionIDs(listOfStates, inState)
 	
 	return inState
 
@@ -425,8 +425,8 @@ def incrementLineNumberIDs(listOfStates, inState):
 	getToFinState = State("write_code_incr_ln_get_to_fin")
 	getToNextFunctionState = State("write_code_incr_ln_get_to_next_function")
 	checkIfLastFunctionState = State("write_code_incr_ln_check_if_last_function")
-#	outState = State("write_code_incr_ln_out")
-	outState = SimpleState("ACCEPT")
+	outState = State("write_code_incr_ln_out")
+#	outState = SimpleState("ACCEPT")
 	
 	listOfStates.extend([inState, writeHState, findLineNumberState, incrementLineNumberState, \
 		pushEverythingDown_State, pushEverythingDown1State, pushEverythingDownHState, \
@@ -501,36 +501,153 @@ def incrementLineNumberIDs(listOfStates, inState):
 	getToNextFunctionState.setWrite("H", "_")
 	
 	checkIfLastFunctionState.set3("_", findLineNumberState, "-", "_")
-	checkIfLastFunctionState.set3("H", outState, "R", "_")
+	checkIfLastFunctionState.set3("H", outState, "R", "H")
 	
 	return outState
 	
+	
+# finds function name locations and marks them with an "H"	
+def markFunctionNames(listOfStates, inState):
+	
+	name = "write_code_mark_fn"
+	
+	readSymbolReadState = State(name + "_read_symbol_read")
+	readSymbolWrittenState = State(name + "_read_symbol_written")
+	readHeadMoveState = State(name + "_read_head_move")
+	getPastGotoState = State(name + "_get_past_goto")
+	checkForLineState = State(name + "_check_for_line")
+	getPastLineNumberState = State(name + "_get_past_ln")
+	checkForLineTypeState = State(name + "_check_for_line_type")
+	getPastVariableNameState = State(name + "_get_past_var_name")
+	getPastArgumentNameState = State(name + "_get_past_arg_name")
+	checkForArgumentState = State(name + "_check_for_arg")
+	checkForFunctionState = State(name + "_check_for_func")
+	goRightState = State(name + "_go_right")
+	outState = State(name + "_out")
+#	outState = SimpleState("ACCEPT")
+
+	listOfStates.extend([inState, readSymbolReadState, readSymbolWrittenState, \
+		readHeadMoveState, getPastGotoState, checkForLineState, getPastLineNumberState, \
+		checkForLineTypeState, getPastVariableNameState, getPastArgumentNameState, \
+		checkForArgumentState, checkForFunctionState, goRightState])
+	
+	#inState might have been checkForReactionState
+	inState.set3("_", checkForLineState, "R", "_")
+	inState.set3("1", readSymbolReadState, "R", "1")
+	inState.set3("H", outState, "L", "H")
+	
+	moveBy(readSymbolReadState, "", 1, "R", readSymbolWrittenState)
+	moveBy(readSymbolWrittenState, "", 1, "R", readHeadMoveState)
+	moveBy(readHeadMoveState, "", 1, "R", getPastGotoState)
+	
+	findSymbol(getPastGotoState, "_", "R", "R", inState)
+	
+	checkForLineState.set3("_", checkForFunctionState, "R", "_")
+	checkForLineState.set3("1", getPastLineNumberState, "R", "1")
+	checkForLineState.set3("E", getPastLineNumberState, "R", "E")
+	
+	findSymbol(getPastLineNumberState, "_", "R", "R", checkForLineTypeState)
+	
+	checkForLineTypeState.set3("_", inState, "R", "_")
+	checkForLineTypeState.set3("1", getPastVariableNameState, "-", "1")
+	checkForLineTypeState.set3("E", getPastArgumentNameState, "-", "E")
+	
+	findSymbol(getPastVariableNameState, "_", "R", "R", inState)
+	
+	findSymbol(getPastArgumentNameState, "_", "R", "R", checkForArgumentState)
+	
+	checkForArgumentState.set3("_", checkForLineState, "R", "_")
+	checkForArgumentState.set3("1", getPastArgumentNameState, "-", "1")
+	checkForArgumentState.set3("E", getPastArgumentNameState, "-", "E")
+		
+	# this is the whole point!	
+	checkForFunctionState.set3("E", goRightState, "R", "H")
+		
+	# obviously this is a little inefficient... at the cost of breaking 
+	# a pretty convention, 2(#functions) states could be shaved off here.	
+	goRightState.set3("_", inState, "R", "_")	
+	
+	return outState
+		
 def incrementFunctionIDs(listOfStates, inState):
-	return None
 	
-	# inState might have been called findHState
+	name = "write_code_incr_fn"
 	
-#	findSymbol(inState, "H", "L", "R", checkForFuncNameState1)
+	incrementState = State(name + "_incr")
+	pushEverythingDown_State = State(name + "_push__")
+	pushEverythingDown1State = State(name + "_push_1")
+	pushEverythingDownHState = State(name + "_push_H")
+	pushEverythingDownEState = State(name + "_push_E")
+	exitPushState = State(name + "_exit_push")
+	findPushyFunctionNameState1 = State(name + "_find_pushy_1")
+	findPushyFunctionNameState2 = State(name + "_find_pushy_2")
+	moveIncrementEnderState1 = State(name + "_move_incr_end_1")
+	moveIncrementEnderState2 = State(name + "_move_incr_end_2")
+	checkForFinState = State(name + "_check_for_fin")
+	getToFinState = State(name + "_get_to_fin")
+#	outState = State(name + "_out")
+	outState = SimpleState("ACCEPT")
 	
-#	checkForFuncNameState1.set3("_", checkForFuncNameState2, "R", "_")
-#	checkForFuncNameState2.set3("_", checkForFuncNameState3, "R", "_")
+	listOfStates.extend([inState, incrementState, pushEverythingDown_State, \
+		pushEverythingDown1State, pushEverythingDownHState, pushEverythingDownEState, \
+		exitPushState, findPushyFunctionNameState1, findPushyFunctionNameState2, \
+		moveIncrementEnderState1, moveIncrementEnderState2, checkForFinState, getToFinState])
 	
-#	checkForFuncNameState3.set3("_", getToEndFuncNameState, "R", "_")
-#	checkForFuncNameState3.set3("1", getToEnds)
+	# inState might have been called findFunctionNameState
+	findSymbol(inState, "H", "L", "L", incrementState)
 	
-#	findSymbol(getToEndFuncNameState, "_", "R", "L", incrFuncNameState)
+	incrementState.set3("_", pushEverythingDownEState, "R", "_")
+	incrementState.set3("1", incrementState, "L", "E")
+	incrementState.set3("H", moveIncrementEnderState1, "R", "H")
+	incrementState.set3("E", inState, "L", "1")
 	
-#	incrFuncNameState.set3("_", doneIncrementingState, "-", "E")
-#	incrFuncNameState.set3("1", incrFuncNameState, "L", "E")
-#	incrFuncNameState.set3("E", doneIncrementingState, "-", "1")
-#	
-#	findSymbol(doneIncrementingState, "_", "R", "R", checkForFuncNameState1)
+	pushEverythingDown_State.set3("_", pushEverythingDown_State, "R", "_")
+	pushEverythingDown_State.set3("1", pushEverythingDown1State, "R", "_")
+	pushEverythingDown_State.set3("H", exitPushState, "R", "_")
+	pushEverythingDown_State.set3("E", pushEverythingDownEState, "R", "_")
 	
-#	recognizeState.set3("_", )
+	pushEverythingDown1State.set3("_", pushEverythingDown_State, "R", "1")
+	pushEverythingDown1State.set3("1", pushEverythingDown1State, "R", "1")
+	pushEverythingDown1State.set3("H", pushEverythingDownHState, "R", "1")
+	pushEverythingDown1State.set3("E", pushEverythingDownEState, "R", "1")
 
+	pushEverythingDownHState.set3("_", pushEverythingDown_State, "R", "H")
+	pushEverythingDownHState.set3("1", pushEverythingDown1State, "R", "H")
+	pushEverythingDownHState.set3("H", pushEverythingDownHState, "R", "H")
+	pushEverythingDownHState.set3("E", pushEverythingDownEState, "R", "H")
 	
+	pushEverythingDownEState.set3("_", pushEverythingDown_State, "R", "E")
+	pushEverythingDownEState.set3("1", pushEverythingDown1State, "R", "E")
+	pushEverythingDownEState.set3("H", pushEverythingDownHState, "R", "E")
+	pushEverythingDownEState.set3("E", pushEverythingDownEState, "R", "E")
 
+	exitPushState.set3("_", findPushyFunctionNameState1, "L", "H")
+	
+	findSymbol(findPushyFunctionNameState1, "H", "L", "L", findPushyFunctionNameState2)
+	
+	findPushyFunctionNameState2.set3("_", incrementState, "-", "_")
+	findPushyFunctionNameState2.set3("1", incrementState, "-", "1")
+	findPushyFunctionNameState2.set3("H", moveIncrementEnderState1, "R", "H")
+	findPushyFunctionNameState2.set3("E", findPushyFunctionNameState1, "-", "E")
+	
+	moveIncrementEnderState1.set3("H", moveIncrementEnderState2, "R", "H")
+	
+	moveIncrementEnderState2.set3("_", checkForFinState, "R", "_")
+	moveIncrementEnderState2.set3("1", moveIncrementEnderState2, "R", "1")
+	moveIncrementEnderState2.set3("H", getToFinState, "R", "_")
+	moveIncrementEnderState2.set3("E", moveIncrementEnderState2, "R", "E")
+	
+	checkForFinState.set3("_", moveIncrementEnderState2, "-", "_")
+	checkForFinState.set3("1", moveIncrementEnderState2, "-", "1")
+	checkForFinState.set3("H", outState, "L", "H")
+	checkForFinState.set3("E", moveIncrementEnderState2, "-", "E")
+	
+	findPattern(getToFinState, inState, listOfStates, name, "_H", "R", "L", "H")
+	
+	return outState
+	
 def main():
+	
 
 ################################################################
 
