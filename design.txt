@@ -25,7 +25,7 @@ ___[functionName]...
 
 stack format:
 
-[functionName]_[returnAddress]_[ID of first var]_[ID of second var]_[functionName]
+[functionName]_[returnAddress]_[ID of first var]_[ID of second var]__[functionName]_[returnAddress]_...
 
 1EE1E1_
 

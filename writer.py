@@ -522,14 +522,13 @@ def markFunctionNames(listOfStates, inState):
 	getPastArgumentNameState = State(name + "_get_past_arg_name")
 	checkForArgumentState = State(name + "_check_for_arg")
 	checkForFunctionState = State(name + "_check_for_func")
-	goRightState = State(name + "_go_right")
 	outState = State(name + "_out")
 #	outState = SimpleState("ACCEPT")
 
 	listOfStates.extend([inState, readSymbolReadState, readSymbolWrittenState, \
 		readHeadMoveState, getPastGotoState, checkForLineState, getPastLineNumberState, \
 		checkForLineTypeState, getPastVariableNameState, getPastArgumentNameState, \
-		checkForArgumentState, checkForFunctionState, goRightState])
+		checkForArgumentState, checkForFunctionState])
 	
 	#inState might have been checkForReactionState
 	inState.set3("_", checkForLineState, "R", "_")
@@ -560,13 +559,11 @@ def markFunctionNames(listOfStates, inState):
 	checkForArgumentState.set3("1", getPastArgumentNameState, "-", "1")
 	checkForArgumentState.set3("E", getPastArgumentNameState, "-", "E")
 		
-	# this is the whole point!	
-	checkForFunctionState.set3("E", goRightState, "R", "H")
+	# this is the whole point! Note there's a minor inefficency here
+	# in that no information is gained from this symbol. Wonder if this could
+	# be easily fixed?
+	checkForFunctionState.set3("E", inState, "R", "H")
 		
-	# obviously this is a little inefficient... at the cost of breaking 
-	# a pretty convention, 2(#functions) states could be shaved off here.	
-	goRightState.set3("_", inState, "R", "_")	
-	
 	return outState
 		
 def incrementFunctionIDs(listOfStates, inState):
@@ -644,7 +641,7 @@ def incrementFunctionIDs(listOfStates, inState):
 	
 	findPattern(getToFinState, inState, listOfStates, name, "_H", "R", "L", "H")
 	
-	return outState
+	return outState	
 	
 def main():
 	

@@ -71,11 +71,19 @@ class FunctionGroup:
 		
 		lineNumber = 1
 		
+		hadFirstLine = False
 		for line in functionLines:
 			if not (line == "\n" or line[0:2] == "//" or line[0:5] == "input"):
-				listOfLineGroups.append(LineGroup(line, functionName, lineNumber, \
-					functionVariableDictionary, functionLabelDictionary, functionDictionary, \
-					convertNumberToBarCode, listOfStates))
+				if not hadFirstLine:
+					listOfLineGroups.append(LineGroup(line, functionName, lineNumber, \
+						functionVariableDictionary, functionLabelDictionary, functionDictionary, \
+						convertNumberToBarCode, listOfStates, True))
+					hadFirstLine = True
+				
+				else:
+					listOfLineGroups.append(LineGroup(line, functionName, lineNumber, \
+						functionVariableDictionary, functionLabelDictionary, functionDictionary, \
+						convertNumberToBarCode, listOfStates))
 			
 			lineNumber += 1
 
@@ -98,19 +106,32 @@ class FunctionGroup:
 # a group of states associated with writing a line of code
 class LineGroup:
 	def __init__(self, lineString, functionName, lineNumber, functionVariableDictionary, \
-		functionLabelDictionary, functionDictionary, convertNumberToBarCode, listOfStates):
+		functionLabelDictionary, functionDictionary, convertNumberToBarCode, listOfStates, 
+		isFirstLine=False):
+		
 		name = "write_code_" + functionName + "_" + str(lineNumber)
 		
 		self.inState = State(name + "_underscore_1")
-		lineNumber_State2 = State(name + "_ln_underscore_2")
+		
+		self.charString = ""
+		
+		if not isFirstLine:
+			lineNumber_State2 = State(name + "_ln_underscore_2")
+			self.charString += "_"
+			
 		lineNumberHState = State(name + "ln_H")
 		
-		self.inState.set3("_", lineNumber_State2, "R", "_")
-		lineNumber_State2.set3("_", lineNumberHState, "R", "_")
-
-		listOfStates.extend([self.inState, lineNumber_State2, lineNumberHState])
+		if isFirstLine:
+			self.inState.set3("_", lineNumberHState, "R", "_")
 		
-		self.charString = "__H"
+		if not isFirstLine:				
+			self.inState.set3("_", lineNumber_State2, "R", "_")
+			lineNumber_State2.set3("_", lineNumberHState, "R", "_")
+			listOfStates.append(lineNumber_State2)
+
+		listOfStates.extend([self.inState, lineNumberHState])
+		
+		self.charString += "_H"
 		
 		if "[" in lineString:
 			# then it must be a direct tape command

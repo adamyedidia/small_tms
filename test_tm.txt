@@ -1,4 +1,4 @@
-States: 159
+States: 156
 
 START start:
 	_ -> write__var_counter_1; R; E
@@ -283,12 +283,6 @@ write_aux_function_name_space_0:
 	E -> ERROR; -; E
 
 write_code_add_3_underscore_1:
-	_ -> write_code_add_3_ln_underscore_2; R; _
-	1 -> ERROR; -; 1
-	H -> ERROR; -; H
-	E -> ERROR; -; E
-
-write_code_add_3_ln_underscore_2:
 	_ -> write_code_add_3ln_H; R; _
 	1 -> ERROR; -; 1
 	H -> ERROR; -; H
@@ -348,14 +342,14 @@ write_code_add_3_varname_0:
 	H -> ERROR; -; H
 	E -> ERROR; -; E
 
-write_code_add_4_underscore_1:
-	_ -> write_code_add_4_ln_underscore_2; R; _
+write_code_add_4_ln_underscore_2:
+	_ -> write_code_add_4ln_H; R; _
 	1 -> ERROR; -; 1
 	H -> ERROR; -; H
 	E -> ERROR; -; E
 
-write_code_add_4_ln_underscore_2:
-	_ -> write_code_add_4ln_H; R; _
+write_code_add_4_underscore_1:
+	_ -> write_code_add_4_ln_underscore_2; R; _
 	1 -> ERROR; -; 1
 	H -> ERROR; -; H
 	E -> ERROR; -; E
@@ -391,12 +385,6 @@ write_code_add_0:
 	E -> ERROR; -; E
 
 write_code_mult_3_underscore_1:
-	_ -> write_code_mult_3_ln_underscore_2; R; _
-	1 -> ERROR; -; 1
-	H -> ERROR; -; H
-	E -> ERROR; -; E
-
-write_code_mult_3_ln_underscore_2:
 	_ -> write_code_mult_3ln_H; R; _
 	1 -> ERROR; -; 1
 	H -> ERROR; -; H
@@ -492,14 +480,14 @@ write_code_mult_3_varname_0:
 	H -> ERROR; -; H
 	E -> ERROR; -; E
 
-write_code_mult_4_underscore_1:
-	_ -> write_code_mult_4_ln_underscore_2; R; _
+write_code_mult_4_ln_underscore_2:
+	_ -> write_code_mult_4ln_H; R; _
 	1 -> ERROR; -; 1
 	H -> ERROR; -; H
 	E -> ERROR; -; E
 
-write_code_mult_4_ln_underscore_2:
-	_ -> write_code_mult_4ln_H; R; _
+write_code_mult_4_underscore_1:
+	_ -> write_code_mult_4_ln_underscore_2; R; _
 	1 -> ERROR; -; 1
 	H -> ERROR; -; H
 	E -> ERROR; -; E
@@ -564,14 +552,14 @@ write_code_mult_4_funcname_0:
 	H -> ERROR; -; H
 	E -> ERROR; -; E
 
-write_code_mult_5_underscore_1:
-	_ -> write_code_mult_5_ln_underscore_2; R; _
+write_code_mult_5_ln_underscore_2:
+	_ -> write_code_mult_5ln_H; R; _
 	1 -> ERROR; -; 1
 	H -> ERROR; -; H
 	E -> ERROR; -; E
 
-write_code_mult_5_ln_underscore_2:
-	_ -> write_code_mult_5ln_H; R; _
+write_code_mult_5_underscore_1:
+	_ -> write_code_mult_5_ln_underscore_2; R; _
 	1 -> ERROR; -; 1
 	H -> ERROR; -; H
 	E -> ERROR; -; E
@@ -636,14 +624,14 @@ write_code_mult_5_funcname_0:
 	H -> ERROR; -; H
 	E -> ERROR; -; E
 
-write_code_mult_6_underscore_1:
-	_ -> write_code_mult_6_ln_underscore_2; R; _
+write_code_mult_6_ln_underscore_2:
+	_ -> write_code_mult_6ln_H; R; _
 	1 -> ERROR; -; 1
 	H -> ERROR; -; H
 	E -> ERROR; -; E
 
-write_code_mult_6_ln_underscore_2:
-	_ -> write_code_mult_6ln_H; R; _
+write_code_mult_6_underscore_1:
+	_ -> write_code_mult_6_ln_underscore_2; R; _
 	1 -> ERROR; -; 1
 	H -> ERROR; -; H
 	E -> ERROR; -; E
@@ -862,13 +850,7 @@ write_code_mark_fn_check_for_func:
 	_ -> ERROR; -; _
 	1 -> ERROR; -; 1
 	H -> ERROR; -; H
-	E -> write_code_mark_fn_go_right; R; H
-
-write_code_mark_fn_go_right:
-	_ -> write_code_incr_ln_out; R; _
-	1 -> ERROR; -; 1
-	H -> ERROR; -; H
-	E -> ERROR; -; E
+	E -> write_code_incr_ln_out; R; H
 
 write_code_mark_fn_out:
 	_ -> write_code_mark_fn_out; L; _
