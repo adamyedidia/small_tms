@@ -131,23 +131,23 @@ def writeFunctionGuts(functionName, functionLines, labelDictionary):
 
 # This writes a counter onto the tape, which will count down from x, where x is the number of variables.
 
-def writeCounter(listOfStates, inState, x):
+def writeCounter(listOfStates, name, inState, x):
 	assert x > 0
 
 	barCode = convertNumberToBarCode(x)
 	listOfCounterWritingStates = [inState]
 
-	writeHState = State("write_var_counter_H")
+	writeHState = State(name + "_counter_H")
 	
 	listOfStates.append(inState)
 	listOfStates.append(writeHState)
 
 	for i in range(1, len(barCode)):
-		newState = State("write__var_counter_" + str(i))
+		newState = State(name + "_counter_" + str(i))
 		listOfCounterWritingStates.append(newState)
 		listOfStates.append(newState)
 
-	outState = State("write_var_counter_out")
+	outState = State(name + "_counter_out")
 	
 	listOfCounterWritingStates.append(writeHState)
 
@@ -313,20 +313,28 @@ def putHeadsEverywhere(listOfStates, inState):
 	return outState
 
 def writeVariableValuesSkeleton(listOfStates, inState, numberOfVariables, initValueString):
-	inState = writeCounter(listOfStates, inState, numberOfVariables)
+	inState = writeCounter(listOfStates, "write_var", inState, numberOfVariables)
 	inState = writeEachVariableValue(listOfStates, inState, initValueString, numberOfVariables)
 	inState = incrementEachIdentifier(listOfStates, inState)
 	inState = putHeadsEverywhere(listOfStates, inState)
-	return inState
+	return inState	
 	
 def writeAuxValues(listOfStates, inState, numberOfVariables, numberOfFunctions):
+	inState = writeAuxSkeleton(listOfStates, inState, numberOfVariables, numberOfFunctions)
+	inState = writeEachVariableName(listOfStates, inState)
+	inState = incrementVariableNames(listOfStates, inState)
+	return inState
+	
+def writeAuxSkeleton(listOfStates, inState, numberOfVariables, numberOfFunctions):
 	# Write "Keep head in place, write _, line 1, function 1"
+	# Then write some blank space for later use for indexing into variables.
 
 	# inState might have been called write_State1
 	write_State2 = State("write_aux_underscore_2")
 	write_State3 = State("write_aux_underscore_3")
 	writeEState1 = State("write_aux_E_1")
 	write_State4 = State("write_aux_underscore_4")
+	counterInState = State("write_aux_counter_in")
 	writeEState2 = State("write_aux_E_2")
 	writeHState = State("write_aux_H")
 	outState = State("write_aux_out")
@@ -350,12 +358,17 @@ def writeAuxValues(listOfStates, inState, numberOfVariables, numberOfFunctions):
 
 	writeEState1.set3("_", write_State4, "R", "E")
 
+	write_State4.set3("_", counterInState, "R", "_")
+
+	write_State5 = writeCounter(listOfStates, "write_aux", counterInState, numberOfVariables)
+	listOfStates.append(write_State5)
+
 	listOfFunctionNameSpaceStates = []
 	for i in range(int(math.log(numberOfFunctions, 2))):
 		listOfFunctionNameSpaceStates.append(State("write_aux_function_name_space_" + str(i)))
 	listOfFunctionNameSpaceStates.append(writeEState2)
 	
-	write_State4.set3("_", listOfFunctionNameSpaceStates[0], "R", "_")
+	write_State5.set3("_", listOfFunctionNameSpaceStates[0], "R", "_")
 
 	for i, state in enumerate(listOfFunctionNameSpaceStates[:-1]):
 		state.set3("_", listOfFunctionNameSpaceStates[i+1], "R", "_")
@@ -363,10 +376,123 @@ def writeAuxValues(listOfStates, inState, numberOfVariables, numberOfFunctions):
 	
 	writeEState2.set3("_", writeHState, "R", "E")
 	
-	writeHState.set3("_", outState, "R", "H")
+	writeHState.set3("_", outState, "L", "H")
 
 	return outState
+	
+def writeEachVariableName(listOfStates, inState):
+	
+	# inState might have been called findCounterState
+	name = "write_aux_var"
+	decrementCounterState = State(name + "_decr_counter")
+	delete1State = State(name + "_delete_1")
+	getPastHState = State(name + "_get_past_H")
+	findNewVarNameState = State(name + "_find_new_var")
+	writeEState = State(name + "_write_E")
+	writeHState = State(name + "_write_H")
+	outState = State(name + "_out")
+	
+	listOfStates.extend([inState, decrementCounterState, delete1State, \
+		getPastHState, findNewVarNameState, writeEState, writeHState])
+	
+	findSymbol(inState, "H", "L", "L", decrementCounterState)
+	
+	decrementCounterState.set3("_", delete1State, "R", "_")
+	decrementCounterState.set3("1", getPastHState, "-", "E")
+	decrementCounterState.set3("E", decrementCounterState, "L", "1")
+	
+	delete1State.set3("H", outState, "R", "_")
+	delete1State.set3("1", getPastHState, "-", "_")
+	
+	findSymbol(getPastHState, "H", "R", "R", findNewVarNameState)
+	
+	findSymbolW(findNewVarNameState, "H", "R", "R", "_", writeEState)
+	
+	writeEState.set3("_", writeHState, "R", "E")
+	
+	writeHState.set3("_", inState, "L", "H")
+	
+	return outState
 
+def incrementVariableNames(listOfStates, inState):
+	
+	name = "write_aux_incr"
+	
+	# this might have been inState findFirstEState = State(name + "_find_first_E")
+	writeHState1 = State(name + "_write_H_1")
+	getToFinState = State(name + "_get_to_fin")
+	incrementState = State(name + "_incr")
+	pushDown_State = State(name + "_push__")
+	pushDown1State = State(name + "_push_1")
+	pushDownEState = State(name + "_push_E")
+	exitPushState = State(name + "_exit_push")
+	findPushyNumberState = State(name + "_find_pushy")
+	getPastNumberState = State(name + "_get_past_number")
+	moveHOverState = State(name + "_move_H")
+	writeEState = State(name + "_write_E")
+	write_State1 = State(name + "_underscore_1")
+	write_State2 = State(name + "_underscore_2")
+	writeHState2 = State(name + "_write_H_2")
+	outState = State(name + "_out")
+	
+	listOfStates.extend([inState, writeHState1, getToFinState, incrementState, pushDown_State, \
+		pushDown1State, pushDownEState, exitPushState, findPushyNumberState, getPastNumberState, 
+		moveHOverState, writeEState, write_State1, write_State2, writeHState2])
+	
+	
+	findSymbol(inState, "E", "R", "R", writeHState1)
+	
+	writeHState1.set3("_", getToFinState, "R", "H")
+	
+	findSymbol(getToFinState, "H", "R", "L", incrementState)
+	
+	incrementState.set3("_", pushDownEState, "R", "_")
+	incrementState.set3("1", incrementState, "L", "E")
+	incrementState.set3("H", pushDownEState, "R", "H")
+	incrementState.set3("E", getPastNumberState, "-", "1")
+	
+	pushDown_State.set3("_", pushDown_State, "R", "_")
+	pushDown_State.set3("1", pushDown1State, "R", "_")
+	pushDown_State.set3("H", exitPushState, "R", "_")
+	pushDown_State.set3("E", pushDownEState, "R", "_")
+	
+	pushDown1State.set3("_", pushDown_State, "R", "1")
+	pushDown1State.set3("1", pushDown1State, "R", "1")
+	pushDown1State.set3("H", exitPushState, "R", "1")
+	pushDown1State.set3("E", pushDownEState, "R", "1")
+	
+	pushDownEState.set3("_", pushDown_State, "R", "E")
+	pushDownEState.set3("1", pushDown1State, "R", "E")
+	pushDownEState.set3("H", exitPushState, "R", "E")
+	pushDownEState.set3("E", pushDownEState, "R", "E")
+	
+	exitPushState.set3("_", findPushyNumberState, "L", "H")	
+
+	findPushyNumberState.set3("_", findPushyNumberState, "L", "_")
+	findPushyNumberState.set3("1", incrementState, "-", "1")
+	findPushyNumberState.set3("H", moveHOverState, "R", "_")
+	findPushyNumberState.set3("E", findPushyNumberState, "L", "E")
+	
+	getPastNumberState.set3("_", incrementState, "L", "_")
+	getPastNumberState.set3("1", getPastNumberState, "L", "1")
+	getPastNumberState.set3("H", moveHOverState, "R", "_")
+	getPastNumberState.set3("E", getPastNumberState, "L", "E")
+	
+	moveHOverState.set3("_", getToFinState, "R", "H")
+	moveHOverState.set3("1", moveHOverState, "R", "1")
+	moveHOverState.set3("H", writeEState, "R", "_")
+	moveHOverState.set3("E", moveHOverState, "R", "E")
+	
+	writeEState.set3("_", write_State1, "R", "E")
+	
+	write_State1.set3("_", write_State2, "R", "_")
+
+	write_State2.set3("_", writeHState2, "R", "_")
+	
+	writeHState2.set3("_", outState, "R", "H")
+	
+	return outState
+	
 def writeProgram(listOfStates, inState, functions, functionVariableDictionary, \
 	functionLabelDictionary, functionDictionary, path):
 
@@ -514,7 +640,6 @@ def markFunctionNames(listOfStates, inState):
 	readSymbolReadState = State(name + "_read_symbol_read")
 	readSymbolWrittenState = State(name + "_read_symbol_written")
 	readHeadMoveState = State(name + "_read_head_move")
-	getPastGotoState = State(name + "_get_past_goto")
 	checkForLineState = State(name + "_check_for_line")
 	getPastLineNumberState = State(name + "_get_past_ln")
 	checkForLineTypeState = State(name + "_check_for_line_type")
@@ -526,7 +651,7 @@ def markFunctionNames(listOfStates, inState):
 #	outState = SimpleState("ACCEPT")
 
 	listOfStates.extend([inState, readSymbolReadState, readSymbolWrittenState, \
-		readHeadMoveState, getPastGotoState, checkForLineState, getPastLineNumberState, \
+		readHeadMoveState, checkForLineState, getPastLineNumberState, \
 		checkForLineTypeState, getPastVariableNameState, getPastArgumentNameState, \
 		checkForArgumentState, checkForFunctionState])
 	
@@ -536,11 +661,12 @@ def markFunctionNames(listOfStates, inState):
 	inState.set3("H", outState, "L", "H")
 	
 	moveBy(readSymbolReadState, "", 1, "R", readSymbolWrittenState)
+	
 	moveBy(readSymbolWrittenState, "", 1, "R", readHeadMoveState)
-	moveBy(readHeadMoveState, "", 1, "R", getPastGotoState)
 	
-	findSymbol(getPastGotoState, "_", "R", "R", inState)
-	
+	moveBy(readHeadMoveState, "", 1, "R", getPastVariableNameState)
+	# a goto looks like a variable name
+		
 	checkForLineState.set3("_", checkForFunctionState, "R", "_")
 	checkForLineState.set3("1", getPastLineNumberState, "R", "1")
 	checkForLineState.set3("E", getPastLineNumberState, "R", "E")
@@ -582,8 +708,8 @@ def incrementFunctionIDs(listOfStates, inState):
 	moveIncrementEnderState2 = State(name + "_move_incr_end_2")
 	checkForFinState = State(name + "_check_for_fin")
 	getToFinState = State(name + "_get_to_fin")
-#	outState = State(name + "_out")
-	outState = SimpleState("ACCEPT")
+	outState = State(name + "_out")
+#	outState = SimpleState("ACCEPT")
 	
 	listOfStates.extend([inState, incrementState, pushEverythingDown_State, \
 		pushEverythingDown1State, pushEverythingDownHState, pushEverythingDownEState, \
@@ -642,6 +768,16 @@ def incrementFunctionIDs(listOfStates, inState):
 	findPattern(getToFinState, inState, listOfStates, name, "_H", "R", "L", "H")
 	
 	return outState	
+	
+def write(listOfStates, inState, numberOfVariables, initValueString, numberOfFunctions, \
+	functions, functionVariableDictionary, functionLabelDictionary, functionDictionary, path):
+	
+	inState = writeVariableValuesSkeleton(listOfStates, inState, numberOfVariables, initValueString)	
+	inState = writeAuxValues(listOfStates, inState, numberOfVariables, numberOfFunctions)
+	inState = writeProgram(listOfStates, inState, functions, functionVariableDictionary,
+		functionLabelDictionary, functionDictionary, path)
+		
+	return inState	
 	
 def main():
 	
@@ -716,5 +852,5 @@ def main():
 
 
 if __name__ == "__main__":
-	main()
-
+	#main()
+	pass

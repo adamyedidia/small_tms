@@ -25,7 +25,7 @@ ___[functionName]...
 
 stack format:
 
-[functionName]_[returnAddress]_[ID of first var]_[ID of second var]__[functionName]_[returnAddress]_...
+[functionName]_[ID of first var]_[ID of second var]_..._[returnAddress]___[functionName]_[ID of first var]_...
 
 1EE1E1_
 
@@ -42,7 +42,6 @@ HH1E1E11H1EE1EH1E1H11EH1EE
 [lineNumber]__...
 
 
-
 HH1E1E1E
 
 HH_1E1EE1 
@@ -52,6 +51,21 @@ list of steps:
 
 -go to function at the top of the stack
 -go to line of code 
+IF DIRECT COMMAND:
+-read the variable name
+-index the variable name into the function stack's list of variables
+-go to the resulting indexed variable in the variable value zone
+-read the symbol on the tape
+-go to the corresponding reaction
+-figure out what to write and how to move
+-write and move
+-set the line number to what it needs to be (+1 or GOTO)
+IF FUNCTION CALL:
+-for each variable in the function call, index that variable name into the function stack's list of variables
+-put what you get on the stack
+IF RETURN STATEMENT:
+-delete all the stuff currently at the top of the stack
+-set the line number to the return address
 
 
 

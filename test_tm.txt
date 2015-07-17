@@ -1,7 +1,7 @@
-States: 156
+States: 181
 
 START start:
-	_ -> write__var_counter_1; R; E
+	_ -> write_var_counter_1; R; E
 	1 -> ERROR; -; 1
 	H -> ERROR; -; H
 	E -> ERROR; -; E
@@ -12,7 +12,7 @@ write_var_counter_H:
 	H -> ERROR; -; H
 	E -> ERROR; -; E
 
-write__var_counter_1:
+write_var_counter_1:
 	_ -> write_var_counter_H; R; 1
 	1 -> ERROR; -; 1
 	H -> ERROR; -; H
@@ -247,7 +247,7 @@ write_aux_E_1:
 	E -> ERROR; -; E
 
 write_aux_underscore_4:
-	_ -> write_aux_function_name_space_0; R; _
+	_ -> write_aux_counter_in; R; _
 	1 -> ERROR; -; 1
 	H -> ERROR; -; H
 	E -> ERROR; -; E
@@ -259,7 +259,7 @@ write_aux_E_2:
 	E -> ERROR; -; E
 
 write_aux_H:
-	_ -> write_aux_out; R; H
+	_ -> write_aux_out; L; H
 	1 -> ERROR; -; 1
 	H -> ERROR; -; H
 	E -> ERROR; -; E
@@ -276,8 +276,164 @@ write_aux_line_number_space_1:
 	H -> ERROR; -; H
 	E -> ERROR; -; E
 
+write_aux_counter_in:
+	_ -> write_aux_counter_1; R; E
+	1 -> ERROR; -; 1
+	H -> ERROR; -; H
+	E -> ERROR; -; E
+
+write_aux_counter_H:
+	_ -> write_aux_counter_out; R; H
+	1 -> ERROR; -; 1
+	H -> ERROR; -; H
+	E -> ERROR; -; E
+
+write_aux_counter_1:
+	_ -> write_aux_counter_H; R; 1
+	1 -> ERROR; -; 1
+	H -> ERROR; -; H
+	E -> ERROR; -; E
+
+write_aux_counter_out:
+	_ -> write_aux_function_name_space_0; R; _
+	1 -> ERROR; -; 1
+	H -> ERROR; -; H
+	E -> ERROR; -; E
+
 write_aux_function_name_space_0:
 	_ -> write_aux_E_2; R; _
+	1 -> ERROR; -; 1
+	H -> ERROR; -; H
+	E -> ERROR; -; E
+
+write_aux_out:
+	_ -> write_aux_out; L; _
+	1 -> write_aux_out; L; 1
+	H -> write_aux_var_decr_counter; L; H
+	E -> write_aux_out; L; E
+
+write_aux_var_decr_counter:
+	_ -> write_aux_var_delete_1; R; _
+	1 -> write_aux_var_get_past_H; -; E
+	H -> ERROR; -; H
+	E -> write_aux_var_decr_counter; L; 1
+
+write_aux_var_delete_1:
+	_ -> ERROR; -; _
+	1 -> write_aux_var_get_past_H; -; _
+	H -> write_aux_var_out; R; _
+	E -> ERROR; -; E
+
+write_aux_var_get_past_H:
+	_ -> write_aux_var_get_past_H; R; _
+	1 -> write_aux_var_get_past_H; R; 1
+	H -> write_aux_var_find_new_var; R; H
+	E -> write_aux_var_get_past_H; R; E
+
+write_aux_var_find_new_var:
+	_ -> write_aux_var_find_new_var; R; _
+	1 -> write_aux_var_find_new_var; R; 1
+	H -> write_aux_var_write_E; R; _
+	E -> write_aux_var_find_new_var; R; E
+
+write_aux_var_write_E:
+	_ -> write_aux_var_write_H; R; E
+	1 -> ERROR; -; 1
+	H -> ERROR; -; H
+	E -> ERROR; -; E
+
+write_aux_var_write_H:
+	_ -> write_aux_out; L; H
+	1 -> ERROR; -; 1
+	H -> ERROR; -; H
+	E -> ERROR; -; E
+
+write_aux_var_out:
+	_ -> write_aux_var_out; R; _
+	1 -> write_aux_var_out; R; 1
+	H -> write_aux_var_out; R; H
+	E -> write_aux_incr_write_H_1; R; E
+
+write_aux_incr_write_H_1:
+	_ -> write_aux_incr_get_to_fin; R; H
+	1 -> ERROR; -; 1
+	H -> ERROR; -; H
+	E -> ERROR; -; E
+
+write_aux_incr_get_to_fin:
+	_ -> write_aux_incr_get_to_fin; R; _
+	1 -> write_aux_incr_get_to_fin; R; 1
+	H -> write_aux_incr_incr; L; H
+	E -> write_aux_incr_get_to_fin; R; E
+
+write_aux_incr_incr:
+	_ -> write_aux_incr_push_E; R; _
+	1 -> write_aux_incr_incr; L; E
+	H -> write_aux_incr_push_E; R; H
+	E -> write_aux_incr_get_past_number; -; 1
+
+write_aux_incr_push__:
+	_ -> write_aux_incr_push__; R; _
+	1 -> write_aux_incr_push_1; R; _
+	H -> write_aux_incr_exit_push; R; _
+	E -> write_aux_incr_push_E; R; _
+
+write_aux_incr_push_1:
+	_ -> write_aux_incr_push__; R; 1
+	1 -> write_aux_incr_push_1; R; 1
+	H -> write_aux_incr_exit_push; R; 1
+	E -> write_aux_incr_push_E; R; 1
+
+write_aux_incr_push_E:
+	_ -> write_aux_incr_push__; R; E
+	1 -> write_aux_incr_push_1; R; E
+	H -> write_aux_incr_exit_push; R; E
+	E -> write_aux_incr_push_E; R; E
+
+write_aux_incr_exit_push:
+	_ -> write_aux_incr_find_pushy; L; H
+	1 -> ERROR; -; 1
+	H -> ERROR; -; H
+	E -> ERROR; -; E
+
+write_aux_incr_find_pushy:
+	_ -> write_aux_incr_find_pushy; L; _
+	1 -> write_aux_incr_incr; -; 1
+	H -> write_aux_incr_move_H; R; _
+	E -> write_aux_incr_find_pushy; L; E
+
+write_aux_incr_get_past_number:
+	_ -> write_aux_incr_incr; L; _
+	1 -> write_aux_incr_get_past_number; L; 1
+	H -> write_aux_incr_move_H; R; _
+	E -> write_aux_incr_get_past_number; L; E
+
+write_aux_incr_move_H:
+	_ -> write_aux_incr_get_to_fin; R; H
+	1 -> write_aux_incr_move_H; R; 1
+	H -> write_aux_incr_write_E; R; _
+	E -> write_aux_incr_move_H; R; E
+
+write_aux_incr_write_E:
+	_ -> write_aux_incr_underscore_1; R; E
+	1 -> ERROR; -; 1
+	H -> ERROR; -; H
+	E -> ERROR; -; E
+
+write_aux_incr_underscore_1:
+	_ -> write_aux_incr_underscore_2; R; _
+	1 -> ERROR; -; 1
+	H -> ERROR; -; H
+	E -> ERROR; -; E
+
+write_aux_incr_underscore_2:
+	_ -> write_aux_incr_write_H_2; R; _
+	1 -> ERROR; -; 1
+	H -> ERROR; -; H
+	E -> ERROR; -; E
+
+write_aux_incr_write_H_2:
+	_ -> write_aux_incr_out; R; H
 	1 -> ERROR; -; 1
 	H -> ERROR; -; H
 	E -> ERROR; -; E
@@ -360,7 +516,7 @@ write_code_add_4ln_H:
 	H -> ERROR; -; H
 	E -> ERROR; -; E
 
-write_aux_out:
+write_aux_incr_out:
 	_ -> write_code_add_underscore_2; R; H
 	1 -> ERROR; -; 1
 	H -> ERROR; -; H
@@ -799,16 +955,10 @@ write_code_mark_fn_read_symbol_written:
 	E -> write_code_mark_fn_read_head_move; R; E
 
 write_code_mark_fn_read_head_move:
-	_ -> write_code_mark_fn_get_past_goto; R; _
-	1 -> write_code_mark_fn_get_past_goto; R; 1
-	H -> write_code_mark_fn_get_past_goto; R; H
-	E -> write_code_mark_fn_get_past_goto; R; E
-
-write_code_mark_fn_get_past_goto:
-	_ -> write_code_incr_ln_out; R; _
-	1 -> write_code_mark_fn_get_past_goto; R; 1
-	H -> write_code_mark_fn_get_past_goto; R; H
-	E -> write_code_mark_fn_get_past_goto; R; E
+	_ -> write_code_mark_fn_get_past_var_name; R; _
+	1 -> write_code_mark_fn_get_past_var_name; R; 1
+	H -> write_code_mark_fn_get_past_var_name; R; H
+	E -> write_code_mark_fn_get_past_var_name; R; E
 
 write_code_mark_fn_check_for_line:
 	_ -> write_code_mark_fn_check_for_func; R; _
@@ -921,7 +1071,7 @@ write_code_incr_fn_move_incr_end_2:
 write_code_incr_fn_check_for_fin:
 	_ -> write_code_incr_fn_move_incr_end_2; -; _
 	1 -> write_code_incr_fn_move_incr_end_2; -; 1
-	H -> ACCEPT; L; H
+	H -> write_code_incr_fn_out; L; H
 	E -> write_code_incr_fn_move_incr_end_2; -; E
 
 write_code_incr_fn_get_to_fin:
