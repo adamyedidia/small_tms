@@ -32,6 +32,34 @@ def prepTopFunction(inState, listOfStates, name):
 	
     return outState
 	
+def prepLine(inState, listOfStates, name):
+    # inState might have been called findLineNumber
+    getToStartLineNumber = State(name + "_get_to_start_ln")
+    markFirstLine = State(name + "_mark_first_line")
+    getPastFunctionName = State(name + "_get_past_fn")
+    writeH = State(name + "_write_H")
+    getToLineNumber = State(name + "_get_to_ln")
+    outState = State(name + "_out")
+    
+    listOfStates.extend([inState, getToStartLineNumber, markFirstLine, getPastFunctionName, 
+        writeH, getToLineNumber])
+    
+    inState.set3("_", inState, "L", "_")
+    inState.set3("1", getToStartLineNumber, "-", "1")
+    inState.set3("E", getToStartLineNumber, "-", "E")
+    
+    findSymbolW(getToStartLineNumber, "_", "L", "R", "H", markFirstLine)
+    
+    findSymbolW(markFirstLine, "H", "R", "R", "_", getPastFunctionName)
+    
+    findSymbol(getPastFunctionName, "_", "R", "R", writeH)
+        
+    writeH.set3("_", getToLineNumber, "L", "H")
+    
+    findSymbol(getToLineNumber, "H", "L", "R", outState)
+
+    return outState
+
 def simpleTravelRight(inState, listOfStates, name, outState=None):
     
     if outState == None:
@@ -59,7 +87,7 @@ def simpleTravelLeft(inState, listOfStates, name, lastMove="R", outState=None):
 # for obvious reasons.
 def moveFunctionMarker(inState, listOfStates, name, outState=None):
     
-    # inState might have been called checkForReactionState
+    # inState might have been called getPastVariableNameState
     readSymbolReadState = State(name + "_read_symbol_read")
     checkForLineState = State(name + "_check_for_line")
     getPastLineNumberState = State(name + "_get_past_ln")
@@ -100,6 +128,48 @@ def moveFunctionMarker(inState, listOfStates, name, outState=None):
     checkForArgumentState.set3("E", getPastArgumentNameState, "-", "E")
     
     findSymbol(returnToFailedFunctionState, "H", "L", "-", outState)
+    
+    return outState
+    
+def moveLineMarker(inState, listOfStates, name, outState=None):
+    # inState might have been called getPastLineNumberState
+    
+    checkForReactionState = State(name + "_check_for_reaction")
+    readSymbolReadState = State(name + "_read_symbol_read")
+    checkForLineTypeState = State(name + "_check_for_line_type")
+    getPastVariableNameState = State(name + "_get_past_var_name")
+    getPastArgumentNameState = State(name + "_get_past_arg_name")
+    checkForArgumentState = State(name + "_check_for_arg")
+    returnToFailedLineState = State(name + "_return_failed_line")
+    if outState == None:
+        outState = State(name + "_out")
+    
+    listOfStates.extend([inState, checkForReactionState, readSymbolReadState, checkForLineTypeState, 
+        getPastVariableNameState, getPastArgumentNameState, checkForArgumentState, returnToFailedLineState])
+    
+    # This is the whole point!
+    checkForReactionState.set3("_", returnToFailedLineState, "L", "H")
+    checkForReactionState.set3("1", readSymbolReadState, "R", "1")
+    
+    moveBy(readSymbolReadState, name + "_reading_basic_info", 3, "R", getPastVariableNameState, 
+        listOfStates)
+    
+    findSymbol(inState, "_", "R", "R", checkForLineTypeState)
+    
+    checkForLineTypeState.set3("_", checkForReactionState, "R", "_")
+    checkForLineTypeState.set3("1", getPastVariableNameState, "-", "1")
+    checkForLineTypeState.set3("E", getPastArgumentNameState, "-", "E")
+    
+    findSymbol(getPastVariableNameState, "_", "R", "R", checkForReactionState)
+    
+    findSymbol(getPastArgumentNameState, "_", "R", "R", checkForArgumentState)
+    
+    # This is the whole point!
+    checkForArgumentState.set3("_", returnToFailedLineState, "L", "H")
+    checkForArgumentState.set3("1", getPastArgumentNameState, "-", "1")
+    checkForArgumentState.set3("E", getPastArgumentNameState, "-", "E")
+    
+    findSymbol(returnToFailedLineState, "H", "L", "-", outState)
     
     return outState
     
@@ -224,11 +294,14 @@ def findMatchingValue(inState, listOfStates, name, travelThere, travelBack, move
     
     # if the symbol matches, and it was the last one, we have succeeded
 
+    successRectified = rectifyNumber(readThereSymbolDict["success"], listOfStates, 
+        name + "_goodnumber_rectify", "H")
+
     gotPastHSuccess = State(name + "_got_past_H_success")
 
-    readThereSymbolDict["success"].set3("H", gotPastHSuccess, "L", "H")
+    findSymbol(successRectified, "H", "L", "L", gotPastHSuccess)
 
-    listOfStates.append(readThereSymbolDict["success"])
+    listOfStates.append(successRectified)
 
     cameHomeVictorious = travelBack(gotPastHSuccess, listOfStates, name + "_succeeded")
     
@@ -241,6 +314,8 @@ def processCentrally(inState, listOfStates):
     inState = findMatchingValue(inState, listOfStates, "cpu_match_top_func", simpleTravelRight, \
         simpleTravelLeft, moveFunctionMarker)
     inState = prepLine(inState, listOfStates, "cpu_prep_line")
+    inState = findMatchingValue(inState, listOfStates, "cpu_match_line", simpleTravelRight, \
+        simpleTravelLeft, moveLineMarker)
 
     listOfStates.append(inState)
     inState.setAllNextStates(SimpleState("ACCEPT"))
