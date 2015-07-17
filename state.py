@@ -398,7 +398,11 @@ class State:
 			
 	def setHeadMove(self, symbol, headMove):
 		assert symbol in self.alphabet
-		assert headMove in ["L", "R", "-"]
+		try:
+			assert headMove in ["L", "R", "-"]
+		except:
+			print "Unacceptable! headMove was", headMove
+			raise
 		self.headMoveDict[symbol] = headMove
 			
 	def setWrite(self, symbol, write):
@@ -417,7 +421,12 @@ class State:
 			self.nextStateDict[symbol] = nextState
 
 	def setAllHeadMoves(self, headMove):
-		assert headMove in ["L", "R", "-"]
+		try:
+			assert headMove in ["L", "R", "-"]
+		except:
+			print "Unacceptable! Headmove was", headMove
+			raise
+            
 		for symbol in self.alphabet:
 			self.headMoveDict[symbol] = headMove
 

@@ -360,7 +360,7 @@ def writeAuxSkeleton(listOfStates, inState, numberOfVariables, numberOfFunctions
 
 	write_State4.set3("_", counterInState, "R", "_")
 
-	write_State5 = writeCounter(listOfStates, "write_aux", counterInState, numberOfVariables)
+	write_State5 = writeCounter(listOfStates, "write_aux", counterInState, numberOfVariables+1)
 	listOfStates.append(write_State5)
 
 	listOfFunctionNameSpaceStates = []
@@ -419,6 +419,7 @@ def incrementVariableNames(listOfStates, inState):
 	name = "write_aux_incr"
 	
 	# this might have been inState findFirstEState = State(name + "_find_first_E")
+	goRightTwiceState = State(name + "_go_right_twice")
 	writeHState1 = State(name + "_write_H_1")
 	getToFinState = State(name + "_get_to_fin")
 	incrementState = State(name + "_incr")
@@ -435,12 +436,15 @@ def incrementVariableNames(listOfStates, inState):
 	writeHState2 = State(name + "_write_H_2")
 	outState = State(name + "_out")
 	
-	listOfStates.extend([inState, writeHState1, getToFinState, incrementState, pushDown_State, \
-		pushDown1State, pushDownEState, exitPushState, findPushyNumberState, getPastNumberState, 
+	listOfStates.extend([inState, goRightTwiceState, writeHState1, getToFinState, \
+		incrementState, pushDown_State, \
+		pushDown1State, pushDownEState, exitPushState, findPushyNumberState, getPastNumberState, \
 		moveHOverState, writeEState, write_State1, write_State2, writeHState2])
 	
 	
-	findSymbol(inState, "E", "R", "R", writeHState1)
+	findSymbolW(inState, "E", "R", "R", "E", goRightTwiceState)
+	
+	moveBy(goRightTwiceState, name + "_go_right_twice", 2, "R", writeHState1, listOfStates)
 	
 	writeHState1.set3("_", getToFinState, "R", "H")
 	

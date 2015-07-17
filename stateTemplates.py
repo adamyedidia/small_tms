@@ -1,7 +1,7 @@
 from state import *
 import sys
 
-def moveBy(state, name, amount, direction, nextState, alphabet=["_", "1", "H", "E"]):
+def moveBy(state, name, amount, direction, nextState, listOfStates=None, alphabet=["_", "1", "H", "E"]):
 	returnList = [state]
 	
 	if amount == 0:
@@ -14,7 +14,10 @@ def moveBy(state, name, amount, direction, nextState, alphabet=["_", "1", "H", "
 	else:
 		prevState = state
 		for i in range(amount - 1):
-			currentState = State(name + "move_by." + str(i+1), None, alphabet)
+			currentState = State(name + "_move_by_" + str(i+1), None, alphabet)
+			
+			if not listOfStates == None:
+				listOfStates.append(currentState)
 
 			returnList.append(currentState)
 			prevState.setAllNextStates(currentState)

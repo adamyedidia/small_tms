@@ -39,8 +39,6 @@ def main():
     
     convertStatesToString(listOfStates, open("test_tm.txt", "w"))
     
-if __name__ == "__main__":
-    print "got here"
-    
+if __name__ == "__main__":    
     main()
  
