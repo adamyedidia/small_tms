@@ -97,8 +97,9 @@ class SingleTapeTuringMachine:
 		halted = False
 
 		while stepCounter < float(numSteps):
-			if not quiet:
-				self.printTape(-2, 187, output)
+			if stepCounter > 18000 and stepCounter < 20000:
+				if not quiet:
+					self.printTape(-2, 250, output)
 			
 #			print stepCounter, float(numSteps), stepCounter < float(numSteps)
 
@@ -138,12 +139,12 @@ class SingleTapeTuringMachine:
 			print self.state.stateName
 
 			self.tape.printTape(start, end)
-			print "--------------------------------------"
+#			print "--------------------------------------"
 		else:
 			output.write(self.state.stateName + "\n")
 
 			self.tape.printTape(start, end, output)
-			output.write("--------------------------------------\n")	
+#			output.write("--------------------------------------\n")	
 
 class Tape:
 	# By convention the first symbol in the alphabet is the initial symbol

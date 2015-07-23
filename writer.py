@@ -772,6 +772,38 @@ def incrementFunctionIDs(listOfStates, inState):
 	findPattern(getToFinState, inState, listOfStates, name, "_H", "R", "L", "H")
 	
 	return outState	
+    
+def firstPrepTopFunction(inState, listOfStates, name):
+    markFirstFunctionState = State(name + "_mark_first_fn")
+    writeHState1 = State(name + "_write_H_1")
+    getToFinState = State(name + "_get_to_fin")
+    writeHState2 = State(name + "_write_H_2")
+    writeHState3 = State(name + "_write_H_3")
+    getPastFinState = State(name + "_get_past_fin")
+    findHState = State(name + "_find_H")
+    outState = State(name + "_out")
+	
+    listOfStates.extend([inState, markFirstFunctionState, writeHState1, getToFinState,
+        writeHState2, writeHState3, getPastFinState, findHState])
+	
+    findPattern(inState, markFirstFunctionState, listOfStates, name + "_mark_first_fn", "HH", "L", "R", "H")
+    
+    moveBy(markFirstFunctionState, name + "_mark_first_fn", 2, "R", writeHState1, listOfStates)
+
+    writeHState1.set3("_", getToFinState, "R", "H")
+    
+    findSymbol(getToFinState, "H", "R", "R", writeHState2)
+    
+    writeHState2.set3("_", writeHState3, "R", "H")
+    
+    writeHState3.set3("_", getPastFinState, "L", "H")
+    
+    getPastFinState.set3("_", findHState, "-", "_")
+    getPastFinState.set3("H", getPastFinState, "L", "H")
+    
+    findSymbol(findHState, "H", "L", "L", outState)
+	
+    return outState    
 	
 def write(listOfStates, inState, numberOfVariables, initValueString, numberOfFunctions, \
 	functions, functionVariableDictionary, functionLabelDictionary, functionDictionary, path):
@@ -780,6 +812,9 @@ def write(listOfStates, inState, numberOfVariables, initValueString, numberOfFun
 	inState = writeAuxValues(listOfStates, inState, numberOfVariables, numberOfFunctions)
 	inState = writeProgram(listOfStates, inState, functions, functionVariableDictionary,
 		functionLabelDictionary, functionDictionary, path)
+    
+    # This is initial preparation for the execution of the CPU
+	inState = firstPrepTopFunction(inState, listOfStates, "first_prep")
 		
 	return inState	
 	
