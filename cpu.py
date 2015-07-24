@@ -49,7 +49,8 @@ def commonPrepTopFunction(inState, listOfStates, name):
     return outState
     
 def prepLine(inState, listOfStates, name):
-    # inState might have been called findLineNumber
+    # inState might have been called getPastStack
+    findLineNumber = State(name + "_find_ln")
     getToStartLineNumber = State(name + "_get_to_start_ln")
     markFirstLine = State(name + "_mark_first_line")
     getPastFunctionName = State(name + "_get_past_fn")
@@ -57,12 +58,14 @@ def prepLine(inState, listOfStates, name):
     getToLineNumber = State(name + "_get_to_ln")
     outState = State(name + "_out")
     
-    listOfStates.extend([inState, getToStartLineNumber, markFirstLine, getPastFunctionName, 
+    listOfStates.extend([inState, findLineNumber, getToStartLineNumber, markFirstLine, getPastFunctionName, 
         writeH, getToLineNumber])
     
-    inState.set3("_", inState, "L", "_")
-    inState.set3("1", getToStartLineNumber, "-", "1")
-    inState.set3("E", getToStartLineNumber, "-", "E")
+    findPattern(inState, findLineNumber, listOfStates, name + "_get_past_stack", "___", "L", "-", "_")
+    
+    findLineNumber.set3("_", findLineNumber, "L", "_")
+    findLineNumber.set3("1", getToStartLineNumber, "-", "1")
+    findLineNumber.set3("E", getToStartLineNumber, "-", "E")
     
     findSymbolW(getToStartLineNumber, "_", "L", "R", "H", markFirstLine)
     
@@ -89,12 +92,16 @@ def prepCopyVarName(inState, listOfStates, name):
     
     return outState
     
+# This function also creates the two underscores needed for the new function on the stack (should there be a function call)
 def readLineType(inState, listOfStates, name):
     # inState might have been called moveRightState
     getPastAuxLineNumber = State(name + "_get_past_aux_ln")
     writeH = State(name + "_write_H")
     findFirstFunction = State(name + "_find_first_func")
     findThreeUnderscores = State(name + "_find_aux_fin")
+    write1 = State(name + "_write_1")
+    findAux = State(name + "_find_aux")
+    checkIfShouldPushMore = State(name + "_check_if_should_push_more")
     findLine = State(name + "_find_line")
     getPastLineNumber = State(name + "_get_past_ln")
     readType = State(name + "_read_type")
@@ -102,7 +109,7 @@ def readLineType(inState, listOfStates, name):
         "function": State(name + "_out_function")}
         
     listOfStates.extend([inState, getPastAuxLineNumber, writeH, findFirstFunction, findThreeUnderscores, 
-        findLine, getPastLineNumber, readType])
+        write1, findAux, checkIfShouldPushMore, findLine, getPastLineNumber, readType])
     
     moveBy(inState, name + "_get_past_early_garbage", 1, "R", getPastAuxLineNumber, listOfStates)
     
@@ -112,7 +119,20 @@ def readLineType(inState, listOfStates, name):
     
     findSymbol(findFirstFunction, "E", "R", "-", findThreeUnderscores)
     
-    findPattern(findThreeUnderscores, findLine, listOfStates, name + "_find_aux_fin", "___", "R", "R", "H")
+    findPattern(findThreeUnderscores, write1, listOfStates, name + "_find_aux_fin", "___", "R", "R", "H")
+    
+    pushIn, pushOut = pushDownTilHHH("_", listOfStates, name + "_create_underscore_push")
+    listOfStates.append(pushOut)
+    
+    # The writing 1 is to mark the tape, telling it to create an underscore twice
+    write1.set3("_", pushIn, "R", "1")
+    
+    findSymbol(pushOut, "H", "L", "L", findAux)
+    
+    findSymbol(findAux, "H", "L", "R", checkIfShouldPushMore)
+    
+    checkIfShouldPushMore.set3("_", findLine, "-", "_")
+    checkIfShouldPushMore.set3("1", pushIn, "-", "_")
     
     findSymbolW(findLine, "H", "R", "R", "_", getPastLineNumber)
 
@@ -152,7 +172,10 @@ def pushDownTilHHH(startSymbol, listOfStates, name):
     getPastFin.set3("_", outState, "-", "_")
     getPastFin.set3("H", getPastFin, "L", "H")
     
-    return startDict[startSymbol], outState
+    if startSymbol == "all":
+        return startDict, outState
+    else:
+        return startDict[startSymbol], outState
 
 def simpleTravelRight(inState, listOfStates, name, lastMove="R", lastWrite="H", outState=None):
     
@@ -774,7 +797,7 @@ def indexIntoStack(inState, listOfStates, name, outState=None):
     inState.set3("E", inState, "L", "1")
     
     delete1.set3("1", getPastH, "R", "_")
-    delete1.set3("H", outState, "-", "_")
+    delete1.set3("H", outState, "R", "_")
     
     findSymbol(getPastH, "H", "R", "R", findH)
     
@@ -1084,40 +1107,274 @@ def handleDirectCommand(inState, listOfStates, name, outState):
         travelAuxToVars, travelAuxToVarsCareful, travelVarsToAux, moveVarMarker)
     dealWithLineNumberDict = dealWithTape(readAndFoundVarDict, listOfStates, name + "_deal_with_tape")
     doneWithLineNumber = State(name + "_dealt_with_ln")
-    incrementLineNumber(dealWithLineNumberDict["incr"], listOfStates, name + "_incr_ln", 
-        doneWithLineNumber)
-    copyGoto(dealWithLineNumberDict["goto"], listOfStates, name + "_copy_goto", doneWithLineNumber)
-    standardPrepTopFunction(doneWithLineNumber, listOfStates, name + "_standard_prep", outState)
+    incrementLineNumber(dealWithLineNumberDict["incr"], listOfStates, name + "_incr_ln", outState)
+    copyGoto(dealWithLineNumberDict["goto"], listOfStates, name + "_copy_goto", outState)
     
     return outState
     
 # This one is cramped	
 def copyFunctionName(inState, listOfStates, name):
-	# inState should have been called readSymbolState
-	copy1 = State(name + "_copy_1")
-	copyE = State(name + "_copy_E")
-	outState = State(name + "_out")
+    # inState should have been called readSymbolState
+    copy1 = State(name + "_copy_1")
+    copyE = State(name + "_copy_E")
+    outState = State(name + "_out")
 	
-	listOfStates.extend([inState, copy1, copyE, pushOut1, pushOutE])
+    listOfStates.extend([inState, copy1, copyE])
 	
-	inState.set3("_", outState, "-", "R")
-	inState.set3("1", copy1, "L", "H")
-	inState.set3("E", copyE, "L", "H")
+    inState.set3("_", outState, "R", "_")
+    inState.set3("1", copy1, "L", "H")
+    inState.set3("E", copyE, "L", "H")
 	
-	pushIn1, pushOut1 = pushDownTilHHH("H", listOfStates, name + "_copy_1")
-	pushInE, pushOutE = pushDownTilHHH("H", listOfStates, name + "_copy_E")
+    pushIn1, pushOut1 = pushDownTilHHH("H", listOfStates, name + "_copy_1")
+    pushInE, pushOutE = pushDownTilHHH("H", listOfStates, name + "_copy_E")
 	
-	findSymbolW(copy1, "H", "L", "R", "1", pushIn1)
-	findSymbolW(copyE, "H", "L", "R", "E", pushInE)
+    listOfStates.extend([pushOut1, pushOutE])
 	
-	findSymbolW(pushOut1, "H", "L", "R", "1", outState)
-	findSymbolW(pushOutE, "H", "L", "R", "E", outState)
+    findSymbolW(copy1, "H", "L", "R", "1", pushIn1)
+    findSymbolW(copyE, "H", "L", "R", "E", pushInE)
 	
-	return outState
+    findSymbolW(pushOut1, "H", "L", "R", "1", inState)
+    findSymbolW(pushOutE, "H", "L", "R", "E", inState)
 	
-def handleFunctionCall(inState, listOfStates, name, outState):
-	functionCallCopied = copyFunctionCall(inState, listOfStates, name)
+    return outState
     
+# This one is cramped	
+def copyArg(inState, listOfStates, name):
+    # inState should have been called readSymbolState
+    copy1 = State(name + "_copy_1")
+    copyE = State(name + "_copy_E")
+    gotPastH1 = State(name + "_got_past_H_1")
+    gotPastHE = State(name + "_got_past_H_E")
+    gotPastOtherH1 = State(name + "_got_past_other_H_1")
+    gotPastOtherHE = State(name + "_got_past_other_H_E")
+    outState = State(name + "_out")
+	
+    listOfStates.extend([inState, copy1, copyE, gotPastH1, gotPastHE, gotPastOtherH1, gotPastOtherHE])
+	
+    inState.set3("_", outState, "-", "_")
+    inState.set3("1", copy1, "R", "H")
+    inState.set3("E", copyE, "R", "H")
+	
+    pushIn1, pushOut1 = pushDownTilHHH("H", listOfStates, name + "_copy_1")
+    pushInE, pushOutE = pushDownTilHHH("H", listOfStates, name + "_copy_E")
+	
+    listOfStates.extend([pushOut1, pushOutE])
+	
+    findSymbolW(copy1, "H", "R", "R", "1", pushIn1)
+    findSymbolW(copyE, "H", "R", "R", "E", pushInE)
+	
+    findSymbol(pushOut1, "H", "L", "L", gotPastH1)
+    findSymbol(pushOutE, "H", "L", "L", gotPastHE)
+    
+    findSymbol(gotPastH1, "H", "L", "L", gotPastOtherH1)
+    findSymbol(gotPastHE, "H", "L", "L", gotPastOtherHE)
+    
+    findSymbolW(gotPastOtherH1, "H", "L", "R", "1", inState)
+    findSymbolW(gotPastOtherHE, "H", "L", "R", "E", inState)
+	
+    return outState    
+	
+# This one is also cramped but at least not doubly so
+def copyArgIndex(inState, listOfStates, name):
+	# inState should have been called readSymbolState
+    getPastHL1 = State(name + "_get_past_H_L_1")
+    getPastHLE = State(name + "_get_past_H_L_E")
+    copy1 = State(name + "_copy_1")
+    copyE = State(name + "_copy_E")
+    writeH1 = State(name + "_write_H_1")
+    writeHE = State(name + "_write_H_E")
+    getPastHR1 = State(name + "_get_past_H_R_1")
+    getPastHRE = State(name + "_get_past_H_R_E")
+    getHome1 = State(name + "_get_home_1")
+    getHomeE = State(name + "_get_home_E")
+    outState = State(name + "_out")
+	    
+    listOfStates.extend([inState, getPastHL1, getPastHLE, copy1, copyE, writeH1, writeHE, getPastHR1, getPastHRE,
+        getHome1, getHomeE])
+	
+    inState.set3("_", outState, "L", "H")
+    inState.set3("1", getPastHL1, "L", "H")
+    inState.set3("E", getPastHLE, "L", "H")
+	
+    findSymbol(getPastHL1, "H", "L", "L", copy1)
+    findSymbol(getPastHLE, "H", "L", "L", copyE)
+	
+    findSymbolW(copy1, "H", "L", "R", "1", writeH1)
+    findSymbolW(copyE, "H", "L", "R", "E", writeHE)
+	
+    writeH1.set3("_", getPastHR1, "R", "H")
+    writeHE.set3("_", getPastHRE, "R", "H")
+
+    findSymbol(getPastHR1, "H", "R", "R", getHome1)
+    findSymbol(getPastHRE, "H", "R", "R", getHomeE)
+	
+    findSymbolW(getHome1, "H", "R", "R", "1", inState)
+    findSymbolW(getHomeE, "H", "R", "R", "E", inState)	
+	
+    return outState
+	
+def prepIndex(inState, listOfStates, name):
+    # inState should have been called findEndStack
+    getPastH = State(name + "_get_past_H")
+    getPastUnderscores = State(name + "_get_past_underscores")
+    findStartLastFunc = State(name + "_find_start_last_func")
+    writeH = State(name + "_write_H")
+    findIndex = State(name + "_find_index")
+    outState = State(name + "_out")
+    
+    listOfStates.extend([inState, getPastH, getPastUnderscores, findStartLastFunc, writeH, findIndex])
+    
+    pushIn, pushOut = pushDownTilHHH("H", listOfStates, name + "_push_tack_on_underscore")
+    
+    # This is where I add on the hanging underscore. It's sort of arbitrary, but this was the most convenient spot
+    findSymbolW(inState, "H", "L", "R", "_", pushIn)
+    
+    findSymbol(pushOut, "H", "L", "L", getPastH)
+    listOfStates.append(pushOut)
+    
+    findSymbol(getPastH, "H", "L", "L", getPastUnderscores)
+    
+    findPattern(getPastUnderscores, findStartLastFunc, listOfStates, name + "_get_past_underscores", "__", "L", "L", "_")
+    
+    findPattern(findStartLastFunc, writeH, listOfStates, name + "_mark_last_func", "__", "L", "R", "_")
+    
+    writeH.set3("_", findIndex, "L", "H")
+    
+    findSymbol(findIndex, "H", "L", "L", outState)
+    
+    return outState
+    
+def prepCopyArg(inState, listOfStates, name):
+    # inState might have been called findH
+    outState = State(name + "_out")
+    
+    listOfStates.append(inState)
+    
+    findSymbolW(inState, "H", "R", "R", "_", outState)
+    
+    return outState
+    
+def prepCopyIndex(inState, listOfStates, name, otherArgOutState):
+    # inState might have been called findH
+    findLineNumber = State(name + "_find_ln")
+    getPastLineNumber = State(name + "_get_past_ln")
+    writeH = State(name + "_write_H")
+    getPastH = State(name + "_get_past_H")
+    findArg = State(name + "_find_arg")
+    checkForOtherArg = State(name + "_check_for_other_arg")
+    doneOutState = State(name + "_done_out")
+    
+    listOfStates.extend([inState, findLineNumber, getPastLineNumber, writeH, getPastH, findArg, checkForOtherArg])
+    
+    findSymbol(inState, "H", "L", "R", findLineNumber)
+    
+    findLineNumber.set3("_", findLineNumber, "R", "_")
+    findLineNumber.set3("1", getPastLineNumber, "-", "1")
+    findLineNumber.set3("E", getPastLineNumber, "-", "E")
+    
+    findSymbol(getPastLineNumber, "_", "R", "R", writeH)
+    
+    writeH.set3("_", getPastH, "R", "H")
+    
+    findSymbol(getPastH, "H", "R", "R", findArg)
+    
+    findSymbolW(findArg, "H", "R", "R", "_", checkForOtherArg)
+    
+    checkForOtherArg.set3("_", doneOutState, "-", "_")
+    checkForOtherArg.set3("1", otherArgOutState, "-", "1")
+    checkForOtherArg.set3("E", otherArgOutState, "-", "E")
+    
+    return doneOutState
+    
+def copyFunctionArgs(inState, listOfStates, name):
+    # inState should have been called readSymbolState
+    indexCopied = copyArgIndex(inState, listOfStates, name + "_copy_index")
+    indexPrepped = prepIndex(indexCopied, listOfStates, name + "_prep_index")
+    stackIndexed = indexIntoStack(indexPrepped, listOfStates, name + "_index_into_stack")
+    copyArgPrepped = prepCopyArg(stackIndexed, listOfStates, name + "_prep_copy_arg")
+    argCopied = copyArg(copyArgPrepped, listOfStates, name + "_copy_arg")
+    copyingDone = prepCopyIndex(argCopied, listOfStates, name + "_prep_copy_index", inState)
+    
+    return copyingDone
+	
+def prepCopyLineNumber(inState, listOfStates, name):
+    # inState should have been called getPastH
+    removeH = State(name + "_remove_H")
+    findLineNumber = State(name + "_find_ln")
+    markLineNumber = State(name + "_mark_ln")
+    outState = State(name + "_out")
+    
+    listOfStates.extend([inState, removeH, findLineNumber, markLineNumber])
+    
+    findSymbol(inState, "H", "L", "L", removeH)
+    
+    findSymbolW(removeH, "H", "L", "-", "_", findLineNumber)    
+    
+    findLineNumber.set3("_", findLineNumber, "L", "_")
+    findLineNumber.set3("1", markLineNumber, "-", "1")
+    findLineNumber.set3("E", markLineNumber, "-", "E")
+    
+    findSymbolW(markLineNumber, "_", "L", "-", "H", outState)
+    
+    return outState
+    
+def copyLineNumber(inState, listOfStates, name, outState):
+    # inState should have been called readSymbol
+    swap1 = State(name + "_swap_1")
+    swapE = State(name + "_swap_E")
+    getPastH1 = State(name + "_get_past_H_1")
+    getPastHE = State(name + "_get_past_H_E")
+    copy_ = State(name + "_copy__")
+    copy1 = State(name + "_copy_1")
+    copyE = State(name + "_copy_E")
+    getHome = State(name + "_get_home")
+    writeE = State(name + "_write_E")
+    clear = State(name + "_clear")
+    getPastLineNumber = State(name + "_get_past_ln")
+    if outState == None:
+        outState = State(name + "_out")
+    
+    listOfStates.extend([inState, swap1, swapE, getPastH1, getPastHE, copy_, copy1, copyE, getHome, writeE, clear,
+        getPastLineNumber])
+    
+    inState.set3("_", writeE, "L", "_")
+    inState.set3("1", swap1, "L", "H")
+    inState.set3("H", copy_, "R", "H") # one weird trick to sneak that extra underscore in
+    inState.set3("E", swapE, "L", "H")
+    
+    swap1.set3("H", getPastH1, "R", "1")
+    swapE.set3("H", getPastHE, "R", "E")
+    
+    getPastH1.set3("H", copy1, "R", "H")
+    getPastHE.set3("H", copyE, "R", "H")
+    
+    pushIn, pushOut = pushDownTilHHH("H", listOfStates, name + "_push")
+    
+    listOfStates.append(pushOut)
+    
+    findSymbolW(copy_, "H", "R", "R", "_", pushIn)
+    findSymbolW(copy1, "H", "R", "R", "1", pushIn)    
+    findSymbolW(copyE, "H", "R", "R", "E", pushIn)
+    
+    findSymbol(pushOut, "H", "L", "L", getHome)
+    
+    findSymbol(getHome, "H", "L", "R", inState)
+    
+    writeE.set3("H", clear, "L", "E")
+    
+    clear.set3("_", getPastLineNumber, "-", "_")
+    clear.set3("1", clear, "L", "_")
+    clear.set3("E", clear, "L", "_")
+    
+    findSymbol(getPastLineNumber, "E", "R", "R", outState)
+    
+    return outState
+    
+def handleFunctionCall(inState, listOfStates, name, outState):
+    functionCallCopied = copyFunctionName(inState, listOfStates, name + "_copy_func_name")
+    functionArgsCopied = copyFunctionArgs(functionCallCopied, listOfStates, name + "_copy_func_args")
+    copyLineNumberPrepped = prepCopyLineNumber(functionArgsCopied, listOfStates, name + "_prep_copy_ln")
+    lineNumberCopied = copyLineNumber(copyLineNumberPrepped, listOfStates, name + "_copy_ln", outState)
     
 def processCentrally(inState, listOfStates):
     functionPrepped = commonPrepTopFunction(inState, listOfStates, "cpu_prep_top_func")
@@ -1127,10 +1384,17 @@ def processCentrally(inState, listOfStates):
     lineMatched = findMatchingValue(linePrepped, listOfStates, "cpu_match_line", simpleTravelRight, \
         simpleTravelLeft, moveLineMarker)        
     lineTypeDict = readLineType(lineMatched, listOfStates, "cpu_read_line_type")
-    handleDirectCommand(lineTypeDict["direct"], listOfStates, "cpu_direct_command", inState)
-        
+    
+    doneProcessingLine = State("cpu_done_processing_line")
+    
+    handleDirectCommand(lineTypeDict["direct"], listOfStates, "cpu_direct_command", doneProcessingLine)
+    handleFunctionCall(lineTypeDict["function"], listOfStates, "cpu_function_call", doneProcessingLine)    
+    
+    standardPrepTopFunction(doneProcessingLine, listOfStates, "cpu_standard_prep", inState)
+		
+		
     for key in lineTypeDict:
-        if not key == "direct":
+        if key == "return":
             listOfStates.append(lineTypeDict[key])
             lineTypeDict[key].setAllNextStates(SimpleState("ACCEPT"))
             

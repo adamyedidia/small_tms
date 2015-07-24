@@ -97,7 +97,8 @@ class SingleTapeTuringMachine:
 		halted = False
 
 		while stepCounter < float(numSteps):
-			if stepCounter > 18000 and stepCounter < 20000:
+			if stepCounter > 17000 and stepCounter < 20000:
+#			if True:
 				if not quiet:
 					self.printTape(-2, 250, output)
 			
