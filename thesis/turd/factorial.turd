@@ -1,0 +1,16 @@
+input x 
+output product 
+local_count 1
+var input
+var product
+modify product with add_small_const 1
+var holder
+label MULTIPLY_LOOP
+clear holder
+assign holder to product
+clear product
+assign product to holder * input
+print product
+modify input with sub_small_const 1
+if input then goto MULTIPLY_LOOP
+accept

@@ -1,0 +1,15 @@
+input n h1 c1 rangen
+
+label UNTESTED
+label can't handle range(0)
+
+clear c1
+clear rangen
+
+label MAIN_LOOP
+modify rangen with append c1
+modify c1 with add_small_const 1
+clear h1 
+assign h1 to c1 != n
+if h1 then goto MAIN_LOOP
+return

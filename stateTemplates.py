@@ -2,6 +2,7 @@ from state import *
 import sys
 
 def moveBy(state, name, amount, direction, nextState, listOfStates=None, alphabet=["_", "1", "H", "E"]):
+	
 	returnList = [state]
 	
 	if amount == 0:

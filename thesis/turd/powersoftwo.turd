@@ -1,0 +1,31 @@
+var list
+var listLength 
+var powerOfTwo
+modify powerOfTwo with add_small_const 1
+var isListNotOfSize10
+var two
+var four
+var holder
+modify two with add_small_const 2
+modify four with add_small_const 4
+label APPEND_LOOP
+modify list with append powerOfTwo
+clear holder
+assign holder to powerOfTwo
+clear powerOfTwo
+assign powerOfTwo to holder * two
+modify listLength with add_small_const 1 
+clear isListNotOfSize10
+assign isListNotOfSize10 to listLength != four
+if isListNotOfSize10 then goto APPEND_LOOP
+clear listLength
+label PRINT_LOOP
+clear powerOfTwo
+assign powerOfTwo to list index listLength
+print powerOfTwo
+print listLength
+modify listLength with add_small_const 1
+clear isListNotOfSize10
+assign isListNotOfSize10 to listLength != four
+if isListNotOfSize10 then goto PRINT_LOOP
+accept

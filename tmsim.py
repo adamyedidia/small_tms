@@ -43,7 +43,8 @@ class SingleTapeTuringMachine:
 
 		self.stateDictionary = {"ACCEPT": SimpleState("ACCEPT", alphabet),
 			"REJECT": SimpleState("REJECT", alphabet),
-			"ERROR": SimpleState("ERROR", alphabet)}
+			"ERROR": SimpleState("ERROR", alphabet),
+			"HALT": SimpleState("HALT", alphabet)}
 
 		self.listOfRealStates = []
 
@@ -97,7 +98,7 @@ class SingleTapeTuringMachine:
 		halted = False
 
 		while stepCounter < float(numSteps):
-			if stepCounter > 17000 and stepCounter < 20000:
+			if stepCounter > 39000 and stepCounter < 42000:
 #			if True:
 				if not quiet:
 					self.printTape(-2, 250, output)
@@ -118,6 +119,11 @@ class SingleTapeTuringMachine:
         
 			if self.state.stateName == "REJECT":
 				print "Turing machine rejected."
+				halted = True
+				break
+		
+			if self.state.stateName == "HALT":
+				print "Turing machine halted."
 				halted = True
 				break
 

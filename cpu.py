@@ -4,27 +4,33 @@ import math
 from state import *
 from stateTemplates import *
 
-# Optimization: merge this function and the one above? Might be worth a few states	
-def standardPrepTopFunction(inState, listOfStates, name, outState):
+# return is already at the end of stack, so I split this
+def standardPrepTopFunctionExceptReturn(inState, listOfStates, name, outState):
     # inState might have been called findStack
     getToEndOfStack = State(name + "_get_to_end_of_stack")
-    getToFirstFunction = State(name + "_get_to_first_func")
-    writeH1 = State(name + "_write_H_1")
     if outState == None:
         outState = State(name + "_out")
         
-    listOfStates.extend([inState, getToEndOfStack, getToFirstFunction, writeH1])
+    listOfStates.extend([inState, getToEndOfStack])
     
     inState.set3("_", inState, "R", "_")
     inState.set3("E", getToEndOfStack, "-", "E")
     
-    findPattern(getToEndOfStack, getToFirstFunction, listOfStates, name + "_find_end_stack", "___",
+    findPattern(getToEndOfStack, outState, listOfStates, name + "_find_end_stack", "___",
         "R", "-", "_")
-        
-    getToFirstFunction.set3("_", getToFirstFunction, "R", "_")
-    getToFirstFunction.set3("E", writeH1, "L", "E")
+
+def standardPrepTopFunction(inState, listOfStates, name, outState):    
+    # inState might have been called getToFirstFunction   
+    writeH = State(name + "_write_H")
+    if outState == None:
+        outState = State(name + "_out")
+                     
+    listOfStates.extend([inState, writeH])         
+             
+    inState.set3("_", inState, "R", "_")
+    inState.set3("E", writeH, "L", "E")
     
-    writeH1.set3("_", outState, "L", "H")
+    writeH.set3("_", outState, "L", "H")
     
     return outState
     
@@ -1375,6 +1381,130 @@ def handleFunctionCall(inState, listOfStates, name, outState):
     functionArgsCopied = copyFunctionArgs(functionCallCopied, listOfStates, name + "_copy_func_args")
     copyLineNumberPrepped = prepCopyLineNumber(functionArgsCopied, listOfStates, name + "_prep_copy_ln")
     lineNumberCopied = copyLineNumber(copyLineNumberPrepped, listOfStates, name + "_copy_ln", outState)
+  
+def prepCopyReturnAddress(inState, listOfStates, name):
+    # inState might have been called findEndStackState
+    findReturnAddress = State(name + "_find_return_address")
+    getToStartReturnAddress = State(name + "_get_to_start_return_address")
+    removeH = State(name + "_remove_H")
+    writeH = State(name + "_write_H")
+    clear = State(name + "_clear")
+    getPastH = State(name + "_get_past_H")
+    getToReturnAddress = State(name + "_get_to_return_address")
+    outState = State(name + "_out")
+    
+    listOfStates.extend([inState, findReturnAddress, getToStartReturnAddress, removeH, writeH, clear, getPastH,
+        getToReturnAddress])
+    
+    findSymbolW(inState, "H", "L", "L", "_", findReturnAddress)
+    
+    findReturnAddress.set3("_", findReturnAddress, "L", "_")
+    findReturnAddress.set3("1", getToStartReturnAddress, "-", "1")
+    findReturnAddress.set3("E", getToStartReturnAddress, "-", "E")
+  
+    findSymbolW(getToStartReturnAddress, "_", "L", "L", "H", removeH)
+    
+    findSymbolW(removeH, "H", "L", "L", "_", writeH)
+    
+    writeH.set3("_", clear, "L", "H")
+    
+    clear.set3("_", getPastH, "-", "_")
+    clear.set3("1", clear, "L", "_")
+    clear.set3("E", clear, "L", "_")
+    
+    findSymbol(getPastH, "H", "R", "R", getToReturnAddress)
+    
+    findSymbolW(getToReturnAddress, "H", "R", "R", "_", outState)
+  
+    return outState  
+  
+def copyReturnAddress(inState, listOfStates, name):
+    # inState should have been called readSymbolState
+    getToLineNumber1 = State(name + "_get_to_ln_1")
+    getToLineNumberE = State(name + "_get_to_ln_E")
+    write11 = State(name + "_write_1_1")
+    writeE1 = State(name + "_write_E_1")
+    write1E = State(name + "_write_1_E")
+    writeEE = State(name + "_write_E_E")
+    getPastH1 = State(name + "_get_past_H_1")
+    getPastHE = State(name + "_get_past_H_E")
+    getHome1 = State(name + "_get_home_1")
+    getHomeE = State(name + "_get_home_E")
+    outState = State(name + "_out")
+    
+    listOfStates.extend([inState, getToLineNumber1, getToLineNumberE, write11, writeE1, write1E, writeEE, getPastH1, 
+        getPastHE, getHome1, getHomeE])
+    
+    inState.set3("_", outState, "-", "_")
+    inState.set3("1", getToLineNumber1, "L", "H")
+    inState.set3("E", getToLineNumberE, "L", "H")
+    
+    findSymbol(getToLineNumber1, "H", "L", "L", write11)
+    findSymbol(getToLineNumberE, "H", "L", "L", writeEE)
+    
+    write11.set3("_", getPastH1, "-", "1")
+    write11.set3("1", write11, "L", "1")
+    write11.set3("E", writeE1, "L", "1")
+    
+    writeE1.set3("_", getPastH1, "-", "E")
+    writeE1.set3("1", write11, "L", "E")
+    writeE1.set3("E", writeE1, "L", "E")
+
+    write1E.set3("_", getPastHE, "-", "1")
+    write1E.set3("1", write1E, "L", "1")
+    write1E.set3("E", writeEE, "L", "1")
+    
+    writeEE.set3("_", getPastHE, "-", "E")
+    writeEE.set3("1", write1E, "L", "E")
+    writeEE.set3("E", writeEE, "L", "E")
+    
+    findSymbol(getPastH1, "H", "R", "R", getHome1)
+    findSymbol(getPastHE, "H", "R", "R", getHomeE)
+    
+    findSymbolW(getHome1, "H", "R", "R", "1", inState)
+    findSymbolW(getHomeE, "H", "R", "R", "E", inState)
+    
+    return outState
+    
+def popTopFunction(inState, listOfStates, name, outState):
+    # inState might have been clear
+    seenUnderscore = State(name + "_seen_underscore")
+    checkIfStackEmpty = State(name + "_check_if_stack_empty")
+    removeH = State(name + "_remove_H")
+    incrementState = State(name + "_increment")
+    getPastReturnAddressState = State(name + "_get_past_return_address")
+    
+    listOfStates.extend([inState, seenUnderscore, checkIfStackEmpty, removeH, incrementState, getPastReturnAddressState])
+    
+    inState.set3("_", seenUnderscore, "L", "_")
+    inState.set3("1", inState, "L", "_")
+    inState.set3("E", inState, "L", "_")
+    
+    seenUnderscore.set3("_", checkIfStackEmpty, "L", "_")
+    seenUnderscore.set3("1", inState, "L", "_")
+    seenUnderscore.set3("E", inState, "L", "_")
+    
+    # This is the only place that the Turing machine can halt without errors!
+    checkIfStackEmpty.set3("_", SimpleState("HALT"), "-", "_")
+    checkIfStackEmpty.set3("1", removeH, "R", "1")
+    checkIfStackEmpty.set3("E", removeH, "R", "1")
+    
+    findSymbolW(removeH, "H", "L", "L", "_", incrementState)
+    
+    # need to increment return address
+    incrementState.set3("_", getPastReturnAddressState, "-", "E")
+    incrementState.set3("1", incrementState, "L", "E")
+    incrementState.set3("E", getPastReturnAddressState, "-", "1")
+    
+    findSymbol(getPastReturnAddressState, "_", "R", "R", outState)
+    
+    return outState
+    
+def handleReturn(inState, listOfStates, name, outState):
+    returnAddressCopyPrepped = prepCopyReturnAddress(inState, listOfStates, name + "_prep_copy_return_address")
+    returnAddressCopied = copyReturnAddress(returnAddressCopyPrepped, listOfStates, name + "_copy_return_address")
+    popTopFunction(returnAddressCopied, listOfStates, name + "_pop_top_func", outState)
+    
     
 def processCentrally(inState, listOfStates):
     functionPrepped = commonPrepTopFunction(inState, listOfStates, "cpu_prep_top_func")
@@ -1386,18 +1516,17 @@ def processCentrally(inState, listOfStates):
     lineTypeDict = readLineType(lineMatched, listOfStates, "cpu_read_line_type")
     
     doneProcessingLine = State("cpu_done_processing_line")
+    doneProcessingLineReturn = State("cpu_done_processing_line_return")
     
     handleDirectCommand(lineTypeDict["direct"], listOfStates, "cpu_direct_command", doneProcessingLine)
-    handleFunctionCall(lineTypeDict["function"], listOfStates, "cpu_function_call", doneProcessingLine)    
+    handleFunctionCall(lineTypeDict["function"], listOfStates, "cpu_function_call", doneProcessingLine)  
+    handleReturn(lineTypeDict["return"], listOfStates, "cpu_return", doneProcessingLine)  
     
-    standardPrepTopFunction(doneProcessingLine, listOfStates, "cpu_standard_prep", inState)
+    # This separation is no longer necessary
+    standardPrepTopFunctionExceptReturn(doneProcessingLine, listOfStates, "cpu_standard_prep_not_return", 
+        doneProcessingLineReturn)
+    standardPrepTopFunction(doneProcessingLineReturn, listOfStates, "cpu_standard_prep", inState)
 		
-		
-    for key in lineTypeDict:
-        if key == "return":
-            listOfStates.append(lineTypeDict[key])
-            lineTypeDict[key].setAllNextStates(SimpleState("ACCEPT"))
-            
 #    print [state.stateName for state in listOfStates]
     
 #    listOfStates.append(inState)

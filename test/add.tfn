@@ -1,6 +1,11 @@
 input a b c
 
-// function add b c a
-GO_RIGHT: [c] _ (1, GO_LEFT); E (1, R, GO_RIGHT)
-NEVER_HERE: return
-GO_LEFT: [c] _ (E, GO_RIGHT); 1 (E, L, GO_LEFT)
+[a] E (1, LOOK_AT_B)
+CALL_FUNC: function add b c a 
+LOOK_AT_B: [b] E (CALL_FUNC); 1 ()
+RETURN: return
+
+// return
+// GO_RIGHT: [c] _ (1, GO_LEFT); E (1, R, GO_RIGHT)
+// NEVER_HERE: return
+// GO_LEFT: [c] _ (E, GO_RIGHT); 1 (E, L, GO_LEFT)

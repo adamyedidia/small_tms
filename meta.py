@@ -30,8 +30,8 @@ def main():
 
     listOfStates = []
 
-    numberOfVariables = 4
-    numberOfFunctions = 2
+    numberOfVariables = 3
+    numberOfFunctions = 1
     
     inState = write(listOfStates, inState, numberOfVariables, initValueString, numberOfFunctions, \
     	functions, functionVariableDictionary, functionLabelDictionary, functionDictionary, path)

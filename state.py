@@ -448,6 +448,7 @@ class State:
 			return self.nextStateDict[symbol].stateName
 		except KeyError:
 			print "Error: I, state", self.stateName, "don't know about symbol", symbol
+			print "My alphabet is", self.alphabet
 			raise
 
 	def getHeadMove(self, symbol):

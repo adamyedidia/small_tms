@@ -134,7 +134,8 @@ def writeFunctionGuts(functionName, functionLines, labelDictionary):
 def writeCounter(listOfStates, name, inState, x):
 	assert x > 0
 
-	barCode = convertNumberToBarCode(x)
+    # Fencepost for the -1 
+	barCode = convertNumberToBarCode(x-1)
 	listOfCounterWritingStates = [inState]
 
 	writeHState = State(name + "_counter_H")
@@ -346,7 +347,7 @@ def writeAuxSkeleton(listOfStates, inState, numberOfVariables, numberOfFunctions
 	write_State2.set3("_", write_State3, "R", "_")
 
 	listOfLineNumberSpaceStates = []
-	for i in range(int(math.log(numberOfVariables, 2))):
+	for i in range(int(math.log(numberOfVariables, 2))+2):
 		listOfLineNumberSpaceStates.append(State("write_aux_line_number_space_" + str(i)))
 	listOfLineNumberSpaceStates.append(writeEState1)
 
@@ -364,7 +365,7 @@ def writeAuxSkeleton(listOfStates, inState, numberOfVariables, numberOfFunctions
 	listOfStates.append(write_State5)
 
 	listOfFunctionNameSpaceStates = []
-	for i in range(int(math.log(numberOfFunctions, 2))):
+	for i in range(int(math.log(numberOfFunctions, 2))+2):
 		listOfFunctionNameSpaceStates.append(State("write_aux_function_name_space_" + str(i)))
 	listOfFunctionNameSpaceStates.append(writeEState2)
 	
@@ -850,8 +851,8 @@ def main():
 
 	listOfStates = []
 
-	numberOfVariables = 4
-	numberOfFunctions = 2
+	numberOfVariables = 3
+	numberOfFunctions = 1
 
 	inState = writeVariableValuesSkeleton(listOfStates, inState, numberOfVariables, initValueString)	
 	inState = writeAuxValues(listOfStates, inState, numberOfVariables, numberOfFunctions)

@@ -1,0 +1,46 @@
+vars v1pos v1neg v2pos v2neg iindexlist jindexlist c1 i j h1 h2 h3 h4 v1length v2length indexlistlength hasedge?
+
+label hasedge([3, 0, -2, 4], [4, 2, -1], [1, 2], [0, 2]) = True
+
+modify v1pos with append_small_const 3
+modify v1pos with append_small_const 0
+modify v1pos with append_small_const 0
+modify v1pos with append_small_const 4
+
+modify v1neg with append_small_const 0
+modify v1neg with append_small_const 0
+modify v1neg with append_small_const 2
+modify v1neg with append_small_const 0
+
+modify v2pos with append_small_const 4
+modify v2pos with append_small_const 2
+modify v2pos with append_small_const 0
+
+modify v2neg with append_small_const 0
+modify v2neg with append_small_const 0
+modify v2neg with append_small_const 1
+
+modify iindexlist with append_small_const 0
+modify iindexlist with append_small_const 2
+
+modify jindexlist with append_small_const 1
+modify jindexlist with append_small_const 2
+
+modify c1 with append_small_const 3
+modify i with append_small_const 3
+modify j with append_small_const 3
+modify h1 with append_small_const 3
+modify h2 with append_small_const 3
+modify h3 with append_small_const 3
+modify h4 with append_small_const 3
+modify v1length with append_small_const 3
+modify v2length with append_small_const 3
+modify indexlistlength with append_small_const 3
+modify hasedge? with append_small_const 3
+
+function hasedge v1pos v1neg v2pos v2neg iindexlist jindexlist c1 i j h1 h2 h3 h4 v1length v2length indexlistlength hasedge?
+
+if hasedge? then goto ACCEPT
+reject
+label ACCEPT
+accept
