@@ -1,0 +1,4 @@
+input x
+
+INCREMENT: [x] E (1, R, INCREMENT); _ (E)
+return

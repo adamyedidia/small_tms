@@ -1,0 +1,15 @@
+input x y z
+
+// computes x = y % z (modulus)
+
+GET_BACK_Z: func getback z
+CLEAR_X: func clear x
+
+MOVE_ALONG_Z: [z] 1 (R) E (GET_BACK_Z)
+MOVE_ALONG_Y: [y] 1 (R) E (GET_BACK_Y)
+INCR_X: [x] E (1, R, INCREMENT); _ (E, MOVE_ALONG_Z)
+
+GET_BACK_Y: func getback y
+func getback x
+func getback z
+return 

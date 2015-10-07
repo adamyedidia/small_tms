@@ -1,0 +1,10 @@
+input x y
+
+// computes x += y. x and y must both be positive ints.
+
+function gettoend x
+MOVE_ALONG_Y: [y] 1 (R); E (GET_BACK_TO_START_Y, L)
+function decr x
+GET_BACK_TO_START_Y: function getback y
+function getback x
+return

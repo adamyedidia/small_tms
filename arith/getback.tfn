@@ -1,0 +1,6 @@
+input x
+
+// getbacktostart
+
+GET_BACK: [x] 1 (L, GET_BACK); E (L, GET_BACK); _ (R)
+return

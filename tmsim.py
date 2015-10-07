@@ -154,59 +154,79 @@ class SingleTapeTuringMachine:
 #			output.write("--------------------------------------\n")	
 
 class Tape:
-	# By convention the first symbol in the alphabet is the initial symbol
-	def __init__(self, name, initSymbol):
-		self.name = name
-		self.headLoc = 0
-		self.tapeDict = {0: initSymbol}
-		self.initSymbol = initSymbol
+    # By convention the first symbol in the alphabet is the initial symbol
+    def __init__(self, name, initSymbol):
+        self.name = name
+        self.headLoc = 0
+        self.tapeDict = {0: initSymbol}
+        self.initSymbol = initSymbol
 
-	def readSymbol(self):
-		return self.tapeDict[self.headLoc]
+    def readSymbol(self):
+        return self.tapeDict[self.headLoc]
 
-	def writeSymbol(self, symbol):
-		self.tapeDict[self.headLoc] = symbol
+    def writeSymbol(self, symbol):
+        self.tapeDict[self.headLoc] = symbol
 
-	def moveHead(self, direction):
-		if direction == "L":
-			self.headLoc -= 1
-			self.continueTape()
+    def moveHead(self, direction):
+        if direction == "L":
+            self.headLoc -= 1
+            self.continueTape()
 
-		elif direction == "R":
-			self.headLoc += 1
-			self.continueTape()
+        elif direction == "R":
+            self.headLoc += 1
+            self.continueTape()
 
-		elif direction == "-":
-			pass
-		else:
-			print direction
-			raise
+        elif direction == "-":
+            pass
+        else:
+            print direction
+            raise
 
-	def continueTape(self):
-		if not self.headLoc in self.tapeDict:
-			self.tapeDict[self.headLoc] = self.initSymbol
+    def continueTape(self):
+        if not self.headLoc in self.tapeDict:
+            self.tapeDict[self.headLoc] = self.initSymbol
 
-	def printTape(self, start, end, output=None):
-		headString = ""
-		tapeString = ""
-		for i in range(start, end):
+    def printTape(self, start, end, output=None):
+        headString = ""
+        tapeString = ""
+        for i in range(start, end):
 			
-			if i == self.headLoc:
-				headString += "v"
-			else:
-				headString += " "
+            if i == self.headLoc:
+                headString += "v"
+            else:
+                headString += " "
 
-			if i in self.tapeDict:
-				tapeString += self.tapeDict[i][0]
-			else:
-				tapeString += self.initSymbol
+            if i in self.tapeDict:
+                tapeString += self.tapeDict[i][0]
+            else:
+                tapeString += self.initSymbol
 		
-		if not self.name == None:
-			tapeString += " " + self.name
+        if not self.name == None:
+            tapeString += " " + self.name
 
-		if output == None:
-			print headString
-			print tapeString
-		else:		
-			output.write(headString + "\n")
-			output.write(tapeString + "\n")
+        if output == None:
+            print headString
+            print tapeString
+        else:		
+            output.write(headString + "\n")
+            output.write(tapeString + "\n")
+
+    def getTapeOutput(self, start, end):
+        headString = ""
+        tapeString = ""
+        for i in range(start, end):
+			
+            if i == self.headLoc:
+                headString += "v"
+            else:
+                headString += " "
+
+            if i in self.tapeDict:
+                tapeString += self.tapeDict[i][0]
+            else:
+                tapeString += self.initSymbol
+		
+        if not self.name == None:
+            tapeString += " " + self.name
+        
+        return headString + "\n" + tapeString + "\n"

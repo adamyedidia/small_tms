@@ -1,0 +1,6 @@
+input x
+
+// This is the findEndUnderscore function
+
+FIND_UNDERSCORE: [x] 1 (R, FIND_UNDERSCORE); E (R, FIND_UNDERSCORE); _ (L)
+return

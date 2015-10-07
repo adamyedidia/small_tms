@@ -1,0 +1,7 @@
+input x y
+
+// assign x to the value y (x = y)
+
+function clear x
+function add x y
+return 

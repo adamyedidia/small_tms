@@ -1,0 +1,19 @@
+input x y z !0 !1 !2 
+function assign !0 x
+function assign2 !1
+function add !2 !0 !1
+[!2] E (IF_STATE_0_FALSE); 1 ()
+function assign !0 y
+function assign3 !1
+function greaterThan !2 !0 !1
+function assign2 !0
+function add !1 !2 !0
+function assign y !1
+IF_STATE_0_FALSE: function assign !0 y
+WHILE_TEST_0: [!0] E (WHILE_STATE_0_FALSE); 1 ()
+function assign !0 x
+function assign1 !1
+function add !2 !0 !1
+function assign x !2
+[!0] E (WHILE_TEST_0)
+WHILE_STATE_0_FALSE: return

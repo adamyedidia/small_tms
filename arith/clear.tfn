@@ -1,0 +1,10 @@
+input x
+
+// sets the value to 0 (a lone E)
+
+function gettoendunderscore x
+LEFT: [x] 1 (L, E); E (L)
+CHECK: [x] _ (R, RETURN); 1 (R); E (R)
+CLEAR: [x] E (_, L, LEFT); 1 (_, L, LEFT)
+RETURN: return
+

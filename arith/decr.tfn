@@ -1,0 +1,4 @@
+input x
+
+DECREMENT: [x] E (_, L, DECREMENT); 1 (E)
+return

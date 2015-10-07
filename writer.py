@@ -37,31 +37,45 @@ def convertStatesToString(listOfStates, output):
         
 def getFunctionLabelDictionary(functions, path):
 
-	functionLabelDictionary = {}
-	functionDictionary = {}
+    # All line numbers ignore empty lines, input lines and comments. The number that appears in your editor I call a "text number."
 
-	functionCounter = 1
+    # Maps from functions to a map from labels within that function to the appropriate line number
+    functionLabelDictionary = {}
+    functionDictionary = {}
+    functionLineDictionary = {}
+    
+    lineNumberToTextNumber = {}
+    
 
-	for function in functions:
+    functionCounter = 1
 
-		functionLabelDictionary[function] = {}		
-		functionDictionary[function] = functionCounter
+    for function in functions:
+
+        functionLineDictionary[function] = {}
+        functionLabelDictionary[function] = {}		
+        functionDictionary[function] = functionCounter
  
-		functionLines = open(path + string.strip(function) + ".tfn", "r")
+        functionLines = open(path + string.strip(function) + ".tfn", "r")
 
-		lineCounter = 1
+        textCounter = 1
+        lineCounter = 1
 		
-		for line in functionLines:
-			if not ("input" in line or "//" in line or line == "\n"):
-				if ":" in line:
-					label = string.split(line, ":")[0]
-					functionLabelDictionary[function][label] = lineCounter
+        for line in functionLines:
+            if not ("input" in line or "//" in line or line == "\n"):
+                if ":" in line:
+                    label = string.split(line, ":")[0]
+                    functionLabelDictionary[function][label] = lineCounter
+                
+                functionLineDictionary[function][lineCounter] = line
+                lineNumberToTextNumber[lineCounter] = textCounter
+                lineCounter += 1    
+                    
+            textCounter += 1
+            
 
-				lineCounter += 1
-
-		functionCounter += 1
+        functionCounter += 1
         
-	return functionLabelDictionary, functionDictionary
+    return functionLabelDictionary, functionDictionary, functionLineDictionary, lineNumberToTextNumber
     
 def getFunctionVariableDictionary(functions, path):
     functionVariableDictionary = {}

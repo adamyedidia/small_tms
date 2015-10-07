@@ -1,0 +1,7 @@
+input w x y z
+
+// computes both w = y / z (integer division)
+// and x = y % z
+// z cannot be 0
+
+MOVE_ALONG_Y: [y] 1 (L) E (GET_BACK, L)

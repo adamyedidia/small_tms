@@ -1,0 +1,8 @@
+input x
+
+// x += 1
+
+function gettoend x
+function incr x
+function getback x
+return

@@ -1,0 +1,9 @@
+input x y z
+
+// x = y * z
+
+function clear x
+[z] E (GET_BACK_Z); 1 (R)
+function add x y
+GET_BACK_Z: function getback z
+return 

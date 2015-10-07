@@ -1,0 +1,11 @@
+input x y z
+
+// x += y, both posints, x must > y. z is a holder.
+
+FIND_END_X: [x] 1 (R, find_END_X); E ()
+MOVE_ALONG_Y: [y] 1 (R); E (GET_BACK_TO_START_Y, L)
+DECREMENT_X: [x] E (_, L, INCREMENT_X); 1 (E)
+GET_BACK_TO_START_Y: 1 [y] (GET_BACK_TO_START_Y, L); _ (R)
+GET_BACK_TO_START_X: 1 [x] (GET_BACK_TO_START_X, L); _ (R)
+return
+

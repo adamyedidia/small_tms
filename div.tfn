@@ -1,0 +1,15 @@
+input x y z
+
+// computes x = y / z (integer division)
+
+function clear x
+
+GET_BACK_Z: function getback z
+MOVE_ALONG_Y: [y] 1 (R, MOVE_ALONG_Z), E ()
+function getback y
+function getback x
+return
+
+INCR_X: function incr x
+MOVE_ALONG_Z: [z] 1 (R, INCR_X), E (GET_BACK_Z)
+
