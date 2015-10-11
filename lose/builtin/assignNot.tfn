@@ -1,0 +1,8 @@
+input x y
+
+// computes x = NOT y (sets x to 1 if true, and to 0 if false)
+// Unary assumed
+
+function assign x y
+function not x
+return

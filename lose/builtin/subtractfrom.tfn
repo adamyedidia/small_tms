@@ -1,0 +1,9 @@
+input x y
+
+// x -= y. Assumes unary structure for both variables.
+
+function findfin x
+READ_Y: [y] 1 (R); E (GET_BACK_TO_START_Y);
+DECR_X: [x] E (_, L, DECR_X); 1 (E, READ_Y);
+GET_BACK_TO_START_Y: function getbacktostart2 x y
+return

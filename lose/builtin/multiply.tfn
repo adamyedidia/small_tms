@@ -1,0 +1,10 @@
+input x y z
+
+// x = y * z. Unary assumed.
+
+function clear x
+[x] E (READ_Y)
+ADD_Z_TO_X: function addto x z
+READ_Y: [y] 1 (R, ADD_X_TO_Z); E ();
+GET_BACK_TO_START_Y: function getbacktostart y
+return

@@ -1,0 +1,7 @@
+input x
+
+// decrement x by 1. Assumes unary.
+// NON-STANDARD
+
+DECR: [x] E (_, L, DECR); 1 (E)
+return

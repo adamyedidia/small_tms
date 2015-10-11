@@ -1,10 +1,11 @@
 grammar Lose;
 
-prog: (command)* ;
+prog: trueprog ;
+trueprog: (command)* EOF ;
 command:  (funcdef | procdef | declare | nondefcommand)  ;
 
 nondefprog: (nondefcommand)* ;
-nondefcommand:  (funcproccall | whileloop | forloop | ifstate | assign | returnstate)  ;
+nondefcommand:  (funcproccall | whileloop | forloop | ifstate | ifelsestate | assign | returnstate)  ;
 
 funcdef: 'func' funcprocbody ;
 procdef: 'proc' funcprocbody ;
@@ -28,9 +29,14 @@ forloop: 'for'  '('  nondefcommand  ';'  expr  ';'  nondefcommand  ')'  '{' nond
 
 ifstate: 'if'  '('  ifexpr  ')'  '{' ifnondefprog '}' ;
 
+ifelsestate: 'ifelse' '(' ifelseexpr ')' '{' ifelsenondefprog '}' '{' elsenondefprog '}' ;
+
+ifelsenondefprog: nondefprog ;
+elsenondefprog: nondefprog ;
 ifnondefprog: nondefprog ; 
 whilenondefprog: nondefprog ;
 
+ifelseexpr: expr ;
 ifexpr: expr ;
 whileexpr: expr ;
 

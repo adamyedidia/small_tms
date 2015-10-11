@@ -1501,6 +1501,8 @@ def popTopFunction(inState, listOfStates, name, outState):
     return outState
     
 def handleReturn(inState, listOfStates, name, outState):
+    # I NEED TO ADD ON AUTOMATIC GOING HOME!
+    
     returnAddressCopyPrepped = prepCopyReturnAddress(inState, listOfStates, name + "_prep_copy_return_address")
     returnAddressCopied = copyReturnAddress(returnAddressCopyPrepped, listOfStates, name + "_copy_return_address")
     popTopFunction(returnAddressCopied, listOfStates, name + "_pop_top_func", outState)

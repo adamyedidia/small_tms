@@ -1,0 +1,8 @@
+input x
+
+// Auto-generated code for function assign14
+// Assigns x to the value 14
+// Unary assumed
+function assign13 x
+function add1 x
+return

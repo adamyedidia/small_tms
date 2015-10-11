@@ -1,4 +1,6 @@
-nat x;
+nat r;
+nat f;
+nat g;
 
 func myFunc(x, y, z) {
     if (x + 2) {
@@ -7,5 +9,17 @@ func myFunc(x, y, z) {
     
     while(y){x=x+1;}
     
+    ifelse ((z+3)<2) {
+        z = 3;
+    } {
+        y = 5;
+    }
+    
     return;
 }
+
+x = f;
+
+myFunc(r, f, g);
+
+halt;

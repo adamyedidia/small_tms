@@ -1,0 +1,33 @@
+input x y z !0 !1 !2 
+
+// Auto-generated code for function myFunc
+
+function assign !0 x
+function assign2 !1
+function add !2 !0 !1
+[!2] E (IF_STATE_0_FALSE); 1 ()
+function assign !0 y
+function assign3 !1
+function greaterThan !2 !0 !1
+function assign2 !0
+function add !1 !2 !0
+function assign y !1
+IF_STATE_0_FALSE: WHILE_TEST_0: function assign !0 y
+[!0] E (WHILE_STATE_0_FALSE); 1 ()
+function assign !0 x
+function assign1 !1
+function add !2 !0 !1
+function assign x !2
+[!0] E (WHILE_TEST_0)
+WHILE_STATE_0_FALSE: function assign !0 z
+function assign3 !1
+function add !2 !0 !1
+function assign2 !0
+function greaterThan !1 !0 !2
+[!1] E (IF_ELSE_STATE_0_FALSE); 1 ()
+function assign3 !0
+function assign z !0
+[!0] E (IF_ELSE_STATE_0_TRUE)
+IF_ELSE_STATE_0_FALSE: function assign5 !0
+function assign y !0
+return

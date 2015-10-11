@@ -1,0 +1,8 @@
+input x
+
+// Auto-generated code for function assign25
+// Assigns x to the value 25
+// Unary assumed
+function assign24 x
+function add1 x
+return

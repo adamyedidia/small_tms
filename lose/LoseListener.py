@@ -13,6 +13,15 @@ class LoseListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by LoseParser#trueprog.
+    def enterTrueprog(self, ctx):
+        pass
+
+    # Exit a parse tree produced by LoseParser#trueprog.
+    def exitTrueprog(self, ctx):
+        pass
+
+
     # Enter a parse tree produced by LoseParser#command.
     def enterCommand(self, ctx):
         pass
@@ -157,6 +166,33 @@ class LoseListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by LoseParser#ifelsestate.
+    def enterIfelsestate(self, ctx):
+        pass
+
+    # Exit a parse tree produced by LoseParser#ifelsestate.
+    def exitIfelsestate(self, ctx):
+        pass
+
+
+    # Enter a parse tree produced by LoseParser#ifelsenondefprog.
+    def enterIfelsenondefprog(self, ctx):
+        pass
+
+    # Exit a parse tree produced by LoseParser#ifelsenondefprog.
+    def exitIfelsenondefprog(self, ctx):
+        pass
+
+
+    # Enter a parse tree produced by LoseParser#elsenondefprog.
+    def enterElsenondefprog(self, ctx):
+        pass
+
+    # Exit a parse tree produced by LoseParser#elsenondefprog.
+    def exitElsenondefprog(self, ctx):
+        pass
+
+
     # Enter a parse tree produced by LoseParser#ifnondefprog.
     def enterIfnondefprog(self, ctx):
         pass
@@ -172,6 +208,15 @@ class LoseListener(ParseTreeListener):
 
     # Exit a parse tree produced by LoseParser#whilenondefprog.
     def exitWhilenondefprog(self, ctx):
+        pass
+
+
+    # Enter a parse tree produced by LoseParser#ifelseexpr.
+    def enterIfelseexpr(self, ctx):
+        pass
+
+    # Exit a parse tree produced by LoseParser#ifelseexpr.
+    def exitIfelseexpr(self, ctx):
         pass
 
 

@@ -1,0 +1,11 @@
+input x y z
+
+// computes x = y > z (sets x to 1 if true, and to 0 if false)
+// Unary assumed
+
+function clear x
+MOVE_Y: [y] 1 (R); E (RETURN_FALSE)
+MOVE_Z: [z] 1 (R, MOVE_Y); E ()
+RETURN_TRUE: function add1 x 
+RETURN_FALSE: function getbacktostart2 y z
+return
