@@ -181,10 +181,12 @@ class LineGroup:
 			listOfStates.extend(listOfBarCodeStates)
 		
 		elif "function" in lineString:
-			if ":" in lineString:
-				everythingButLabel = string.split(lineString, ":")[1]
-			else:
-				everythingButLabel = lineString
+#			if ":" in lineString:
+#				everythingButLabel = string.split(lineString, ":")[1]
+#			else:
+#				everythingButLabel = lineString
+
+			everythingButLabel = string.split(lineString, ":")[-1]
 			
 			splitLine = string.split(everythingButLabel)
 			
@@ -197,7 +199,7 @@ class LineGroup:
 			funcNameEState = State(name + "_funcname_preamble_E")
 			
 			lineNumberHState.set3("_", funcNameEState, "R", "H")
-			
+			            
 			functionBarCode = convertNumberToBarCode(functionDictionary[splitLine[1]])
 			
 			self.charString += "_E" + functionBarCode

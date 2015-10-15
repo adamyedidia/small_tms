@@ -62,8 +62,16 @@ def getFunctionLabelDictionary(functions, path):
 		
         for line in functionLines:
             if not ("input" in line or "//" in line or line == "\n"):
-                if ":" in line:
-                    label = string.split(line, ":")[0]
+
+                # getting rid of whitespace, then splitting by colons
+                labels = string.split(string.replace(line, " ", ""), ":")[:-1]
+                for label in labels:
+                    try:
+                        assert not label in functionLabelDictionary[function] 
+                    except:
+                        print "Error: duplicate label", label, "on line", lineCounter, "of function", function
+                        raise
+                        
                     functionLabelDictionary[function][label] = lineCounter
                 
                 functionLineDictionary[function][lineCounter] = line

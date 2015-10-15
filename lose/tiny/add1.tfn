@@ -1,0 +1,9 @@
+input x
+
+// Does x += 1
+// Unary assumed
+
+function findfin x
+function incr x
+function getbacktostart x
+return

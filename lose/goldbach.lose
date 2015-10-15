@@ -1,0 +1,60 @@
+nat evenNumber;
+nat primeCounter;
+nat isThisOnePrime;
+nat foundSum;
+
+func assignXtoYminusX(x, y) {
+    x = y - x;
+    return;
+}
+
+/* Figures out if x is prime, and puts the output in y */
+/* Does not modify x, modifies y */
+func isPrime(x, y) {
+    if (x == 1) {
+        y = 0;
+        return;
+    }
+    
+    y = 2;
+    
+    while (x > y) {
+        if ((x % y) == 0) {
+            y = 0;
+            return;
+        }
+        y = y + 1;
+    }
+    
+    return;
+}
+
+evenNumber = 2;
+foundSum = 1;
+
+while (foundSum) {
+    foundSum = 0;
+    evenNumber = evenNumber + 2;
+    primeCounter = 1;
+    
+    while (primeCounter < evenNumber) {    
+        isPrime(primeCounter, isThisOnePrime);
+        
+        if (isThisOnePrime) {
+            assignXtoYminusX(primeCounter, evenNumber);
+            isPrime(primeCounter, isThisOnePrime);
+            assignXtoYminusX(primeCounter, evenNumber);
+            
+            if (isThisOnePrime) {
+                print evenNumber;
+                print primeCounter;
+                
+                foundSum = 1;
+            }
+        }
+        
+        primeCounter = primeCounter + 1;    
+    }         
+}
+
+halt;

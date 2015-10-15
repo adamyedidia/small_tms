@@ -18,7 +18,7 @@ function assign !0 x
 function assign1 !1
 function add !2 !0 !1
 function assign x !2
-[!0] E (WHILE_TEST_0)
+[!0] E (WHILE_TEST_0); 1 (WHILE_TEST_0)
 WHILE_STATE_0_FALSE: function assign !0 z
 function assign3 !1
 function add !2 !0 !1
@@ -27,7 +27,7 @@ function greaterThan !1 !0 !2
 [!1] E (IF_ELSE_STATE_0_FALSE); 1 ()
 function assign3 !0
 function assign z !0
-[!0] E (IF_ELSE_STATE_0_TRUE)
+[!0] E (IF_ELSE_STATE_0_TRUE); 1 (IF_ELSE_STATE_0_TRUE)
 IF_ELSE_STATE_0_FALSE: function assign5 !0
 function assign y !0
-return
+IF_ELSE_STATE_0_TRUE: return

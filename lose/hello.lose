@@ -18,7 +18,7 @@ func myFunc(x, y, z) {
     return;
 }
 
-x = f;
+r = f;
 
 myFunc(r, f, g);
 

@@ -55,3 +55,4 @@ def importFuncs(targetDir, func="main"):
 importFuncs(sys.argv[1])
 
 open(sys.argv[1] + "/functions.tff", "w").write(functionsTFF)
+open(sys.argv[1] + "/initvar", "w").write("E\n")

@@ -5,7 +5,7 @@ trueprog: (command)* EOF ;
 command:  (funcdef | procdef | declare | nondefcommand)  ;
 
 nondefprog: (nondefcommand)* ;
-nondefcommand:  (funcproccall | whileloop | forloop | ifstate | ifelsestate | assign | returnstate)  ;
+nondefcommand:  (funcproccall | whileloop | forloop | ifstate | ifelsestate | assign | returnstate | printstate)  ;
 
 funcdef: 'func' funcprocbody ;
 procdef: 'proc' funcprocbody ;
@@ -29,6 +29,8 @@ forloop: 'for'  '('  nondefcommand  ';'  expr  ';'  nondefcommand  ')'  '{' nond
 
 ifstate: 'if'  '('  ifexpr  ')'  '{' ifnondefprog '}' ;
 
+printstate: 'print' VAR ';' ;
+
 ifelsestate: 'ifelse' '(' ifelseexpr ')' '{' ifelsenondefprog '}' '{' elsenondefprog '}' ;
 
 ifelsenondefprog: nondefprog ;
@@ -47,15 +49,20 @@ returnstate: ('return' | 'halt')  ';' ;
 expr:   expr OPERATOR_MUL_DIV expr
     |   expr OPERATOR_ADD_SUB expr 
     |   expr OPERATOR_COMPARE expr
+    |   expr OPERATOR_BOOLEAN expr
+    |   OPERATOR_NOT expr
     |   INT
     |   '(' expr ')'
     |  VAR
     ;
 
-OPERATOR_MUL_DIV: ('*' | '/') ;
+OPERATOR_MUL_DIV: ('*' | '/' | '%') ;
 OPERATOR_ADD_SUB: ('+' | '-') ;
 OPERATOR_COMPARE: ('==' | '!=' | '>' | '<' | '>=' | '<=') ;
+OPERATOR_BOOLEAN: ('&' | '|') ;
+OPERATOR_NOT: ('!') ;
 
+COMMENT : '/*'.*?'*/' -> skip;
 WS : [\t\n\r ]+ -> skip;
 VAR     : [a-zA-Z_]+ ;
 INT     : [0-9]+ ;

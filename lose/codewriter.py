@@ -153,8 +153,8 @@ class CodeWriter(LoseListener):
             
             self.currentFunc.add("")
 
-    def enterExpr(self, ctx):        
-        ctx.newAttribute = "hi!"
+#    def enterExpr(self, ctx):        
+#        ctx.newAttribute = "hi!"
 
     # release locks on the children and take hold of the lock on yourself
     def exitExpr(self, ctx):
@@ -165,6 +165,7 @@ class CodeWriter(LoseListener):
             ctx.associatedReg = self.currentFunc.findSmallestUnfilledReg()
             self.currentFunc.fillReg(ctx.associatedReg)        
         
+            # if it's a two-expr sort of situation
             if ctx.expr(0) != None and ctx.expr(1) != None:                 
                 self.currentFunc.add(self.dealWithExpr(ctx, stringify(ctx.associatedReg), \
                     stringify(ctx.expr(0).associatedReg), stringify(ctx.expr(1).associatedReg)))
@@ -176,55 +177,94 @@ class CodeWriter(LoseListener):
             else:
                 self.currentFunc.add(self.dealWithExpr(ctx, stringify(ctx.associatedReg), None, None))   
         
+        # if it's a one-expr sort of situation
         else:
-            # if it's just parens don't do shit
-            ctx.associatedReg = ctx.expr(0).associatedReg    
+            if ctx.OPERATOR_NOT() != None:
+                ctx.associatedReg = self.currentFunc.findSmallestUnfilledReg()
+                self.currentFunc.fillReg(ctx.associatedReg)
+                
+                self.currentFunc.add(self.dealWithExpr(ctx, stringify(ctx.associatedReg), \
+                    stringify(ctx.expr(0).associatedReg), None))
+                    
+                    # release lock
+                self.currentFunc.emptyReg(ctx.expr(0).associatedReg)
+            
+            else:
+                # if it's just parens don't do shit
+                ctx.associatedReg = ctx.expr(0).associatedReg    
+    
+    def enterWhileloop(self, ctx):
+        # Associate with the component parts the current whileCounter
+        # This is an identifier to distinguish the various while loops
+        ctx.whileexpr().whileCounter = self.currentFunc.whileCounter
+        ctx.whilenondefprog().whileCounter = self.currentFunc.whileCounter
+        
+        self.currentFunc.whileCounter += 1
             
     def enterWhileexpr(self, ctx):
-        self.currentFunc.add("WHILE_TEST_" + str(self.currentFunc.whileCounter) + ": ")
+        self.currentFunc.add("WHILE_TEST_" + str(ctx.whileCounter) + ": ")
 
     def exitWhileexpr(self, ctx):
         assert len(self.currentFunc.filledRegs) == 1
         self.currentFunc.add("[" + stringify(self.currentFunc.filledRegs[0]) + \
-            "] E (WHILE_STATE_" + str(self.currentFunc.whileCounter) + "_FALSE); 1 ()\n")
+            "] E (WHILE_STATE_" + str(ctx.whileCounter) + "_FALSE); 1 ()\n")
         
         self.currentFunc.emptyReg(self.currentFunc.filledRegs[0])
         
     def exitWhilenondefprog(self, ctx):
         dummyReg = self.currentFunc.findSmallestUnfilledReg()
         
-        self.currentFunc.add("[" + stringify(dummyReg) + "] E (WHILE_TEST_" + str(self.currentFunc.whileCounter) + ")\n")
-        self.currentFunc.add("WHILE_STATE_" + str(self.currentFunc.whileCounter) + "_FALSE: ")
+        self.currentFunc.add("[" + stringify(dummyReg) + "] E (WHILE_TEST_" + str(ctx.whileCounter) + \
+            "); 1 (WHILE_TEST_" + str(ctx.whileCounter) + ")\n")
+        # goto top of while loop no matter what    
+        self.currentFunc.add("WHILE_STATE_" + str(ctx.whileCounter) + "_FALSE: ")
+            
+    def enterIfstate(self, ctx):
+        # Associate with the component parts the current ifCounter
+        # This is an identifier to distinguish the various while loops
+        ctx.ifexpr().ifCounter = self.currentFunc.ifCounter
+        ctx.ifnondefprog().ifCounter = self.currentFunc.ifCounter
+                
+        self.currentFunc.ifCounter += 1
 
     # if the holder variable that holds the expression has a positive value, skip to the label at the end of the if statement
     def exitIfexpr(self, ctx):
         assert len(self.currentFunc.filledRegs) == 1
         self.currentFunc.add("[" + stringify(self.currentFunc.filledRegs[0]) + "] E (IF_STATE_" + \
-            str(self.currentFunc.ifCounter) + "_FALSE); 1 ()\n")
+            str(ctx.ifCounter) + "_FALSE); 1 ()\n")
         
         self.currentFunc.emptyReg(self.currentFunc.filledRegs[0])    
         
     # Place the label at the end of the concluded if statement. Note the intentional lack of \n
-    def exitIfnondefprog(self, ctx):
-        self.currentFunc.add("IF_STATE_" + str(self.currentFunc.ifCounter) + "_FALSE: ")
-        self.currentFunc.ifCounter += 1
+    def exitIfnondefprog(self, ctx):        
+        self.currentFunc.add("IF_STATE_" + str(ctx.ifCounter) + "_FALSE: ")
         
+    def enterIfelsestate(self, ctx):    
+        # Associate with the component parts the current ifElseCounter
+        # This is an identifier to distinguish the various while loops      
+        ctx.ifelseexpr().ifElseCounter = self.currentFunc.ifElseCounter
+        ctx.ifelsenondefprog().ifElseCounter = self.currentFunc.ifElseCounter
+        ctx.elsenondefprog().ifElseCounter = self.currentFunc.ifElseCounter
+          
+        self.currentFunc.ifElseCounter += 1  
+          
     def exitIfelseexpr(self, ctx):
         assert len(self.currentFunc.filledRegs) == 1
         self.currentFunc.add("[" + stringify(self.currentFunc.filledRegs[0]) + "] E (IF_ELSE_STATE_" + \
-            str(self.currentFunc.ifElseCounter) + "_FALSE); 1 ()\n")
+            str(ctx.ifElseCounter) + "_FALSE); 1 ()\n")
         
         self.currentFunc.emptyReg(self.currentFunc.filledRegs[0])
     
     def exitIfelsenondefprog(self, ctx):
         dummyReg = self.currentFunc.findSmallestUnfilledReg()        
         
-        self.currentFunc.add("[" + stringify(dummyReg) + "] E (IF_ELSE_STATE_" + str(self.currentFunc.ifElseCounter) + "_TRUE)\n")
-        self.currentFunc.add("IF_ELSE_STATE_" + str(self.currentFunc.ifElseCounter) + "_FALSE: ")
+        self.currentFunc.add("[" + stringify(dummyReg) + "] E (IF_ELSE_STATE_" + str(ctx.ifElseCounter) + \
+            "_TRUE); 1 (IF_ELSE_STATE_" + str(ctx.ifElseCounter) + "_TRUE)\n")
+        # goto end no matter what
+        self.currentFunc.add("IF_ELSE_STATE_" + str(ctx.ifElseCounter) + "_FALSE: ")
         
-    def editElsenondefprog(self, ctx):
-        self.currentFunc.add("IF_ELSE_STATE_" + str(self.currentFunc.ifElseCounter) + "_TRUE: ")
-        self.currentFunc.ifElseCounter += 1
+    def exitElsenondefprog(self, ctx):
+        self.currentFunc.add("IF_ELSE_STATE_" + str(ctx.ifElseCounter) + "_TRUE: ")
 
     def exitAssign(self, ctx):
         # should be just one reg full, since it's the root of the expression tree
@@ -243,34 +283,56 @@ class CodeWriter(LoseListener):
         comp = ctx.OPERATOR_COMPARE()
         
         if ctx.INT() != None:
-            self.funcSet["assign" + ctx.INT().getText()] = True
-            return "function assign" + ctx.INT().getText() + " " + reg1 + "\n"
+            if ctx.INT().getText() == "0":
+                return "function clear " + reg1 + "\n"
+            else:
+                self.funcSet["assign" + ctx.INT().getText()] = True
+                return "function assign" + ctx.INT().getText() + " " + reg1 + "\n"
         
         elif ctx.VAR() != None:    
-            self.funcSet["assign"] = True
             return "function assign " + reg1 + " " + ctx.VAR().getText() + "\n"
+         
+        elif ctx.OPERATOR_NOT() != None:
+            return "function assignNot " + reg1 + " " + reg2 + "\n" 
                 
         elif ctx.expr(0) != None and ctx.expr(1) == None:
             # parens
             return ""        
                 
+        elif ctx.OPERATOR_BOOLEAN() != None:
+            if ctx.OPERATOR_BOOLEAN().getText() == "&":
+                return "function and " + reg1 + " " + reg2 + " " + reg3 + "\n"
+                
+            elif ctx.OPERATOR_BOOLEAN.getText() == "|":
+                return "function or " + reg1 + " " + reg2 + " " + reg3 + "\n"        
+            
+            else:
+                pront("bad operator " + ctx.OPERATOR_BOOLEAN.getText())
+                raise
+            
         elif ctx.OPERATOR_MUL_DIV() != None:    
             if ctx.OPERATOR_MUL_DIV().getText() == "*":
-                self.funcSet["multiply"] = True
                 return "function multiply " + reg1 + " " + reg2 + " " + reg3 + "\n"
             
             elif ctx.OPERATOR_MUL_DIV().getText() == "/":
-                self.funcSet["divide"] = True
                 return "function divide " + reg1 + " " + reg2 + " " + reg3 + "\n"
+            
+            elif ctx.OPERATOR_MUL_DIV().getText() == "%":
+                return "function modulus " + reg1 + " " + reg2 + " " + reg3 + "\n"
+            
+            else:
+                pront("bad operator " + ctx.OPERATOR_MUL_DIV().getText())
+                raise
         
         elif ctx.OPERATOR_ADD_SUB() != None:    
             if ctx.OPERATOR_ADD_SUB().getText() == "+":
-                self.funcSet["add"] = True
                 return "function add " + reg1 + " " + reg2 + " " + reg3 + "\n"
             
             elif ctx.OPERATOR_ADD_SUB().getText() == "-":
-                self.funcSet["subtract"] = True
                 return "function subtract " + reg1 + " " + reg2 + " " + reg3 + "\n"
+                
+            else:
+                pront("bad operator " + ctx.OPERATOR_ADD_SUB().getText())
         
         elif comp != None:    
             if ctx.OPERATOR_COMPARE().getText() == ">":
@@ -297,7 +359,12 @@ class CodeWriter(LoseListener):
             elif ctx.OPERATOR_COMPARE().getText() == "!=":
                 self.funcSet["notEqual"] = True
                 return "function notEqual " + reg1 + " " + reg2 + " " + reg3 + "\n"
-            
+                
+            else:
+                pront("bad operator " + comp.getText())
+                raise
+        
+        pront("Bad expr: " + ctx.getText())    
         raise
             
     def exitProg(self, ctx):

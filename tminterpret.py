@@ -29,15 +29,16 @@ class TuringMachineWithStack:
             
             for j, symbol in enumerate(initVarString):
                 self.tapeDictionary[i+1].tapeDict[j] = symbol
-        
+    
+    # Returns 1 upon halting, 0 otherwise    
     def runOneStep(self):
                 
         currentFunction = self.stack[-1][0]
+        print currentFunction, self.lineNumber
         currentLine = self.functionLineDictionary[currentFunction][self.lineNumber]
         
-        # Get rid of label
-        if ":" in currentLine:
-            currentLine = currentLine[string.find(currentLine, ":") + 1:]
+        # get rid of labels
+        currentLine = string.split(currentLine, ":")[-1]
         
         if "[" in currentLine:
             # direct command
@@ -51,12 +52,13 @@ class TuringMachineWithStack:
             tapeName = self.stack[-1][1][variableName]
             
             currentTape = self.tapeDictionary[tapeName]
+            currentSymbol = currentTape.readSymbol()
                         
             for reaction in reactions:
                 
                 # ugly stuff at the end of next line is for removing whitespce
                 splitReaction = re.split("[(|)|,]", string.strip(reaction).replace(" ", ""))
-                if splitReaction[0] == currentTape.readSymbol():
+                if splitReaction[0] == currentSymbol:
                     foundAppropriateReaction = True
                 
                     for command in splitReaction[1:]:
@@ -70,13 +72,13 @@ class TuringMachineWithStack:
                     foundGoto = False
                     for command in splitReaction[1:]:
                         if not command in ["1", "E", "_", "L", "R", "-", ""]:
-                            try:
+                            try:                                
                                 self.lineNumber = self.functionLabelDictionary[currentFunction][command]
                                 foundGoto = True
                             except:
                                 print "Unrecognized label on line", self.lineNumberToTextNumber[self.lineNumber], "of function", currentFunction
                                 raise
-                                
+                    
                     if not foundGoto:
                         self.lineNumber += 1
                     

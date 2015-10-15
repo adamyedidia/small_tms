@@ -1,7 +1,7 @@
 import sys
 import string
 import math
-sys.path.insert(0, '/home/adamyedidia/thesis/turdtotm')
+sys.path.insert(0, '/Users/adamyedidia/small_tms/thesis/turdtotm')
 from state import *
 from constantsTurdToTM import *
 from stateTemplates import *
@@ -171,6 +171,10 @@ def processSymbol(inState, name, outerSymbol, symbolMapping, conditions,
 		for symbol in conditions:
 			inState.setNextState(symbol, SimpleState("REJECT"))
 			inState.setHeadMove(symbol, "L")
+	elif nextOuterState.stateName == "HALT":
+		for symbol in conditions:
+			inState.setNextState(symbol, SimpleState("HALT"))
+			inState.setHeadMove(symbol, "L")		
 
 	elif outerWrite != outerSymbol:
 		# a symbol is being written	

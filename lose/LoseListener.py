@@ -166,6 +166,15 @@ class LoseListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by LoseParser#printstate.
+    def enterPrintstate(self, ctx):
+        pass
+
+    # Exit a parse tree produced by LoseParser#printstate.
+    def exitPrintstate(self, ctx):
+        pass
+
+
     # Enter a parse tree produced by LoseParser#ifelsestate.
     def enterIfelsestate(self, ctx):
         pass

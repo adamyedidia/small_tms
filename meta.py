@@ -13,7 +13,7 @@ def main():
     except:  
         raise Exception("No functions.tff file found in directory " + path) 
 
-    functionLabelDictionary, functionDictionary = getFunctionLabelDictionary(functions, path)
+    functionLabelDictionary, functionDictionary, _, _ = getFunctionLabelDictionary(functions, path)
     functionVariableDictionary = getFunctionVariableDictionary(functions, path)
 
 ###################################################################
@@ -30,8 +30,8 @@ def main():
 
     listOfStates = []
 
-    numberOfVariables = 3
-    numberOfFunctions = 1
+    numberOfVariables = 7
+    numberOfFunctions = len(functions)
     
     inState = write(listOfStates, inState, numberOfVariables, initValueString, numberOfFunctions, \
     	functions, functionVariableDictionary, functionLabelDictionary, functionDictionary, path)

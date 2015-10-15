@@ -1,7 +1,7 @@
 import sys
 import string
 import math
-sys.path.insert(0, '/home/adamyedidia/thesis/turdtotm')
+sys.path.insert(0, '/Users/adamyedidia/small_tms/thesis/turdtotm')
 from state import *
 from constantsTurdToTM import *
 from stateTemplates import *
@@ -46,7 +46,7 @@ if __name__ == "__main__":
 
 	listOfStates = []
 
-	isErrorStateDictionary = {"ERROR": True, "ACCEPT": False, "REJECT": False}
+	isErrorStateDictionary = {"ERROR": True, "ACCEPT": False, "REJECT": False, "HALT": False}
 
 	outerStartState = sttm.startState
 

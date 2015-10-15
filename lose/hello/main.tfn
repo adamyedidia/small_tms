@@ -3,6 +3,6 @@ input r g f !0 !1 !2
 // Auto-generated code for function main
 
 function assign !0 f
-function assign x !0
+function assign r !0
 function myFunc r f g !0 !1 !2 
 return

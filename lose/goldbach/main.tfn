@@ -1,0 +1,39 @@
+input foundSum isThisOnePrime evenNumber primeCounter !0 !1 !2 
+
+// Auto-generated code for function main
+
+function assign2 !0
+function assign evenNumber !0
+function assign1 !0
+function assign foundSum !0
+WHILE_TEST_0: function assign !0 foundSum
+[!0] E (WHILE_STATE_0_FALSE); 1 ()
+function clear !0
+function assign foundSum !0
+function assign !0 evenNumber
+function assign2 !1
+function add !2 !0 !1
+function assign evenNumber !2
+function assign1 !0
+function assign primeCounter !0
+WHILE_TEST_1: function assign !0 primeCounter
+function assign !1 evenNumber
+function greaterThan !2 !1 !0
+[!2] E (WHILE_STATE_1_FALSE); 1 ()
+function isPrime primeCounter isThisOnePrime !0 !1 !2 
+function assign !0 isThisOnePrime
+[!0] E (IF_STATE_0_FALSE); 1 ()
+function assignXtoYminusX primeCounter evenNumber !0 !1 !2 
+function isPrime primeCounter isThisOnePrime !0 !1 !2 
+function assignXtoYminusX primeCounter evenNumber !0 !1 !2 
+function assign !0 isThisOnePrime
+[!0] E (IF_STATE_1_FALSE); 1 ()
+function assign1 !0
+function assign foundSum !0
+IF_STATE_1_FALSE: IF_STATE_0_FALSE: function assign !0 primeCounter
+function assign1 !1
+function add !2 !0 !1
+function assign primeCounter !2
+[!0] E (WHILE_TEST_1); 1 (WHILE_TEST_1)
+WHILE_STATE_1_FALSE: [!0] E (WHILE_TEST_0); 1 (WHILE_TEST_0)
+WHILE_STATE_0_FALSE: return

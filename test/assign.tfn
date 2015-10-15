@@ -1,0 +1,6 @@
+input !0 y
+READ_Y: [y] 1 (R); E (SAW_E, R); _ (GET_BACK_TO_START_Y, L)
+SAW_1: [!0] _ (1, R, READ_Y)
+SAW_E: [!0] _ (E, R, READ_Y)
+GO_LEFT_0: [!0] _ (L)
+return

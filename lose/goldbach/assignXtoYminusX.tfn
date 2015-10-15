@@ -1,0 +1,9 @@
+input x y !0 !1 !2 
+
+// Auto-generated code for function assignXtoYminusX
+
+function assign !0 y
+function assign !1 x
+function subtract !2 !0 !1
+function assign x !2
+return
