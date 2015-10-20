@@ -1,0 +1,208 @@
+/* Figures out if x is prime, and puts the output in out */
+/* Does not modify x, modifies y */
+func isPrime(x, out) {
+    if (x == 1) {
+        out = 0;
+        return;
+    }
+    
+    out = 2;
+    
+    while (x > out) {
+        if ((x % out) == 0) {
+            out = 0;
+            return;
+        }
+        out = out + 1;
+    }
+    
+    return;
+}
+
+/* eta(j) = p if there exists k,p s.t. j = p^k, p is prime */
+/* eta(j) = 1 otherwise */
+ 
+func eta(j, hold, out) {
+    out = 1;
+    while (j > out) {    
+        out = out + 1;
+    
+        isPrime(out, hold);
+    
+        /* is the number we're trying indeed prime? */
+        if (hold) {
+            hold = 1;                
+            while (j > hold) {                
+                hold = hold * out;
+                if (hold == j) {
+                    return;
+                }
+            }
+        }
+    }
+    
+    out = 1;
+    return;
+}
+
+/* delta(x) = \product_{n<x} \product_{j<=n} eta(j) */
+
+func delta(x, nCount, jCount, etaHold, etaOut, out) {
+    out = 1;
+    nCount = 1;
+    
+    while (nCount < x) {
+        jCount = 1;
+        
+        while (jCount <= nCount) {
+            eta(jCount, etaHold, etaOut);
+            out = out * etaOut;
+            
+            jCount = jCount + 1;
+        }
+        
+        nCount = nCount + 1;
+    }
+    
+    return;
+}
+
+/* out = x^2 */
+func square(x, out) {
+    out = x * x;
+    return;
+}
+
+/* c *= (a*b) */
+func multiplyByBoth(a, b, c) {
+    c = c * b;
+    c = c * a;
+    return;
+}
+
+/* out1 = x1^2 
+   out2 = x2^2 */
+
+func squareBoth(x1, x2, out1, out2) {
+    square(x1, out1);
+    square(x2, out2);
+    return;
+}
+
+func squareBothAndMultiply(x1, x2, h, out) {
+    squareBoth(x1, x2, h, out);
+    out = out * h;
+    return;
+}
+
+
+/* out = x! */
+func factorial(x, xCountdown, out) {
+    xCountdown = x;
+    out = 1;
+    
+    while (xCountdown > 0) {
+        out = out * xCountdown;
+        xCountdown = xCountdown - 1;
+    }
+    
+    return;
+}
+
+/* see final.pdf for an explanation of the breakdown of this procedure */
+
+func a(deltaXFac, k, h, out) {        
+    
+    out = 0;
+    
+    /* the sum will be taken over out */
+    
+    k = 1;
+        
+    while (k <= deltaXFac) {
+        h = deltaXFac / k;
+        out = out + h;
+        k = k + 1;
+    }
+    
+    return;
+}
+
+/* see final.pdf for an explanation of the breakdown of this procedure */
+
+func b(deltaXFac, x, out) {
+    square(x, out);
+    out = out / 2;
+    out = out * deltaXFac;
+    return;
+}
+
+/* see final.pdf for an explanation of the breakdown of this procedure */
+
+func l(aOfX, bOfX, h, out) {
+    squareBoth(aOfX, bOfX, h, out);
+    out = out + h;
+    return;
+}
+
+/* see final.pdf for an explanation of the breakdown of this procedure */
+/* WARNING! this modifies deltaXFac! Do not reuse deltaXFac after calling this function!! */
+
+func r(x, deltaXFac, aOfX, bOfX, h1, h2, out) {
+
+    /* first term (36 n^3 (delta(n)!)^2) */
+    h1 = 3;
+    squareBothAndMultiply(deltaXFac, h1, h2, out);
+    h1 = 2;
+    squareBothAndMultiply(h1, x, deltaXFac, h2);
+    multiplyByBoth(x, h2, out);
+    
+    /* second term (2 a(n) b(n)) */
+    multiplyByBoth(aOfX, bOfX, h1);
+    
+    out = out + h1;
+    
+    return;
+}
+
+nat x;
+nat deltaXFac;
+nat aOfX;
+nat bOfX;
+nat lOfX;
+nat rOfX;
+nat h;
+
+rOfX = 1;
+
+while (lOfX < rOfX) {
+    x = x + 1;
+    print x; 
+
+    delta(x, aOfX, bOfX, lOfX, rOfX, h);
+    factorial(h, aOfX, deltaXFac);
+    
+    a(deltaXFac, bOfX, h, aOfX);
+    b(deltaXFac, h, bOfX);
+    
+    r(x, deltaXFac, aOfX, bOfX, h, lOfX, rOfX);
+    l(aOfX, bOfX, h, lOfX);
+}
+
+halt;
+
+
+/*
+
+u = 4;
+z = 2;
+
+delta(u, v, w, x, y, z);
+
+print u;
+print y;
+print z;
+
+halt;
+
+*/

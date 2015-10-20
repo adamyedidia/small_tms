@@ -1,0 +1,34 @@
+input x nCount jCount etaHold etaOut out !0 !1 !2 
+
+// Auto-generated code for function delta
+
+function assign1 !0
+function assign out !0
+function assign1 !0
+function assign nCount !0
+WHILE_TEST_0: function assign !0 nCount
+function assign !1 x
+function greaterThan !2 !1 !0
+[!2] E (WHILE_STATE_0_FALSE); 1 ()
+function assign1 !0
+function assign jCount !0
+WHILE_TEST_1: function assign !0 jCount
+function assign !1 nCount
+function greaterOrEqual !2 !1 !0
+[!2] E (WHILE_STATE_1_FALSE); 1 ()
+function eta jCount etaHold etaOut !0 !1 !2 
+function assign !0 out
+function assign !1 etaOut
+function multiply !2 !0 !1
+function assign out !2
+function assign !0 jCount
+function assign1 !1
+function add !2 !0 !1
+function assign jCount !2
+[!0] E (WHILE_TEST_1); 1 (WHILE_TEST_1)
+WHILE_STATE_1_FALSE: function assign !0 nCount
+function assign1 !1
+function add !2 !0 !1
+function assign nCount !2
+[!0] E (WHILE_TEST_0); 1 (WHILE_TEST_0)
+WHILE_STATE_0_FALSE: return

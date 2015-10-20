@@ -1,0 +1,8 @@
+input x y z
+
+// get to the beginning of three values.
+// NON-STANDARD
+
+function getbacktostart2 x y
+function getbacktostart z
+return

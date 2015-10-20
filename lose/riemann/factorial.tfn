@@ -1,0 +1,22 @@
+input x xCountdown out !0 !1 !2 
+
+// Auto-generated code for function factorial
+
+function assign !0 x
+function assign xCountdown !0
+function assign1 !0
+function assign out !0
+WHILE_TEST_0: function assign !0 xCountdown
+function clear !1
+function greaterThan !2 !0 !1
+[!2] E (WHILE_STATE_0_FALSE); 1 ()
+function assign !0 out
+function assign !1 xCountdown
+function multiply !2 !0 !1
+function assign out !2
+function assign !0 xCountdown
+function assign1 !1
+function subtract !2 !0 !1
+function assign xCountdown !2
+[!0] E (WHILE_TEST_0); 1 (WHILE_TEST_0)
+WHILE_STATE_0_FALSE: return

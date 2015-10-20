@@ -246,6 +246,9 @@ class ReactionGroup:
 		functionLabelDictionary, listOfStates):
 		
 		splitReaction = removeAll(re.split("[ |(|,|)]", reactionString.strip()), "")
+		
+#		print splitReaction, lineNumber, functionName
+		
 		symbolRead = splitReaction[0]
 		name = "write_code_" + functionName + "_" + str(lineNumber) + "_" + symbolRead
 	

@@ -1,0 +1,7 @@
+input x y z
+
+// assign x to y - z. Unary assumed
+
+function assign x y
+function subtractfrom x z
+return

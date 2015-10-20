@@ -64,6 +64,6 @@ OPERATOR_NOT: ('!') ;
 
 COMMENT : '/*'.*?'*/' -> skip;
 WS : [\t\n\r ]+ -> skip;
-VAR     : [a-zA-Z_]+ ;
+VAR     : [a-zA-Z_] [a-zA-Z0-9_]* ;
 INT     : [0-9]+ ;
 

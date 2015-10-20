@@ -1,0 +1,32 @@
+input x out !0 !1 !2 
+
+// Auto-generated code for function isPrime
+
+function assign !0 x
+function assign1 !1
+function equal !2 !0 !1
+[!2] E (IF_STATE_0_FALSE); 1 ()
+function clear !0
+function assign out !0
+return
+IF_STATE_0_FALSE: function assign2 !0
+function assign out !0
+WHILE_TEST_0: function assign !0 x
+function assign !1 out
+function greaterThan !2 !0 !1
+[!2] E (WHILE_STATE_0_FALSE); 1 ()
+function assign !0 x
+function assign !1 out
+function modulus !2 !0 !1
+function clear !0
+function equal !1 !2 !0
+[!1] E (IF_STATE_1_FALSE); 1 ()
+function clear !0
+function assign out !0
+return
+IF_STATE_1_FALSE: function assign !0 out
+function assign1 !1
+function add !2 !0 !1
+function assign out !2
+[!0] E (WHILE_TEST_0); 1 (WHILE_TEST_0)
+WHILE_STATE_0_FALSE: return

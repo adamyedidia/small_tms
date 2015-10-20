@@ -30,7 +30,7 @@ def main():
 
     listOfStates = []
 
-    numberOfVariables = 7
+    numberOfVariables = 10
     numberOfFunctions = len(functions)
     
     inState = write(listOfStates, inState, numberOfVariables, initValueString, numberOfFunctions, \

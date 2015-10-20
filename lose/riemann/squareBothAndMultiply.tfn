@@ -1,0 +1,10 @@
+input x1 x2 h out !0 !1 !2 
+
+// Auto-generated code for function squareBothAndMultiply
+
+function squareBoth x1 x2 h out !0 !1 !2 
+function assign !0 out
+function assign !1 h
+function multiply !2 !0 !1
+function assign out !2
+return

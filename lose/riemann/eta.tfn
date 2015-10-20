@@ -1,0 +1,37 @@
+input j hold out !0 !1 !2 
+
+// Auto-generated code for function eta
+
+function assign1 !0
+function assign out !0
+WHILE_TEST_0: function assign !0 j
+function assign !1 out
+function greaterThan !2 !0 !1
+[!2] E (WHILE_STATE_0_FALSE); 1 ()
+function assign !0 out
+function assign1 !1
+function add !2 !0 !1
+function assign out !2
+function isPrime out hold !0 !1 !2 
+function assign !0 hold
+[!0] E (IF_STATE_0_FALSE); 1 ()
+function assign1 !0
+function assign hold !0
+WHILE_TEST_1: function assign !0 j
+function assign !1 hold
+function greaterThan !2 !0 !1
+[!2] E (WHILE_STATE_1_FALSE); 1 ()
+function assign !0 hold
+function assign !1 out
+function multiply !2 !0 !1
+function assign hold !2
+function assign !0 hold
+function assign !1 j
+function equal !2 !0 !1
+[!2] E (IF_STATE_1_FALSE); 1 ()
+return
+IF_STATE_1_FALSE: [!0] E (WHILE_TEST_1); 1 (WHILE_TEST_1)
+WHILE_STATE_1_FALSE: IF_STATE_0_FALSE: [!0] E (WHILE_TEST_0); 1 (WHILE_TEST_0)
+WHILE_STATE_0_FALSE: function assign1 !0
+function assign out !0
+return

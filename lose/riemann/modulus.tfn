@@ -1,0 +1,11 @@
+input x y z
+
+// x = y % z. Unary assumed.
+
+GBTS_Z: function getbacktostart z
+CLEAR_X: function clear x
+MOVE_Z: [z] 1 (R); E (GBTS_Z)
+MOVE_Y: [y] 1 (R); E (GBTS_Y)
+INCR_X: [x] E (1, R, INCR_X); _ (E, MOVE_Z)
+GBTS_Y: function getbacktostart3 x y z
+return

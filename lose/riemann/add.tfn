@@ -1,0 +1,7 @@
+input x y z
+
+// assign x to y + z. Assumes unary structure for both variables
+
+function assign x y
+function addto x z
+return

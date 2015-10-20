@@ -1,0 +1,14 @@
+input deltaXFac x out !0 !1 !2 
+
+// Auto-generated code for function b
+
+function square x out !0 !1 !2 
+function assign !0 out
+function assign2 !1
+function divide !2 !0 !1
+function assign out !2
+function assign !0 out
+function assign !1 deltaXFac
+function multiply !2 !0 !1
+function assign out !2
+return

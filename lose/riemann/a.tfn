@@ -1,0 +1,26 @@
+input deltaXFac k h out !0 !1 !2 
+
+// Auto-generated code for function a
+
+function clear !0
+function assign out !0
+function assign1 !0
+function assign k !0
+WHILE_TEST_0: function assign !0 k
+function assign !1 deltaXFac
+function greaterOrEqual !2 !1 !0
+[!2] E (WHILE_STATE_0_FALSE); 1 ()
+function assign !0 deltaXFac
+function assign !1 k
+function divide !2 !0 !1
+function assign h !2
+function assign !0 out
+function assign !1 h
+function add !2 !0 !1
+function assign out !2
+function assign !0 k
+function assign1 !1
+function add !2 !0 !1
+function assign k !2
+[!0] E (WHILE_TEST_0); 1 (WHILE_TEST_0)
+WHILE_STATE_0_FALSE: return

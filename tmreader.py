@@ -292,40 +292,116 @@ if __name__ == "__main__":
 			coreStateDictionary[outerState.stateName].makeStartState()
 
 	for outerState in sttm.listOfRealStates:
-		readResultDictionary = makeStateReadTree(outerState.stateName, 
-			coreStateDictionary[outerState.stateName], 
-			2 ** (wordLength - 1), reverseSymbolMapping, listOfStates)
-
-#		for symbol in alphabetMTToST():
-#
-#			nextOuterState = outerState.getNextState(symbol)
-#
-#			if nextOuterState.stateName == "ERROR":
-#				readResultDictionary[symbol].stateName = "ERROR"
-#		
-#			elif nextOuterState.stateName == "ACCEPT":
-#				readResultDictionary[symbol].stateName = "ACCEPT"
-#		
-#			elif nextOuterState.stateName == "REJECT":
-#				readResultDictionary[symbol].stateName = "REJECT"
-#
-#			else:
-#				if 
-
-		for word in readResultDictionary:
-
-			listOfStates.append(readResultDictionary[word])
-
-			# if we have a word that's malformed (like bb) then we interpret as that symbol for all following characters
-			if word in reverseSymbolMapping:
-				processSymbol(readResultDictionary[word], outerState.stateName + "_read_" + reverseSymbolMapping[word],
-					reverseSymbolMapping[word], symbolMapping, alphabetMSToTS(), outerState, coreStateDictionary, listOfStates)
-	
+		
+		coreState = coreStateDictionary[outerState.stateName]
+		
+		numErrors = 0
+		onlyAcceptableSymbol = None
+		for symbol in symbolMapping:
+			if outerState.getNextState(symbol).stateName == "ERROR":
+				numErrors += 1
 			else:
-				for symbol in alphabetMSToTS():
-					processSymbol(readResultDictionary[word], outerState.stateName + "_read_" + reverseSymbolMapping[word + symbol], 
-						reverseSymbolMapping[word + symbol], symbolMapping, 
-						[symbol], outerState, coreStateDictionary, listOfStates)
+				onlyAcceptableSymbol = symbol
+								
+		if numErrors == 3:
+			# This is an unprincipled hack; it says that if the state in question has only one non-ERROR thing that could be read, 
+			# and there's a thing to write, and you want to go right, then just write it as you go right.
+						
+			nextState = outerState.getNextState(onlyAcceptableSymbol)
+			write = outerState.getWrite(onlyAcceptableSymbol)
+			headMove = outerState.getHeadMove(onlyAcceptableSymbol)
+			
+			listOfStates.append(coreState)		
+			
+			writeMapping = symbolMapping[write]
+			onlyAcceptableMapping = symbolMapping[onlyAcceptableSymbol]
+			
+			if writeMapping[1] != onlyAcceptableMapping[1]:
+				
+				writeSecondSymbolState = State(outerState.stateName + "_write_next", None, alphabetMSToTS())
+				listOfStates.append(writeSecondSymbolState)
+				# Then we need to go right to write the new second symbol
+				coreState.setNextState(onlyAcceptableMapping[0], writeSecondSymbolState)
+				coreState.setHeadMove(onlyAcceptableMapping[0], "R")
+				coreState.setWrite(onlyAcceptableMapping[0], writeMapping[0])
+				
+				if headMove == "R" or headMove == "-":
+					writeSecondSymbolState.setNextState(onlyAcceptableMapping[1], coreStateDictionary[nextState.stateName])
+				elif headMove == "L":
+					goLeftState = State(outerState.stateName + "_go_left", None, alphabetMSToTS())
+					listOfStates.append(goLeftState)
+					
+					writeSecondSymbolState.setNextState(onlyAcceptableMapping[1], goLeftState)
+					
+				writeSecondSymbolState.setWrite(onlyAcceptableMapping[1], writeMapping[1])
+				
+				if headMove == "R":
+					writeSecondSymbolState.setHeadMove(onlyAcceptableMapping[1], "R")
+				elif headMove == "-":
+					writeSecondSymbolState.setHeadMove(onlyAcceptableMapping[1], "L")
+				elif headMove == "L":					
+					writeSecondSymbolState.setHeadMove(onlyAcceptableMapping[1], "L")
+					
+					moveBy(goLeftState, outerState.stateName + "_go_left", 2, "L", coreStateDictionary[nextState.stateName],
+						listOfStates, alphabetMSToTS())	
+					
+			else:
+				moveState = State(outerState.stateName + "_move", None, alphabetMSToTS())
+				listOfStates.append(moveState)
+				
+				coreState.setNextState(onlyAcceptableMapping[0], moveState)
+				
+				if headMove == "L":
+					coreState.setHeadMove(onlyAcceptableMapping[0], "L")
+				elif headMove == "R" or headMove == "-":
+					coreState.setHeadMove(onlyAcceptableMapping[0], "R")	
+					
+				coreState.setWrite(onlyAcceptableMapping[0], writeMapping[0])
+				
+				moveState.setAllNextStates(coreStateDictionary[nextState.stateName])
+				
+				if headMove == "L" or headMove == "-":
+					moveState.setAllHeadMoves("L")
+				elif headMove == "R":
+					moveState.setAllHeadMoves("R")
+		
+		else:
+			# There's more than one possible symbol that could be read; in the interest of simplicity,
+			# we do the more general and less parsimonious thing.						
+			readResultDictionary = makeStateReadTree(outerState.stateName, 
+				coreStateDictionary[outerState.stateName], 
+				2 ** (wordLength - 1), reverseSymbolMapping, listOfStates)
+
+	#		for symbol in alphabetMTToST():
+	#
+	#			nextOuterState = outerState.getNextState(symbol)
+	#
+	#			if nextOuterState.stateName == "ERROR":
+	#				readResultDictionary[symbol].stateName = "ERROR"
+	#		
+	#			elif nextOuterState.stateName == "ACCEPT":
+	#				readResultDictionary[symbol].stateName = "ACCEPT"
+	#		
+	#			elif nextOuterState.stateName == "REJECT":
+	#				readResultDictionary[symbol].stateName = "REJECT"
+	#
+	#			else:
+	#				if 
+
+			for word in readResultDictionary:
+
+				listOfStates.append(readResultDictionary[word])
+
+				# if we have a word that's malformed (like bb) then we interpret as that symbol for all following characters
+				if word in reverseSymbolMapping:
+					processSymbol(readResultDictionary[word], outerState.stateName + "_read_" + reverseSymbolMapping[word],
+						reverseSymbolMapping[word], symbolMapping, alphabetMSToTS(), outerState, coreStateDictionary, listOfStates)
+	
+				else:
+					for symbol in alphabetMSToTS():
+						processSymbol(readResultDictionary[word], outerState.stateName + "_read_" + reverseSymbolMapping[word + symbol], 
+							reverseSymbolMapping[word + symbol], symbolMapping, 
+							[symbol], outerState, coreStateDictionary, listOfStates)
 
 #		for symbol in alphabetMSToTS():
 			

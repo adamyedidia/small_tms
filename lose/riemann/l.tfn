@@ -1,0 +1,10 @@
+input aOfX bOfX h out !0 !1 !2 
+
+// Auto-generated code for function l
+
+function squareBoth aOfX bOfX h out !0 !1 !2 
+function assign !0 out
+function assign !1 h
+function add !2 !0 !1
+function assign out !2
+return

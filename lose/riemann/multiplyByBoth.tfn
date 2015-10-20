@@ -1,0 +1,13 @@
+input a b c !0 !1 !2 
+
+// Auto-generated code for function multiplyByBoth
+
+function assign !0 c
+function assign !1 b
+function multiply !2 !0 !1
+function assign c !2
+function assign !0 c
+function assign !1 a
+function multiply !2 !0 !1
+function assign c !2
+return

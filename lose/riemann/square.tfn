@@ -1,0 +1,9 @@
+input x out !0 !1 !2 
+
+// Auto-generated code for function square
+
+function assign !0 x
+function assign !1 x
+function multiply !2 !0 !1
+function assign out !2
+return
