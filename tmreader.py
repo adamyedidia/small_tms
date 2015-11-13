@@ -212,10 +212,17 @@ def processSymbol(inState, name, outerSymbol, symbolMapping, conditions,
 
 		# at this point, I'm at position 0.
 		if outerHeadMove == "-":
-			# Then I'm exactly where I want to be! Whoo!
-			currentState.setAllNextStates(coreStateDictionary[nextOuterState.stateName])
-			currentState.setAllHeadMoves("-")
 			
+			moveState = State(name + "_move.1", None, alphabetMSToTS())
+			
+			currentState.setAllNextStates(moveState)
+			currentState.setAllHeadMoves("R")
+			
+			listOfStates.append(moveState)
+			
+			moveState.setAllNextStates(coreStateDictionary[nextOuterState.stateName])
+			moveState.setAllHeadMoves("L")
+
 		elif outerHeadMove == "L":
 
 			moveState = State(name + "_move.1", None, alphabetMSToTS())
