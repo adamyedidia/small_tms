@@ -1,0 +1,812 @@
+/*----------------------------------------------------------*/
+/* SILLY HELPER FUNCTIONS */
+
+/* Executes o <- l @ i */
+
+func index(l, i, o) {
+    o = l @ i;
+    return;
+}
+
+/*----------------------------------------------------------*/
+
+func index2(l, i, o) {
+    o = l @* i;
+    return;
+}
+
+/*----------------------------------------------------------*/
+
+func indexTwice(l1, l2, i, o1, o2) {
+    index(l1, i, o1);
+    index(l2, i, o2);
+    return;
+}
+
+/*----------------------------------------------------------*/
+
+func doubleIndexOneList(l, i1, i2, o1, o2) {
+    index(l, i1, o1);
+    index(l, i2, o2);
+    return;
+}
+
+/*----------------------------------------------------------*/
+
+/* Executes o1 <- l @ i1 and o2 <- l @ i2 */
+
+func doubleIndex2OneList(l, i1, i2, o1, o2) {
+    index2(l, i1, o1);
+    index2(l, i2, o2);
+    return;
+}
+
+/*----------------------------------------------------------*/
+
+/* Executes o1 <- l1 @ i1 and o2 <- l2 @ i2 */
+
+func doubleIndex(l1, l2, i1, i2, o1, o2) {
+    index(l1, i1, o1);
+    index(l2, i2, o2);
+    return;
+}
+
+/*----------------------------------------------------------*/
+
+/* Executes x <- 0 */
+
+func zero(x) {
+    x = 0;
+    return;
+}
+
+/*----------------------------------------------------------*/
+
+/* Executes x <- 1 */
+
+func one(x) {
+    x = 1;
+    return;
+}
+
+/*----------------------------------------------------------*/
+
+/* Executes l <- [] */
+
+func empty(l) {
+    l = [];
+    return;
+}
+
+/*----------------------------------------------------------*/
+
+/* Executes x <- 0 and y <- 0 */
+
+func doubleZero(x, y) {
+    zero(x);
+    zero(y);
+    return;
+}
+
+/*----------------------------------------------------------*/
+
+/* Executes x <- 0 and l <- [] */
+
+func zeroAndEmpty(x, l) {
+    zero(x);
+    empty(l);
+    return;
+}
+
+/*----------------------------------------------------------*/
+
+/* Executes x <- 0 and y <- 1 */
+
+func zeroAndOne(x, y) {
+    zero(x);
+    one(y);
+    return;
+}
+
+/*----------------------------------------------------------*/
+
+/* Executes x <- x + 1; */
+
+func incr(x) {
+    x = x + 1;
+    return;
+}
+
+/*----------------------------------------------------------*/
+
+/* Executes l <- l.append(x); */
+
+func append(l, x) {
+    l = l ^ x;
+    return;
+}
+
+/*----------------------------------------------------------*/
+
+/* Executes x <- x or y */
+
+func orWith(x, y) {
+    x = x | y;
+    return;
+}
+
+/*----------------------------------------------------------*/
+
+/* Executes x <- x and y */
+
+func andWith(x, y) {
+    x = x & y;
+    return;
+}
+
+/*----------------------------------------------------------*/
+
+/* Executes o <- x < (#l) */
+
+func lessThanLength(x, l, o) {
+    o = x < (#l);
+    return;
+}
+
+/*----------------------------------------------------------*/
+
+/* Executes o1 <- x < (#l1) and o2 <- x < (#l2) */
+
+func lessThanLengthTwice(x, l1, l2, o1, o2) {
+    o1 = x < (#l1);
+    o2 = x < (#l2);    
+    return;
+}
+
+/*----------------------------------------------------------*/
+
+/* Executes o <- (#l1) != (#l2) */
+
+func notSameLength(l1, l2, o) {
+    o = (#l1) != (#l2);
+    return;
+}
+
+/*----------------------------------------------------------*/
+
+func aIsLessThanBAndCIsAtLeastD(a, b, c, d, o) {
+    o = (a < b) & (c >= d);
+    return;
+} 
+
+/* NO MORE SILLY HELPER FUNCTIONS */
+/*----------------------------------------------------------*/
+
+/* Two pairs of nodes (a,b) and (c,d) are order equivalent if a and c are the same size and b
+and d are the same size and if for all 1 <= i <= a and 1 <= j <= |b|, the i-th element of a
+is less than the j-th element of b if and only if the i-th element of c is less than the
+j-th element of d.
+
+a, b, c, d are as described above. i and j are holder variables. output is where the 
+resulting boolean is held. 
+
+a: inp list
+b: inp list
+c: inp list
+d: inp list
+i: hold int
+j: hold int
+h1: hold int
+h2: hold int
+h3: hold int
+h4: hold int
+h5: hold int
+h6: hold int
+output: out int
+*/
+
+func isOrderEquivalent(a, b, c, d, i, j, h1, h2, h3, h4, h5, h6, output) {
+    zero(output);
+    
+    /* a and c are the same size and b and d are the same size */
+    
+    notSameLength(a, c, h1);
+    notSameLength(b, d, h2);
+    
+    if (h1 | h2) {
+        return;
+    }
+    
+    /* for all 1 <= i <= |a| and 1 <= j <= |b|, the i-th element of a is less than the j-th 
+    element of b if and only if the i-th element of c is less than the
+    j-th element of d */
+    
+    zero(i);
+    
+    lessThanLength(i, a, h1);
+    
+    /* while i < len(a) */
+    while (h1) {
+    
+        zero(j);
+        
+        lessThanLength(j, b, h1);
+        
+        /* while j < len(b) */
+        while (h1) {
+            
+            doubleIndex(a, b, i, j, h1, h2);
+            doubleIndex(c, d, i, j, h3, h4);
+            
+            aIsLessThanBAndCIsAtLeastD(h1, h2, h3, h4, h5);
+            aIsLessThanBAndCIsAtLeastD(h3, h4, h1, h2, h6);
+        
+            if (h5 | h6) {
+                return;
+            }
+            
+            incr(j);
+            lessThanLength(j, b, h1);
+        }
+        
+        incr(i);
+        lessThanLength(i, a, h1);
+    }
+    
+    one(output);
+    return;
+}
+
+/* isOrderEquivalent test suite 
+
+list a;
+list b;
+list c;
+list d; 
+int i; 
+int j;
+int h1;
+int h2;
+int h3;
+int h4;
+int h5;
+int h6;
+int output;
+
+a = [2, 5];
+b = [1, 3];
+c = [1, 3];
+d = [~1, 2];
+i = 4;
+j = 6;
+h1 = 4;
+h2 = 4;
+h3 = 4;
+h4 = 4;
+h5 = 4;
+h6 = 4;
+output = ~2;
+
+isOrderEquivalent(a, b, c, d, i, j, h1, h2, h3, h4, h5, h6, output); 
+
+print output; */
+
+/*----------------------------------------------------------*/
+
+/* The ush() function takes as input a set and returns a copy of that set with all non-negative numbers in that set incremented by 1. 
+
+x: inp list
+h: hold int
+i: hold int
+output: out list
+*/
+
+func ush(x, h, i, output) {
+    zeroAndEmpty(i, output);
+    
+    lessThanLength(i, x, h);
+    
+    /* while (i < (# x)) */
+    while (h) {
+        index(x, i, h);
+        if (h >= 0) {
+            incr(h);
+        }
+        append(output, h);
+        incr(i);
+        
+        lessThanLength(i, x, h);
+    }
+    
+    return;
+}
+
+/* ush test suite 
+
+list x;
+int h;
+int i;
+list output;
+
+x = [~3, 5, 2];
+h = 5;
+i = 0;
+output = [5];
+
+ush(x, h, i, output);
+
+print output; */
+
+/*----------------------------------------------------------*/
+
+/* x ltrlex y if and only if x = y or x_i < y_i where i is least such 
+that x_i != y_i 
+
+x: inp list
+y: inp list
+i: hold int
+h1: int
+h2: int
+output: out int
+*/
+
+func ltrlex(x, y, i, h1, h2, output) {
+    
+    doubleZero(i, output);
+    
+    /* while ((i < (# x)) & (i < (# y))) */
+    lessThanLengthTwice(i, x, y, h1, h2);
+    
+    while (h1 & h2) {
+        
+        indexTwice(x, y, i, h1, h2);
+    
+        if (h1 < h2) {
+            one(output);
+            return;
+        }
+        
+        if (h1 > h2) {
+            return;
+        }
+        
+        incr(i);
+        
+        lessThanLengthTwice(i, x, y, h1, h2);
+    }
+    
+    notSameLength(x, y, h1);
+    
+    if (h1) {
+        return;
+    }
+    
+    output = 1;
+    return;
+}
+
+/* ltrlex test suite 
+
+int x;
+int y;
+int i;
+int h1;
+int h2;
+int output;
+
+x = [~2,5,7];
+y = [~2,5,6];
+i = 3;
+h1 = 4;
+h2 = 4;
+output = 2;
+
+ltrlex(x, y, i, h1, h2, output);
+
+print output; */
+
+/*----------------------------------------------------------*/
+
+/* edgeIndex tells you if there's an edge between the vertex indexed at i
+and the vertex indexed at j */
+
+/*
+edges: inp list
+numVertices: inp int
+i: inp int
+j: inp int
+output: out int
+*/
+
+func edgeIndex(edges, numVertices, i, j, output) {
+    output = edges @ ((numVertices * i) + j);
+    return;
+}
+
+/* edgeIndex test suite 
+
+int numVertices;
+list edges;
+int i;
+int j;
+int output;
+
+numVertices = 3;
+edges = [~1,~2,~3,~4,~5,~6,~7,~8,~9];
+i = 1;
+j = 1;
+output = 4;
+
+edgeIndex(edges, numVertices, i, j, output);
+
+print output; */
+
+
+/*----------------------------------------------------------*/
+
+/* A set of vertices X *reduces* a set of vertices Y if and only if for all y \in Y, there exists x \in X such that x ltrlex y and an edge exists between x and y. */
+
+/*
+X: inp list
+Y: inp list
+graph: inp list2
+edges: inp list
+numVertices: inp int
+x: hold list
+y: hold list
+c1: hold int
+c2: hold int
+h1: hold int
+h2: hold int 
+h3: hold int
+output: out int
+*/
+
+func reduces(X, Y, graph, edges, numVertices, x, y, c1, c2, h1, h2, h3, output) { 
+    zeroAndOne(c1, h1);
+    
+    /* ...for all y \in Y... */
+    
+    while (c1 < numVertices) {
+        /* if there exists vertex-index c1 in the set
+        Y */
+        if (Y @ c1) {
+            /* set y equal to the actual vertex */
+            y = graph @* c1;
+            
+            doubleZero(c2, h1);
+            
+            /* h1 will hold the existence check */            
+            /* ...there exists x \in X... */
+            
+            /* c2 going 0...numVertices */
+            while (c2 < numVertices) {
+                if (X @ c2) {
+                    x = graph @* c2;
+                    
+                    /* ...such that x ltrlex y... */
+                    ltrlex(x, y, h2, h3);
+                    
+                    /* ...and an edge exists between x and y...*/
+                    edgeIndex(edges, numVertices, c1, c2, h2);
+                    
+                    /* h1 = h1 | (h2 & h3); */
+                    
+                    andWith(h2, h3);
+                    orWith(h1, h2);
+                    
+                }
+                
+                incr(c2);
+            }
+            
+            /* if non-existence, return false */
+            if (!h1) {
+                zero(output);
+                return;
+            }
+        }
+        
+        incr(c1);
+    }
+    
+    /* the forall is satisfied; return true */
+    one(output);
+    return;
+}
+
+/* TEST SUITE NECESSARY */
+
+/*----------------------------------------------------------*/
+
+/* A free set of vertices is one with no edges in between any pair of vertices
+in the set */
+
+/*
+vertexSet: inp list
+numVertices: inp int
+edges: inp list
+c1: hold int
+c2: hold int
+h1: hold int
+h2: hold int
+output: out int
+*/
+
+func isFree(vertexSet, numVertices, edges, c1, c2, h1, h2, output) {
+    zero(c1);
+    
+    /* check all pairs of vertices and make sure none of them have an edge */
+    
+    /* for c1 0...numVertices */
+    while (c1 < numVertices) {
+        zero(c2);   
+        
+        /* for c2 0...numVertices */
+        while (c2 < numVertices) {
+        
+            doubleIndexOneList(vertexSet, c1, c2, h1, h2);
+        
+            if (h1 & h2) { 
+                
+                edgeIndex(edges, numVertices, c1, c2, output);
+                
+                if (output) {
+                    zero(output);
+                    return;
+                }
+            }
+            incr(c2);
+        }
+        incr(c1);
+    }
+    
+    one(output);
+    return;
+}
+
+/* isFree test suite */
+
+list vertexSet;
+int numVertices;
+list edges;
+int c1;
+int c2;
+int h1;
+int h2;
+int output;
+
+vertexSet = [0,1,1];
+numVertices = 3;
+edges = [0,1,1,1,0,0,1,0,0];
+c1 = 3;
+c2 = ~9;
+h1 = 4;
+h2 = 4;
+output = 4;
+
+isFree(vertexSet, numVertices, edges, c1, c2, h1, h2, output);
+
+print output; 
+
+/*----------------------------------------------------------*/
+
+/*
+x: inp int
+c: hold int
+output: out int
+*/
+
+func factorial(x, c, output) {
+    zeroAndOne(c, output);
+    
+    while (c < x) {
+        incr(c);
+        output = output * c;
+    }
+    
+    return;
+}
+
+/* factorial test suite 
+
+int x;
+int c;
+int output;
+
+x = 5;
+c = ~2;
+output = 4;
+
+factorial(x, c, output);
+
+print output; */
+
+/*----------------------------------------------------------*/
+
+/* c <- a xor b */
+
+/* 
+a: inp int
+b: inp int
+c: out int
+*/
+
+func xor(a, b, c) {
+    zero(c);
+
+    if (a) {
+        if (b) {
+            return;
+        }
+        one(c);
+        return;
+    }
+    if (b) {
+        one(c);
+        return;
+    }
+    return;
+}
+
+/* xor test suite 
+
+int a;
+int b;
+int c;
+
+a = 1;
+b = 1;
+c = 5;
+
+xor(a,b,c);
+
+print c; */
+
+
+/*----------------------------------------------------------*/
+
+/* 
+l: inp list
+i: hold int
+currentEntry: hold int
+sumBit: hold int
+overflow: out int
+newList: out list
+*/
+
+func incrementList(l, i, currentEntry, sumBit, overflow, newList) {
+    zeroAndEmpty(i, newList);
+    one(overflow); 
+    
+    lessThanLength(i, l, sumBit);
+    /* while (i < (# l)) */
+    while (sumBit) {
+        currentEntry = l @ i;
+        xor(currentEntry, overflow, sumBit);
+    
+        append(newList, sumBit);
+
+        andWith(overflow, currentEntry);
+        
+        incr(i);
+        lessThanLength(i, l, sumBit);
+    } 
+    
+    return;
+}
+
+/* incrementList test suite 
+
+list l;
+int i;
+int overflow;
+int currentEntry;
+int sumBit;
+list newList;
+
+l = [1,1,0,1];
+i = ~2;
+overflow = 3;
+currentEntry = ~5;
+sumBit = 4;
+newList = [3]; 
+
+incrementList(l, i, currentEntry, sumBit, overflow, newList); 
+
+print overflow;
+print newList;  */
+
+/*----------------------------------------------------------*/
+
+/* computes the union of two lists of vertices */
+/* because lists of vertices in this code are lists of bools indicating 
+the presence of each vertex, this is really just the elementwise OR */
+/* ASSUMES len(list1) == len(list2) */
+
+/*
+list1: inp list
+list2: inp list
+i: hold int
+h1: hold int
+h2: hold int
+output: out int
+*/
+
+func union(l1, l2, i, h1, h2, output) {
+    zeroAndEmpty(i, output);
+    
+    lessThanLength(i, l1, h1);
+    while (h1) {
+        indexTwice(l1, l2, i, h1, h2);
+        orWith(h1, h2);
+        append(output, h1);
+        
+        incr(i);
+        lessThanLength(i, l1, h1);
+    }
+    
+    return;
+}
+
+/* union test suite 
+
+list l1;
+list l2;
+int i;
+int h1;
+int h2;
+int output;
+
+l1 = [0,0,1,1];
+l2 = [1,0,0,1];
+i = 4;
+h1 = 4;
+h2 = 4;
+output = ~4;
+
+union(l1, l2, i, h1, h2, output);
+print output; */
+
+/*----------------------------------------------------------*/
+
+/* In an order invariant graph, two nodes (a,b) have an edge between them if and only if each other pair of
+nodes (c, d) that is order equivalent with (a, b) have an edge between them. */
+
+/* This function is the first of the Great Functions. */
+/*
+func checkGraphForOrderInvariance(graph, edges, numVertices, a, b, c, d, 
+    aIndex, bIndex, cIndex, dIndex, h1, h2, h3, h4, h5, h6, h7, h8, h9, h10, output) {
+     
+    zero(aIndex);
+
+    while (aIndex < numVertices) {
+        zero(bIndex);
+         
+        while (bIndex < numVertices) {
+            zero(cIndex);
+             
+            while (cIndex < numVertices) {
+                zero(dIndex);
+                 
+                while (dIndex < numVertices) { */
+                
+                    /* The vertices in the pairs must be distinct */
+            /*        if (aIndex != bIndex) & (cIndex != dIndex) {
+                
+                        doubleIndexOneList(graph, aIndex, bIndex, a, b);
+                        doubleIndexOneList(graph, cIndex, dIndex, c, d);
+                 
+                        isOrderEquivalent(a,b,c,d,h1,h2,h3,h4,h5,h6,h7,h8,h9);
+                        
+                        
+                    }
+                }
+            }
+        }
+    } 
+} 
+*/
+/*----------------------------------------------------------*/
+
+halt;

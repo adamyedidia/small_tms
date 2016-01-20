@@ -1,0 +1,7 @@
+int x;
+list y;
+
+x = 2;
+y = [3, 5];
+
+halt;

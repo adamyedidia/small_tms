@@ -1,0 +1,11 @@
+input x y z
+
+// assign x to y + z. Assumes signed unary structure.
+
+function clear x
+[y] 1 (POS_Y); E (R)
+// subtract z from y
+NEG_Y: function appendE x
+[z] 1 (NEG_Y_POS_Z); E (R)
+NEG_Y_NEG_Z: function addto y z
+NEG_Y_POS_Z:
