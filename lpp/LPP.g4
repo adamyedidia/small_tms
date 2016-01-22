@@ -72,13 +72,15 @@ listexpr:
     |   '[' ']'                                 // emptylist
     |   VAR                                     // listvar
     ;
+
+    // This is a giant hack!! Ask Zach how to fix this ASAP!
     
 list2expr:
-    |   list2expr OPERATOR_APPEND listexpr      // list2append
-    |   list2expr OPERATOR_CONCAT list2expr     // list2concat
+    |   list2expr OPERATOR_APPEND2 listexpr      // list2append
+    |   list2expr OPERATOR_CONCAT2 list2expr     // list2concat
     |   '(' list2expr ')'
     |   ':' (listexpr ',')* listexpr ':'        // constlist2
-    |   ':' ':'                                 // emptylist2
+    |   ':'                                     // emptylist2
     |  VAR                                      // list2var
     ;
 

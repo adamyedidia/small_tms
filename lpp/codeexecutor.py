@@ -95,6 +95,8 @@ class CodeExecutor(LPPListener):
             
             if self.executeNonDefCommand(command, mapping):
                  # we got here via return statement; we're done!
+                 del self.stack[-1]
+                 
                  return
             
             commandCounter += 1
@@ -113,7 +115,7 @@ class CodeExecutor(LPPListener):
             command = ctx.nondefcommand(commandCounter)
                          
             if self.executeNonDefCommand(command, mapping):
-                # This means we got here via return satement
+                # This means we got here via return statement
                 return True
                 
             commandCounter += 1
@@ -139,6 +141,10 @@ class CodeExecutor(LPPListener):
             varCounter = 1
             
             functionBeingCalled = self.funcDictionary[funcName]
+            
+            self.stack += [funcName]
+            
+            print self.stack
             
             while callBody.VAR(varCounter) != None:
                 try:
@@ -186,7 +192,7 @@ class CodeExecutor(LPPListener):
                 
         elif command.ifelsestate() != None:
             ifElseState = command.ifelsestate()
-            if self.evaluateIntexpr(ifElseState.ifelseexpr().intexpr()) > 0:
+            if self.evaluateIntexpr(ifElseState.ifelseexpr().intexpr(), mapping) > 0:
                 if self.executeNonDefProg(ifElseState.ifelsenondefprog().nondefprog(), mapping):
                     return True
             else:
@@ -229,7 +235,7 @@ class CodeExecutor(LPPListener):
             return self.evaluateList2expr(ctx.list2expr(), mapping)
             
     def evaluateIntexpr(self, ctx, mapping):
-#        print ctx, ctx.getText()
+#        print "list", ctx, ctx.getText()
         if ctx.INT() != None:
             return int(ctx.INT().getText())
         
@@ -257,10 +263,13 @@ class CodeExecutor(LPPListener):
             # this is the listindex case
             l = self.evaluateListexpr(ctx.listexpr(), mapping)
             i = self.evaluateIntexpr(ctx.intexpr(0), mapping)
+#            print l
+#            print mapping
+            
             assert type(l) == type([])
-            assert type(i) == type(0)
+            assert isinstance(i, (int, long))
             result = l[i]
-            assert type(result) == type(0)
+            assert isinstance(result, (int, long))
             
             return result
             
@@ -378,15 +387,20 @@ class CodeExecutor(LPPListener):
                     
             else:
                 raise
+                
+        else:
+            raise
         
     def evaluateListexpr(self, ctx, mapping):
-#        print ctx, ctx.getText()
+#        print "list", ctx, ctx.getText()
         
         if ctx.OPERATOR_APPEND() != None:
             l = self.evaluateListexpr(ctx.listexpr(0), mapping)
             i = self.evaluateIntexpr(ctx.intexpr(0), mapping)
+#            print l, i, mapping
+            
             assert type(l) == type([])
-            assert type(i) == type(0)
+            assert isinstance(i, (int, long))
             return l + [i]
             
         elif ctx.OPERATOR_CONCAT() != None:
@@ -400,8 +414,9 @@ class CodeExecutor(LPPListener):
             l2 = self.evaluateList2expr(ctx.list2expr(), mapping)
             i = self.evaluateIntexpr(ctx.intexpr(0), mapping)
             assert type(l2) == type([])
-            assert type(i) == type(0)
+            assert isinstance(i, (int, long))
             result = l2[i]
+#            print l2, i, result
             assert type(result) == type([])
             return result
             
@@ -430,36 +445,56 @@ class CodeExecutor(LPPListener):
             return []
             
     def evaluateList2expr(self, ctx, mapping):
-        if ctx.OPERATOR_APPEND() != None:
-            l2 = self.evaluateList2expr(ctx.list2expr(), mapping)
-            l = self.evaluateListexpr(ctx.listexpr(), mapping)
+#        print "list2", ctx, ctx.getText()
+        
+        if ctx.OPERATOR_APPEND2() != None:        
+#            print mapping
+            l2 = self.evaluateList2expr(ctx.list2expr(0), mapping)
+            l = self.evaluateListexpr(ctx.listexpr(0), mapping)
+            
+#            print "append2"
+#            print l2, l
             return l2 + [l]
         
-        elif ctx.OPERATOR_CONCAT() != None:
+        elif ctx.OPERATOR_CONCAT2() != None:            
             firstList2 = self.evaluateList2expr(ctx.list2expr(0), mapping)
             secondList2 = self.evaluateList2expr(ctx.list2expr(1), mapping)
             
+ #           print "concat2"
+            
             return firstList2 + secondList2
             
-        elif ctx.list2expr() != None:
+        elif ctx.list2expr(0) != None:            
+            
+ #           print "parens"
+            
             # This is the parens case
             # There better not be any cases after this one containing list2exprs
-            return self.evaluateList2expr(ctx.list2expr(), mapping)
+            return self.evaluateList2expr(ctx.list2expr(0), mapping)
             
-        elif ctx.listexpr() != None:
-            # Build your own list!
+        elif ctx.listexpr(0) != None:
+            
+#            print ctx.getText()
+#            print ctx.listexpr(0).getText()
+#            print "byo"
+            
+            # Build your own list2!
             returnList2 = []
             exprCounter = 0
             
             while ctx.listexpr(exprCounter) != None:
-                returnList.append(self.evaluateListexpr(ctx.listexpr(exprCounter), mapping))
+                returnList2.append(self.evaluateListexpr(ctx.listexpr(exprCounter), mapping))
                 exprCounter += 1
                 
             return returnList2
             
         elif ctx.VAR() != None:
+#            print "var"
+                        
             return self.variableDictionary[mapping[ctx.VAR().getText()]]
             
         else:
             # empty list2 case
+#            print "empty"
+            
             return []

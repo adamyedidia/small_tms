@@ -40,7 +40,7 @@ public class LPPLexer extends Lexer {
 	private static final String[] _LITERAL_NAMES = {
 		null, "'func'", "'proc'", "'{'", "'}'", "'int'", "'='", "';'", "'list'", 
 		"'list2'", "'('", "','", "')'", "'while'", "'for'", "'if'", "'print'", 
-		"'ifelse'", "'return'", "'halt'", "'['", "']'", "'$'"
+		"'ifelse'", "'return'", "'halt'", "'['", "']'", "':'"
 	};
 	private static final String[] _SYMBOLIC_NAMES = {
 		null, null, null, null, null, null, null, null, null, null, null, null, 
@@ -156,7 +156,7 @@ public class LPPLexer extends Lexer {
 		"\7t\2\2\u0099\u009a\7p\2\2\u009a&\3\2\2\2\u009b\u009c\7j\2\2\u009c\u009d"+
 		"\7c\2\2\u009d\u009e\7n\2\2\u009e\u009f\7v\2\2\u009f(\3\2\2\2\u00a0\u00a1"+
 		"\7]\2\2\u00a1*\3\2\2\2\u00a2\u00a3\7_\2\2\u00a3,\3\2\2\2\u00a4\u00a5\7"+
-		"&\2\2\u00a5.\3\2\2\2\u00a6\u00a7\t\2\2\2\u00a7\60\3\2\2\2\u00a8\u00a9"+
+		"<\2\2\u00a5.\3\2\2\2\u00a6\u00a7\t\2\2\2\u00a7\60\3\2\2\2\u00a8\u00a9"+
 		"\t\3\2\2\u00a9\62\3\2\2\2\u00aa\u00ab\7\u0080\2\2\u00ab\64\3\2\2\2\u00ac"+
 		"\u00ad\7?\2\2\u00ad\u00b6\7?\2\2\u00ae\u00af\7#\2\2\u00af\u00b6\7?\2\2"+
 		"\u00b0\u00b6\t\4\2\2\u00b1\u00b2\7@\2\2\u00b2\u00b6\7?\2\2\u00b3\u00b4"+

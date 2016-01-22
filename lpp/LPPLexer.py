@@ -74,7 +74,7 @@ def serializedATN():
         buf.write(u"\u009a\7p\2\2\u009a&\3\2\2\2\u009b\u009c\7j\2\2\u009c")
         buf.write(u"\u009d\7c\2\2\u009d\u009e\7n\2\2\u009e\u009f\7v\2\2\u009f")
         buf.write(u"(\3\2\2\2\u00a0\u00a1\7]\2\2\u00a1*\3\2\2\2\u00a2\u00a3")
-        buf.write(u"\7_\2\2\u00a3,\3\2\2\2\u00a4\u00a5\7&\2\2\u00a5.\3\2")
+        buf.write(u"\7_\2\2\u00a3,\3\2\2\2\u00a4\u00a5\7<\2\2\u00a5.\3\2")
         buf.write(u"\2\2\u00a6\u00a7\t\2\2\2\u00a7\60\3\2\2\2\u00a8\u00a9")
         buf.write(u"\t\3\2\2\u00a9\62\3\2\2\2\u00aa\u00ab\7\u0080\2\2\u00ab")
         buf.write(u"\64\3\2\2\2\u00ac\u00ad\7?\2\2\u00ad\u00b6\7?\2\2\u00ae")
@@ -163,7 +163,7 @@ class LPPLexer(Lexer):
             u"'func'", u"'proc'", u"'{'", u"'}'", u"'int'", u"'='", u"';'", 
             u"'list'", u"'list2'", u"'('", u"','", u"')'", u"'while'", u"'for'", 
             u"'if'", u"'print'", u"'ifelse'", u"'return'", u"'halt'", u"'['", 
-            u"']'", u"'$'" ]
+            u"']'", u"':'" ]
 
     symbolicNames = [ u"<INVALID>",
             u"OPERATOR_MUL_DIV", u"OPERATOR_ADD_SUB", u"OPERATOR_NEGATE", 
