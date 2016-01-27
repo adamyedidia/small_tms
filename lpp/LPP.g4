@@ -49,28 +49,28 @@ returnstate: ('return' | 'halt')  ';' ;
 
 
 
-intexpr:   intexpr OPERATOR_MUL_DIV intexpr     // intop DONE DONE
-    |   intexpr OPERATOR_ADD_SUB intexpr        // intop DONE DONE
-    |   intexpr OPERATOR_COMPARE intexpr        // intop DONE DONE
-    |   intexpr OPERATOR_BOOLEAN intexpr        // intop DONE DONE
-    |   listexpr OPERATOR_INDEX intexpr                // listindex DONE DONE
-    |   OPERATOR_NOT intexpr                    // intnot DONE DONE
-    |   '(' intexpr ')'                         // DONE DONE
-    |   OPERATOR_NEGATE intexpr                 // DONE
-    |   OPERATOR_LENGTH listexpr                // DONE
-    |   OPERATOR_LENGTH2 list2expr              // DONE
-    |   INT                                     // intint DONE DONE
-    |   VAR                                     // intvar DONE DONE
+intexpr:   intexpr OPERATOR_MUL_DIV intexpr     // intop DONE 
+    |   intexpr OPERATOR_ADD_SUB intexpr        // intop DONE 
+    |   intexpr OPERATOR_COMPARE intexpr        // intop 
+    |   intexpr OPERATOR_BOOLEAN intexpr        // intop DONE 
+    |   listexpr OPERATOR_INDEX intexpr                // listindex 
+    |   OPERATOR_NOT intexpr                    // intnot DONE 
+    |   '(' intexpr ')'                         // DONE 
+    |   OPERATOR_NEGATE intexpr                 // intneg DONE
+    |   OPERATOR_LENGTH listexpr                // len 
+    |   OPERATOR_LENGTH2 list2expr              // len2 
+    |   INT                                     // intint DONE 
+    |   VAR                                     // intvar DONE 
     ;
     
 listexpr:
     |   list2expr OPERATOR_INDEX2 intexpr                // list2index
     |   listexpr OPERATOR_APPEND intexpr        // listappend
     |   listexpr OPERATOR_CONCAT listexpr       // listconcat
-    |   '(' listexpr ')'                        
-    |   '[' (intexpr ',')* intexpr ']'          // constlist
+    |   '(' listexpr ')'                        // DONE
+    |   '[' (intexpr ',')* intexpr ']'          // constlist 
     |   '[' ']'                                 // emptylist
-    |   VAR                                     // listvar
+    |   VAR                                     // listvar DONE
     ;
 
     // This is a giant hack!! Ask Zach how to fix this ASAP!
@@ -78,10 +78,10 @@ listexpr:
 list2expr:
     |   list2expr OPERATOR_APPEND2 listexpr      // list2append
     |   list2expr OPERATOR_CONCAT2 list2expr     // list2concat
-    |   '(' list2expr ')'
+    |   '(' list2expr ')'                       // DONE
     |   ':' (listexpr ',')* listexpr ':'        // constlist2
     |   ':'                                     // emptylist2
-    |  VAR                                      // list2var
+    |  VAR                                      // DONE list2var
     ;
 
 OPERATOR_MUL_DIV: ('*' | '/' | '%') ;

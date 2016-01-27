@@ -35,6 +35,7 @@ class TuringMachineWithStack:
                 
         currentFunction = self.stack[-1][0]
         print currentFunction, self.lineNumber
+#        print self.functionLineDictionary[currentFunction][self.lineNumber]
         currentLine = self.functionLineDictionary[currentFunction][self.lineNumber]
         
         # get rid of labels
@@ -53,8 +54,13 @@ class TuringMachineWithStack:
             
             currentTape = self.tapeDictionary[tapeName]
             currentSymbol = currentTape.readSymbol()
+            
+            print currentTape.tapeDict
+            print currentTape.name
                         
             for reaction in reactions:
+                
+                print reaction, currentSymbol
                 
                 # ugly stuff at the end of next line is for removing whitespce
                 splitReaction = re.split("[(|)|,]", string.strip(reaction).replace(" ", ""))

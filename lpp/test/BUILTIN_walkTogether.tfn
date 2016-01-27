@@ -1,0 +1,8 @@
+input x y
+
+// moves x and y along their respective tapes until they are both at the end
+
+MOVE_ALONG_X: [x] 1 (R); E (FINAL_MOVE_ALONG_Y)
+MOVE_ALONG_Y: [y] 1 (R, MOVE_ALONG_X); E (RETURN)
+FINAL_MOVE_ALONG_Y: [y] 1 (R); E (R)
+RETURN: return

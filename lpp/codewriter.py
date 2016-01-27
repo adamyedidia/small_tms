@@ -50,6 +50,7 @@ class CodeWriter(LPPListener):
         self.funcSet = {}
         self.currentFunc = self.mainFunc
         self.currentFile = open("main.tfn", "w")
+        self.BUILTIN_SYMBOL = "BUILTIN_"
 
     def exitTrueprog(self, ctx):
         self.writeMainInputLine()
@@ -196,7 +197,12 @@ class CodeWriter(LPPListener):
         ctx.associatedReg = self.currentFunc.findSmallestUnfilledReg()
         self.currentFunc.fillReg(ctx.associatedReg)
         
-        self.currentFunc.add(self.dealWithExpr(ctx, [stringify(ctx.associatedReg)] + 
+ #       print ctx.getText()
+ #       print marker
+ #       if ctx.getText() == "x<(#l)":
+ #           print ctx.OPERATOR_COMPARE().getText()
+        
+        self.currentFunc.add(self.dealWithExpr(ctx, [ctx.associatedReg] + 
             [expr.associatedReg for expr in listOfExprs], marker))
             
         # release lock    
@@ -209,6 +215,8 @@ class CodeWriter(LPPListener):
         # 0 intexprs possibilities:
         # INT
         # VAR
+        # OPERATOR_LENGTH listexpr
+        # OPERATOR_LENGTH2 listexpr
         if (ctx.intexpr(0) == None):
             if ctx.INT() != None:
                 # INT
@@ -216,29 +224,40 @@ class CodeWriter(LPPListener):
                 
             if ctx.VAR() != None:
                 try:
-                    assert self.variableDictionary[ctx.VAR(0).getText()] == "int"
+                    pass
+   #                 assert self.variableDictionary[ctx.VAR(0).getText()] == "int"
                 except:
                     pront("Error: expected integer")
                     raise
                     
                 self.manageRegs(ctx, [], "intvar")
+                
+            if ctx.OPERATOR_LENGTH() != None:
+                self.manageRegs(ctx, [ctx.listexpr()], "len")
+                
+            if ctx.OPERATOR_LENGTH2() != None:
+                self.manageRegs(ctx, [ctx.list2expr()], "len2")
 
         # Each expr has an associatedReg. That's where the value is stored.
 
         # 1 intexpr possibilities:
-        # listexpr '[' intexpr ']'
         # OPERATOR_NOT intexpr
+        # OPERATOR_NEGATE intexpr
+        # listexpr OPERATOR_INDEX intexpr
         # '(' intexpr ')'
-        # '[' (intexpr ',')* intexpr ']'
         elif (ctx.intexpr(1) == None):
             
-            if ctx.listexpr(0) != None:
+            if ctx.OPERATOR_INDEX() != None:
                 # listexpr '[' intexpr ']'
-                self.manageRegs(ctx, [ctx.listexpr(0), ctx.intexpr(0)], "listindex")
+                self.manageRegs(ctx, [ctx.listexpr(), ctx.intexpr(0)], "listindex")
         
-            elif OPERATOR_NOT(0) != None:
+            elif ctx.OPERATOR_NOT() != None:
                 # OPERATOR_NOT intexpr
                 self.manageRegs(ctx, [ctx.intexpr(0)], "intnot")
+                
+            elif ctx.OPERATOR_NEGATE() != None:
+                # OPERATOR_NEGATE intexpr
+                self.manageRegs(ctx, [ctx.intexpr(0)], "intneg")
         
             else:
                 # if it's just parens don't do shit
@@ -253,7 +272,7 @@ class CodeWriter(LPPListener):
             # intexpr OPERATOR intexpr
             self.manageRegs(ctx, [ctx.intexpr(0), ctx.intexpr(1)], "intop")
             
-    def enterListexpr(self, ctx):
+    def exitListexpr(self, ctx):
         
         # 0 listexprs possibilities:
         # list2expr '[' intexpr ']'
@@ -262,9 +281,9 @@ class CodeWriter(LPPListener):
         # VAR
         if (ctx.listexpr(0) == None):
             
-            if ctx.list2expr(0) != None:
+            if ctx.list2expr() != None:
                 # list2expr '[' intexpr ']'
-                self.manageRegs(ctx, [ctx.list2expr(0), ctx.intexpr(0)], "list2index")
+                self.manageRegs(ctx, [ctx.list2expr(), ctx.intexpr(0)], "list2index")
                 
             elif ctx.intexpr(0) != None:
                 # '[' (intexpr ',')* intexpr ']'
@@ -281,15 +300,16 @@ class CodeWriter(LPPListener):
                     
                 self.manageRegs(ctx, listOfExprs, "constlist")    
                 
-            elif ctx.VAR(0) == None:
+            elif ctx.VAR() == None:
                 # '[' ']'
                 self.manageRegs(ctx, [], "emptylist")
                 
             else: 
                 # VAR
                 try:
-                    assert self.variableDictionary[ctx.VAR(0).getText()] == "list"
-                except:
+                    pass
+  #                  assert self.variableDictionary[ctx.VAR().getText()] == "list"
+                except:                    
                     pront("Error: expected list")
                     raise
 
@@ -319,7 +339,7 @@ class CodeWriter(LPPListener):
             raise
             
             
-    def enterList2expr(self, ctx):
+    def exitList2expr(self, ctx):
         # 0 list2expr possibilities:
         # '[' (listexpr ',')* listexpr ']'
         # '[' ']'
@@ -340,10 +360,11 @@ class CodeWriter(LPPListener):
                 
                 self.manageRegs(ctx, listOfExprs, "constlist2")
             
-            elif ctx.VAR(0) != None:
+            elif ctx.VAR() != None:
                 # VAR
                 try:
-                    assert self.variableDictionary[ctx.VAR(0).getText()] == "list2"
+                    pass
+#                    assert self.variableDictionary[ctx.VAR().getText()] == "list2"
                 except:
                     pront("Error: expected list2")
                     raise
@@ -371,8 +392,8 @@ class CodeWriter(LPPListener):
         # list2expr 'concat' list2expr
         else:
             # list2expr 'concat' list2expr
-            self.manageRegs(ctx, [ctx.list2expr(0), ctx.list2expr(1)], "list2concat")            
-                
+            self.manageRegs(ctx, [ctx.list2expr(0), ctx.list2expr(1)], "list2concat")   
+                            
     def enterWhileloop(self, ctx):
         # Associate with the component parts the current whileCounter
         # This is an identifier to distinguish the various while loops
@@ -449,7 +470,7 @@ class CodeWriter(LPPListener):
     def exitAssign(self, ctx):
         # should be just one reg full, since it's the root of the expression tree
         assert len(self.currentFunc.filledRegs) == 1
-        self.currentFunc.add("function assign " + ctx.VAR().getText() + " " + stringify(self.currentFunc.filledRegs[0]) + "\n")
+        self.currentFunc.add("function " + self.BUILTIN_SYMBOL + "assign " + ctx.VAR().getText() + " " + stringify(self.currentFunc.filledRegs[0]) + "\n")
 
         self.currentFunc.emptyReg(self.currentFunc.filledRegs[0])
 
@@ -460,28 +481,29 @@ class CodeWriter(LPPListener):
 
     def makeStandardNoteAndLine(self, funcName, regListInStringForm):
         self.funcSet[funcName] = True
-        return "function " + funcName + regListInStringForm
+        return "function " + self.BUILTIN_SYMBOL + funcName + regListInStringForm
 
     # Loads the result of the operation ctx on regs listOfRegs into reg 1
     def dealWithExpr(self, ctx, listOfRegs, marker):
         # This doesn't get used every time, only when it fits the
         # situation
-        regListInStringForm = listSum([" " + i for i in listOfRegs]) + "\n"
+        regListInStringForm = listSum([" " + stringify(i) for i in listOfRegs]) + "\n"
         
         if marker == "intint":
             assert len(listOfRegs) == 1
             if ctx.INT().getText() == "0":
                 self.funcSet["clear"] = True
-                return "function clear " + regListInStringForm
+                return "function " + self.BUILTIN_SYMBOL + "clear " + regListInStringForm
             
             else:
                 self.funcSet["assign" + ctx.INT().getText()] = True
-                return "function assign" + ctx.INT().getText() + " " + listOfRegs[0] + "\n"
+                return "function " + self.BUILTIN_SYMBOL + "assign" + ctx.INT().getText() + " " + \
+                    stringify(listOfRegs[0]) + "\n"
                 
         elif (marker == "intvar") or (marker == "listvar") or (marker == "list2var"):
             assert len(listOfRegs) == 1
             self.funcSet["assign"] = True
-            return "function assign " + listOfRegs[0] + " " + ctx.VAR().getText() + "\n"
+            return "function " + self.BUILTIN_SYMBOL + "assign " + stringify(listOfRegs[0]) + " " + ctx.VAR().getText() + "\n"
         
         elif marker == "intnot":
             assert len(listOfRegs) == 2
@@ -493,7 +515,7 @@ class CodeWriter(LPPListener):
                 if ctx.OPERATOR_BOOLEAN().getText() == "&":
                     return self.makeStandardNoteAndLine("and", regListInStringForm)
                 
-                elif ctx.OPERATOR_BOOLEAN.getText() == "|":
+                elif ctx.OPERATOR_BOOLEAN().getText() == "|":
                     return self.makeStandardNoteAndLine("or", regListInStringForm)  
             
                 else:
@@ -523,17 +545,19 @@ class CodeWriter(LPPListener):
                     return self.makeStandardNoteAndLine("subtract", regListInStringForm)
                 
                 else:
-                    pront("bad operator " + ctx.OPERATOR_ADD_SUB().getText())        
+                    pront("bad operator " + ctx.OPERATOR_ADD_SUB().getText())     
+                    raise  
 
-            elif ctx.OPERATOR_ADD_SUB() != None:
+            elif ctx.OPERATOR_COMPARE() != None:
                 if ctx.OPERATOR_COMPARE().getText() == ">":
                     return self.makeStandardNoteAndLine("greaterThan", regListInStringForm)
 
                 elif ctx.OPERATOR_COMPARE().getText() == "<":
+                    
                     # Note the inversion of reg2 and reg3
                     self.funcSet["greaterThan"] = True
-                    return "function greaterThan " + listOfRegs[0] + " " + listOfRegs[2] + \
-                        " " + listOfRegs[1] + "\n"
+                    return "function " + self.BUILTIN_SYMBOL + "greaterThan " + stringify(listOfRegs[0]) + " " + \
+                        stringify(listOfRegs[2]) + " " + stringify(listOfRegs[1]) + "\n"
         
                 elif ctx.OPERATOR_COMPARE().getText() == ">=":
                     return self.makeStandardNoteAndLine("greaterOrEqual", regListInStringForm)
@@ -541,8 +565,8 @@ class CodeWriter(LPPListener):
                 elif ctx.OPERATOR_COMPARE().getText() == "<=":
                     # Note the inversion of reg2 and reg3
                     self.funcSet["greaterOrEqual"] = True
-                    return "function greaterOrEqual " + listOfRegs[0] + " " + listOfRegs[2] + \
-                        " " + listOfRegs[1] + "\n"
+                    return "function " + self.BUILTIN_SYMBOL + "greaterOrEqual " + stringify(listOfRegs[0]) + " " + \
+                        stringify(listOfRegs[2]) + " " + stringify(listOfRegs[1]) + "\n"
         
                 elif ctx.OPERATOR_COMPARE().getText() == "==":
                     return self.makeStandardNoteAndLine("equal", regListInStringForm)
@@ -563,7 +587,7 @@ class CodeWriter(LPPListener):
                 regListInStringForm)
                 
         else:
-            return self.makeStandardNoteAndLine(marker, regListinStringForm)
+            return self.makeStandardNoteAndLine(marker, regListInStringForm)
                             
 #        comp = ctx.OPERATOR_COMPARE()       
         
@@ -655,12 +679,9 @@ class CodeWriter(LPPListener):
     def exitProg(self, ctx):
         pass
 
-    def enterNatdecl(self, ctx):                
-        self.variableDictionary[ctx.VAR().getText()] = "nat"
+    def enterIntdecl(self, ctx):                
+        self.variableDictionary[ctx.VAR().getText()] = "int"
 
-    def enterSigndecl(self, ctx):                
-        self.variableDictionary[ctx.VAR().getText()] = "signed"
-    
     def enterListdecl(self, ctx):                
         self.variableDictionary[ctx.VAR().getText()] = "list"
 

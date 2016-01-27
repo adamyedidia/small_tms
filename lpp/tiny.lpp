@@ -1,7 +1,9 @@
 int x;
-list y;
+int y;
+int z;
 
-x = 2;
-y = [3, 5];
+x = ~6;
+y = 3;
+z = x / y;
 
 halt;
