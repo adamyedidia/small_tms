@@ -579,11 +579,11 @@ class CodeWriter(LPPListener):
                     raise                                
                 
         elif marker == "constlist":
-            return self.makeStandardNoteAndLine("listAssemble" + len(listOfRegs)-1, \
+            return self.makeStandardNoteAndLine("listAssemble" + str(len(listOfRegs)-1), \
                 regListInStringForm)
                     
         elif marker == "constlist2":            
-            return self.makeStandardNoteAndLine("list2Assemble" + len(listOfRegs)-1, \
+            return self.makeStandardNoteAndLine("list2Assemble" + str(len(listOfRegs)-1), \
                 regListInStringForm)
                 
         else:

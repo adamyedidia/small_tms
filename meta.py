@@ -37,7 +37,7 @@ def main():
     	functions, functionVariableDictionary, functionLabelDictionary, functionDictionary, path)
     inState = processCentrally(inState, listOfStates)
     
-    convertStatesToString(listOfStates, open("test_tm.txt", "w"))
+    convertStatesToString(listOfStates, open("ZFC_indep_4symbol.txt", "w"))
     
 if __name__ == "__main__":    
     main()

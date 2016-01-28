@@ -318,7 +318,9 @@ class VarGroup:
 		
 		self.inState = State(name + "_underscore")
 		self.charString = "_"
-		
+			
+#		print functionName, lineNumber
+        
 		variableBarCode = convertNumberToBarCode(functionVariableDictionary[functionName][variableName])
 
 		listOfBarCodeStates = []

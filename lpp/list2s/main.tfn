@@ -1,0 +1,33 @@
+input y x z w v !0 !1 !2 !3 !4 
+
+// Auto-generated code for function main
+
+function BUILTIN_assign2 !0
+function BUILTIN_assign4 !1
+function BUILTIN_listAssemble2 !2 !0 !1
+function BUILTIN_assign4 !0
+function BUILTIN_intneg !1 !0
+function BUILTIN_clear  !0
+function BUILTIN_listAssemble2 !3 !1 !0
+function BUILTIN_list2Assemble2 !0 !2 !3
+function BUILTIN_assign x !0
+function BUILTIN_emptylist !0
+function BUILTIN_assign1 !1
+function BUILTIN_assign1 !2
+function BUILTIN_intneg !3 !2
+function BUILTIN_clear  !2
+function BUILTIN_listAssemble3 !4 !1 !3 !2
+function BUILTIN_list2Assemble2 !1 !0 !4
+function BUILTIN_assign w !1
+function BUILTIN_assign !0 x
+function BUILTIN_assign !1 w
+function BUILTIN_list2concat !2 !0 !1
+function BUILTIN_assign v !2
+function BUILTIN_assign !0 v
+function BUILTIN_assign1 !1
+function BUILTIN_list2index !2 !0 !1
+function BUILTIN_assign y !2
+function BUILTIN_assign !0 v
+function BUILTIN_len2 !1 !0
+function BUILTIN_assign z !1
+return

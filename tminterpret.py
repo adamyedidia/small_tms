@@ -34,7 +34,7 @@ class TuringMachineWithStack:
     def runOneStep(self):
                 
         currentFunction = self.stack[-1][0]
-        print currentFunction, self.lineNumber
+#        print currentFunction, self.lineNumber
 #        print self.functionLineDictionary[currentFunction][self.lineNumber]
         currentLine = self.functionLineDictionary[currentFunction][self.lineNumber]
         
@@ -54,10 +54,7 @@ class TuringMachineWithStack:
             
             currentTape = self.tapeDictionary[tapeName]
             currentSymbol = currentTape.readSymbol()
-            
-            print currentTape.tapeDict
-            print currentTape.name
-                        
+                                    
             for reaction in reactions:
                 
                 print reaction, currentSymbol

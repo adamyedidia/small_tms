@@ -1,6 +1,6 @@
 input x
 
-// add an E to the end of where you are. Assumes you're standing on an E.
+// add an E to the end of where you are. Assumes you're standing on an E_.
 // Does not bring you back home.
 
 [x] E (R)

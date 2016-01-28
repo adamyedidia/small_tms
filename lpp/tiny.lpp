@@ -1,9 +1,13 @@
+int w;
 int x;
 int y;
 int z;
 
-x = ~6;
-y = 3;
-z = x / y;
+w = [3,~3];
+x = [2,~2];
+
+y = w || x;
+z = y @ 1;
+
 
 halt;

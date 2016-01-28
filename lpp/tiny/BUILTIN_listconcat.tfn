@@ -1,0 +1,9 @@
+input x y z
+
+// x <- y || z
+
+function BUILTIN_assign x y
+function BUILTIN_findFin x
+// [z] E (R)
+function BUILTIN_copy x z
+return

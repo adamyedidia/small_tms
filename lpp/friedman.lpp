@@ -1652,10 +1652,10 @@ func eachReducing(freeSet, graph, edges, numVertices, k, n, eightKN, i, c1, h1, 
             toTheLessThanOrEqualToK(union, k, hl1, oxidizer, c1, h1, h2, h3, h4, hl2);
             
             /* put [x_1 U ... U x_i U {0, ..., n}]^{<=k} into vertex-index form */
-            turnToVertexIndexForm(graph, hl2, c1, oneIndex, h1, h2, h3, h4, union, hl1, oxidizer);
+            turnToVertexIndexForm(graph, hl2, c1, oneCounter, h1, h2, h3, h4, union, hl1, oxidizer);
             
             /* check if {x_1, ..., x_{8kni!}} reduces [x_1 U ... U x_i U {0, ..., n}]^{<=k} */
-            reduces(reducer, oxidizer, graph, edges, numVertices, hl1, hl2, c1, oneIndex, h1, h2, h3, output);
+            reduces(reducer, oxidizer, graph, edges, numVertices, hl1, hl2, c1, oneCounter, h1, h2, h3, output);
             
             if (!output) {
                 return;

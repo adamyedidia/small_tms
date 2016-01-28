@@ -27,10 +27,10 @@ ADD_Z: function BUILTIN_addTo x z
 [x] E (GBTS)
 
 POS_Y: [z] 1 (ADD_BOTH); E (R)
-[z] _ (L); E (); 1 ();
+[z] _ (L); E (); 1 ()
 
 POS_Y_NEG_Z: function BUILTIN_walkTogether y z
-[y] 1 (ADD_Y); E ();
+[y] 1 (ADD_Y); E ()
 function BUILTIN_appendE x
 [x] E (ADD_Z)
 

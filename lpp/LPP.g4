@@ -51,37 +51,37 @@ returnstate: ('return' | 'halt')  ';' ;
 
 intexpr:   intexpr OPERATOR_MUL_DIV intexpr     // intop DONE 
     |   intexpr OPERATOR_ADD_SUB intexpr        // intop DONE 
-    |   intexpr OPERATOR_COMPARE intexpr        // intop 
+    |   intexpr OPERATOR_COMPARE intexpr        // intop DONE
     |   intexpr OPERATOR_BOOLEAN intexpr        // intop DONE 
-    |   listexpr OPERATOR_INDEX intexpr                // listindex 
+    |   listexpr OPERATOR_INDEX intexpr         // listindex DONE
     |   OPERATOR_NOT intexpr                    // intnot DONE 
     |   '(' intexpr ')'                         // DONE 
     |   OPERATOR_NEGATE intexpr                 // intneg DONE
-    |   OPERATOR_LENGTH listexpr                // len 
-    |   OPERATOR_LENGTH2 list2expr              // len2 
+    |   OPERATOR_LENGTH listexpr                // len DONE
+    |   OPERATOR_LENGTH2 list2expr              // len2 DONE
     |   INT                                     // intint DONE 
     |   VAR                                     // intvar DONE 
     ;
     
 listexpr:
-    |   list2expr OPERATOR_INDEX2 intexpr                // list2index
-    |   listexpr OPERATOR_APPEND intexpr        // listappend
-    |   listexpr OPERATOR_CONCAT listexpr       // listconcat
+    |   list2expr OPERATOR_INDEX2 intexpr       // list2index DONE
+    |   listexpr OPERATOR_APPEND intexpr        // listappend DONE
+    |   listexpr OPERATOR_CONCAT listexpr       // listconcat DONE
     |   '(' listexpr ')'                        // DONE
-    |   '[' (intexpr ',')* intexpr ']'          // constlist 
-    |   '[' ']'                                 // emptylist
+    |   '[' (intexpr ',')* intexpr ']'          // constlist DONE
+    |   '[' ']'                                 // emptylist DONE
     |   VAR                                     // listvar DONE
     ;
 
     // This is a giant hack!! Ask Zach how to fix this ASAP!
     
 list2expr:
-    |   list2expr OPERATOR_APPEND2 listexpr      // list2append
+    |   list2expr OPERATOR_APPEND2 listexpr      // list2append DONE
     |   list2expr OPERATOR_CONCAT2 list2expr     // list2concat
     |   '(' list2expr ')'                       // DONE
-    |   ':' (listexpr ',')* listexpr ':'        // constlist2
-    |   ':'                                     // emptylist2
-    |  VAR                                      // DONE list2var
+    |   ':' (listexpr ',')* listexpr ':'        // constlist2 DONE
+    |   ':'                                     // emptylist2 DONE
+    |  VAR                                      // list2var DONE
     ;
 
 OPERATOR_MUL_DIV: ('*' | '/' | '%') ;

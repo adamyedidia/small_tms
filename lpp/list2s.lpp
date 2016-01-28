@@ -1,0 +1,15 @@
+list2 x;
+list y;
+list2 w;
+int z;
+list2 v;
+
+x = :[2, 4], [~4, 0]:
+w = :[], [1,~1, 0]:;
+
+v = x ||* w;
+
+y = v @* 1;
+z = #* v;
+
+halt;

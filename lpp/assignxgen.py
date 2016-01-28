@@ -16,7 +16,7 @@ def writeAssignsUpToX(x, builtinSymbol):
             output.write("input x\n\n")
             output.write("// Auto-generated code for function " + builtinSymbol + "assign" + str(i) + "\n")
             output.write("// Assigns x to the value " + str(i) + "\n")
-            output.write("// Unary assumed\n")
+            output.write("// Unary assumed\n\n")
             output.write("function " + builtinSymbol + "assign" + str(i-1) + " x\n")
             output.write("function " + builtinSymbol + "add1 x\n")
             output.write("return\n")
