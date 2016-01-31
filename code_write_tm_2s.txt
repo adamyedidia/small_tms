@@ -1,0 +1,590 @@
+States: 147
+
+START preamble_write_marker_a:
+	a -> preamble_first_b_signal; R; a
+	b -> ERROR; -; b
+
+preamble_first_b_signal:
+	a -> preamble_go_left; L; b
+	b -> ERROR; -; b
+
+preamble_go_left:
+	a -> data_0_bbbbbb; R; a
+	b -> ERROR; -; b
+
+epilogue_clean_up:
+	a -> epilogue_find_code_head; L; a
+	b -> epilogue_clean_up; L; a
+
+epilogue_find_code_head:
+	a -> epilogue_find_code_head; L; a
+	b -> epilogue_found_code_head; R; b
+
+epilogue_found_code_head:
+	a -> OUT; R; a
+	b -> ERROR; -; b
+
+data_0_bbbbbb:
+	a -> data_1_bbbbba; R; b
+	b -> data_21_bababa; R; a
+
+data_1_bbbbba:
+	a -> data_2_bbbbab; R; b
+	b -> data_13_bbaaba; R; a
+
+data_2_bbbbab:
+	a -> data_3_bbbbaa; R; b
+	b -> data_40_ababbb; R; a
+
+data_3_bbbbaa:
+	a -> data_4_bbbabb; R; b
+	b -> data_56_aaabbb; R; a
+
+data_4_bbbabb:
+	a -> data_5_bbbaba; R; b
+	b -> data_47_abaaaa; R; a
+
+data_5_bbbaba:
+	a -> data_6_bbbaab; R; b
+	b -> data_52_aababb; R; a
+
+data_6_bbbaab:
+	a -> data_7_bbbaaa; R; b
+	b -> data_11_bbabaa; R; a
+
+data_7_bbbaaa:
+	a -> data_8_bbabbb; R; b
+	b -> data_46_abaaab; R; a
+
+data_8_bbabbb:
+	a -> data_9_bbabba; R; b
+	b -> data_14_bbaaab; R; a
+
+data_9_bbabba:
+	a -> data_10_bbabab; R; b
+	b -> data_47_abaaaa; R; a
+
+data_10_bbabab:
+	a -> data_11_bbabaa; R; b
+	b -> data_29_baaaba; R; a
+
+data_11_bbabaa:
+	a -> data_12_bbaabb; R; b
+	b -> data_19_babbaa; R; a
+
+data_12_bbaabb:
+	a -> data_13_bbaaba; R; b
+	b -> data_26_baabab; R; a
+
+data_13_bbaaba:
+	a -> data_14_bbaaab; R; b
+	b -> data_56_aaabbb; R; a
+
+data_14_bbaaab:
+	a -> data_15_bbaaaa; R; b
+	b -> data_12_bbaabb; R; a
+
+data_15_bbaaaa:
+	a -> data_16_babbbb; R; b
+	b -> data_58_aaabab; R; a
+
+data_16_babbbb:
+	a -> data_17_babbba; R; b
+	b -> data_44_abaabb; R; a
+
+data_17_babbba:
+	a -> data_18_babbab; R; b
+	b -> data_59_aaabaa; R; a
+
+data_18_babbab:
+	a -> data_19_babbaa; R; b
+	b -> data_60_aaaabb; R; a
+
+data_19_babbaa:
+	a -> data_20_bababb; R; b
+	b -> data_61_aaaaba; R; a
+
+data_20_bababb:
+	a -> data_21_bababa; R; b
+	b -> data_53_aababa; R; a
+
+data_21_bababa:
+	a -> data_22_babaab; R; b
+	b -> data_13_bbaaba; R; a
+
+data_22_babaab:
+	a -> data_23_babaaa; R; b
+	b -> data_53_aababa; R; a
+
+data_23_babaaa:
+	a -> data_24_baabbb; R; b
+	b -> data_13_bbaaba; R; a
+
+data_24_baabbb:
+	a -> data_25_baabba; R; b
+	b -> data_35_abbbaa; R; a
+
+data_25_baabba:
+	a -> data_26_baabab; R; b
+	b -> data_42_ababab; R; a
+
+data_26_baabab:
+	a -> data_27_baabaa; R; b
+	b -> data_59_aaabaa; R; a
+
+data_27_baabaa:
+	a -> data_28_baaabb; R; b
+	b -> data_32_abbbbb; R; a
+
+data_28_baaabb:
+	a -> data_29_baaaba; R; b
+	b -> data_48_aabbbb; R; a
+
+data_29_baaaba:
+	a -> data_30_baaaab; R; b
+	b -> data_61_aaaaba; R; a
+
+data_30_baaaab:
+	a -> data_31_baaaaa; R; b
+	b -> data_11_bbabaa; R; a
+
+data_31_baaaaa:
+	a -> data_32_abbbbb; R; b
+	b -> data_14_bbaaab; R; a
+
+data_32_abbbbb:
+	a -> data_33_abbbba; R; b
+	b -> data_61_aaaaba; R; a
+
+data_33_abbbba:
+	a -> data_34_abbbab; R; b
+	b -> data_0_bbbbbb; R; a
+
+data_34_abbbab:
+	a -> data_35_abbbaa; R; b
+	b -> data_51_aabbaa; R; a
+
+data_35_abbbaa:
+	a -> data_36_abbabb; R; b
+	b -> data_44_abaabb; R; a
+
+data_36_abbabb:
+	a -> data_37_abbaba; R; b
+	b -> data_15_bbaaaa; R; a
+
+data_37_abbaba:
+	a -> data_38_abbaab; R; b
+	b -> data_31_baaaaa; R; a
+
+data_38_abbaab:
+	a -> data_39_abbaaa; R; b
+	b -> data_63_aaaaaa; R; a
+
+data_39_abbaaa:
+	a -> data_40_ababbb; R; b
+	b -> data_63_aaaaaa; R; a
+
+data_40_ababbb:
+	a -> data_41_ababba; R; b
+	b -> data_63_aaaaaa; R; a
+
+data_41_ababba:
+	a -> data_42_ababab; R; b
+	b -> data_63_aaaaaa; R; a
+
+data_42_ababab:
+	a -> data_43_ababaa; R; b
+	b -> data_63_aaaaaa; R; a
+
+data_43_ababaa:
+	a -> data_44_abaabb; R; b
+	b -> data_63_aaaaaa; R; a
+
+data_44_abaabb:
+	a -> data_45_abaaba; R; b
+	b -> data_63_aaaaaa; R; a
+
+data_45_abaaba:
+	a -> data_46_abaaab; R; b
+	b -> data_63_aaaaaa; R; a
+
+data_46_abaaab:
+	a -> data_47_abaaaa; R; b
+	b -> data_63_aaaaaa; R; a
+
+data_47_abaaaa:
+	a -> data_48_aabbbb; R; b
+	b -> data_63_aaaaaa; R; a
+
+data_48_aabbbb:
+	a -> data_49_aabbba; R; b
+	b -> data_63_aaaaaa; R; a
+
+data_49_aabbba:
+	a -> data_50_aabbab; R; b
+	b -> data_63_aaaaaa; R; a
+
+data_50_aabbab:
+	a -> data_51_aabbaa; R; b
+	b -> data_63_aaaaaa; R; a
+
+data_51_aabbaa:
+	a -> data_52_aababb; R; b
+	b -> data_63_aaaaaa; R; a
+
+data_52_aababb:
+	a -> data_53_aababa; R; b
+	b -> data_63_aaaaaa; R; a
+
+data_53_aababa:
+	a -> data_54_aabaab; R; b
+	b -> data_63_aaaaaa; R; a
+
+data_54_aabaab:
+	a -> data_55_aabaaa; R; b
+	b -> data_63_aaaaaa; R; a
+
+data_55_aabaaa:
+	a -> data_56_aaabbb; R; b
+	b -> data_63_aaaaaa; R; a
+
+data_56_aaabbb:
+	a -> data_57_aaabba; R; b
+	b -> data_63_aaaaaa; R; a
+
+data_57_aaabba:
+	a -> data_58_aaabab; R; b
+	b -> data_63_aaaaaa; R; a
+
+data_58_aaabab:
+	a -> data_59_aaabaa; R; b
+	b -> data_63_aaaaaa; R; a
+
+data_59_aaabaa:
+	a -> data_60_aaaabb; R; b
+	b -> data_63_aaaaaa; R; a
+
+data_60_aaaabb:
+	a -> data_61_aaaaba; R; b
+	b -> data_63_aaaaaa; R; a
+
+data_61_aaaaba:
+	a -> data_62_aaaaab; R; b
+	b -> data_63_aaaaaa; R; a
+
+data_62_aaaaab:
+	a -> data_63_aaaaaa; R; b
+	b -> data_63_aaaaaa; R; a
+
+data_63_aaaaaa:
+	a -> data_out; R; a
+	b -> data_63_aaaaaa; R; a
+
+data_out:
+	a -> test_negative_continue; L; a
+	b -> test_positive_end; L; a
+
+test_negative_continue:
+	a -> create_blank_char_0_find_first_a_left; L; a
+	b -> ERROR; -; b
+
+create_blank_char_0_find_first_a_left:
+	a -> create_blank_char_0_find_second_a; L; a
+	b -> create_blank_char_0_find_first_a_left; L; b
+
+create_blank_char_0_find_second_a:
+	a -> create_blank_char_0_write_blank_char; R; a
+	b -> create_blank_char_0_find_second_a; L; b
+
+create_blank_char_0_write_blank_char:
+	a -> create_blank_char_0_push_middle_a; R; a
+	b -> create_blank_char_0_find_first_a_right; R; a
+
+create_blank_char_0_go_right:
+	a -> ERROR; -; a
+	b -> ERROR; -; b
+
+create_blank_char_0_find_first_a_right:
+	a -> create_blank_char_0_push_middle_a; R; b
+	b -> create_blank_char_0_find_first_a_right; R; b
+
+create_blank_char_0_push_middle_a:
+	a -> create_blank_char_0_out_a; R; a
+	b -> create_blank_char_0_out_b; R; a
+
+create_blank_char_0_out_b:
+	a -> create_blank_char_1_find_first_a_left; L; b
+	b -> create_blank_char_0_out_b; R; b
+
+create_blank_char_0_out_a:
+	a -> create_blank_char_1_find_first_a_left; L; a
+	b -> ERROR; -; b
+
+create_blank_char_1_find_first_a_left:
+	a -> create_blank_char_1_find_second_a; L; a
+	b -> create_blank_char_1_find_first_a_left; L; b
+
+create_blank_char_1_find_second_a:
+	a -> create_blank_char_1_write_blank_char; R; a
+	b -> create_blank_char_1_find_second_a; L; b
+
+create_blank_char_1_write_blank_char:
+	a -> create_blank_char_1_push_middle_a; R; a
+	b -> create_blank_char_1_find_first_a_right; R; a
+
+create_blank_char_1_go_right:
+	a -> ERROR; -; a
+	b -> ERROR; -; b
+
+create_blank_char_1_find_first_a_right:
+	a -> create_blank_char_1_push_middle_a; R; b
+	b -> create_blank_char_1_find_first_a_right; R; b
+
+create_blank_char_1_push_middle_a:
+	a -> create_blank_char_1_out_a; R; a
+	b -> create_blank_char_1_out_b; R; a
+
+create_blank_char_1_out_b:
+	a -> create_blank_char_2_find_first_a_left; L; b
+	b -> create_blank_char_1_out_b; R; b
+
+create_blank_char_1_out_a:
+	a -> create_blank_char_2_find_first_a_left; L; a
+	b -> ERROR; -; b
+
+create_blank_char_2_find_first_a_left:
+	a -> create_blank_char_2_find_second_a; L; a
+	b -> create_blank_char_2_find_first_a_left; L; b
+
+create_blank_char_2_find_second_a:
+	a -> create_blank_char_2_write_blank_char; R; a
+	b -> create_blank_char_2_find_second_a; L; b
+
+create_blank_char_2_write_blank_char:
+	a -> create_blank_char_2_push_middle_a; R; a
+	b -> create_blank_char_2_find_first_a_right; R; a
+
+create_blank_char_2_go_right:
+	a -> ERROR; -; a
+	b -> ERROR; -; b
+
+create_blank_char_2_find_first_a_right:
+	a -> create_blank_char_2_push_middle_a; R; b
+	b -> create_blank_char_2_find_first_a_right; R; b
+
+create_blank_char_2_push_middle_a:
+	a -> create_blank_char_2_out_a; R; a
+	b -> create_blank_char_2_out_b; R; a
+
+create_blank_char_2_out_b:
+	a -> create_blank_char_3_find_first_a_left; L; b
+	b -> create_blank_char_2_out_b; R; b
+
+create_blank_char_2_out_a:
+	a -> create_blank_char_3_find_first_a_left; L; a
+	b -> ERROR; -; b
+
+create_blank_char_3_find_first_a_left:
+	a -> create_blank_char_3_find_second_a; L; a
+	b -> create_blank_char_3_find_first_a_left; L; b
+
+create_blank_char_3_find_second_a:
+	a -> create_blank_char_3_write_blank_char; R; a
+	b -> create_blank_char_3_find_second_a; L; b
+
+create_blank_char_3_write_blank_char:
+	a -> create_blank_char_3_push_middle_a; R; a
+	b -> create_blank_char_3_find_first_a_right; R; a
+
+create_blank_char_3_go_right:
+	a -> ERROR; -; a
+	b -> ERROR; -; b
+
+create_blank_char_3_find_first_a_right:
+	a -> create_blank_char_3_push_middle_a; R; b
+	b -> create_blank_char_3_find_first_a_right; R; b
+
+create_blank_char_3_push_middle_a:
+	a -> create_blank_char_3_out_a; R; a
+	b -> create_blank_char_3_out_b; R; a
+
+create_blank_char_3_out_b:
+	a -> create_blank_char_4_find_first_a_left; L; b
+	b -> create_blank_char_3_out_b; R; b
+
+create_blank_char_3_out_a:
+	a -> create_blank_char_4_find_first_a_left; L; a
+	b -> ERROR; -; b
+
+create_blank_char_4_find_first_a_left:
+	a -> create_blank_char_4_find_second_a; L; a
+	b -> create_blank_char_4_find_first_a_left; L; b
+
+create_blank_char_4_find_second_a:
+	a -> create_blank_char_4_write_blank_char; R; a
+	b -> create_blank_char_4_find_second_a; L; b
+
+create_blank_char_4_write_blank_char:
+	a -> create_blank_char_4_push_middle_a; R; a
+	b -> create_blank_char_4_find_first_a_right; R; a
+
+create_blank_char_4_go_right:
+	a -> ERROR; -; a
+	b -> ERROR; -; b
+
+create_blank_char_4_find_first_a_right:
+	a -> create_blank_char_4_push_middle_a; R; b
+	b -> create_blank_char_4_find_first_a_right; R; b
+
+create_blank_char_4_push_middle_a:
+	a -> create_blank_char_4_out_a; R; a
+	b -> create_blank_char_4_out_b; R; a
+
+create_blank_char_4_out_b:
+	a -> create_blank_char_5_find_first_a_left; L; b
+	b -> create_blank_char_4_out_b; R; b
+
+create_blank_char_4_out_a:
+	a -> create_blank_char_5_find_first_a_left; L; a
+	b -> ERROR; -; b
+
+create_blank_char_5_find_first_a_left:
+	a -> create_blank_char_5_find_second_a; L; a
+	b -> create_blank_char_5_find_first_a_left; L; b
+
+create_blank_char_5_find_second_a:
+	a -> create_blank_char_5_write_blank_char; R; a
+	b -> create_blank_char_5_find_second_a; L; b
+
+create_blank_char_5_write_blank_char:
+	a -> create_blank_char_5_push_middle_a; R; a
+	b -> create_blank_char_5_find_first_a_right; R; a
+
+create_blank_char_5_go_right:
+	a -> ERROR; -; a
+	b -> ERROR; -; b
+
+create_blank_char_5_find_first_a_right:
+	a -> create_blank_char_5_push_middle_a; R; b
+	b -> create_blank_char_5_find_first_a_right; R; b
+
+create_blank_char_5_push_middle_a:
+	a -> create_blank_char_5_out_a; R; a
+	b -> create_blank_char_5_out_b; R; a
+
+create_blank_char_5_out_a:
+	a -> create_blank_go_left; R; a
+	b -> ERROR; -; b
+
+create_blank_char_5_out_b:
+	a -> create_blank_word_out; R; b
+	b -> create_blank_char_5_out_b; R; b
+
+create_blank_go_left:
+	a -> create_blank_word_out; L; a
+	b -> ERROR; -; b
+
+create_blank_word_out:
+	a -> convert_delete_last_b; L; a
+	b -> create_blank_word_out; R; b
+
+convert_delete_last_b:
+	a -> convert_make_new_b; R; a
+	b -> convert_get_to_first_a_left; L; a
+
+convert_get_to_first_a_left:
+	a -> convert_get_to_second_a_left; L; a
+	b -> convert_get_to_first_a_left; L; b
+
+convert_get_to_second_a_left:
+	a -> convert_increment; L; a
+	b -> convert_get_to_second_a_left; L; b
+
+convert_get_to_second_a_right:
+	a -> create_blank_word_out; R; a
+	b -> convert_get_to_second_a_right; R; b
+
+convert_make_new_b:
+	a -> convert_move_left; L; b
+	b -> ERROR; -; b
+
+convert_move_left:
+	a -> convert_clean_up_mess; L; a
+	b -> ERROR; -; b
+
+convert_clean_up_mess:
+	a -> data_0_bbbbbb; R; a
+	b -> convert_clean_up_mess; L; a
+
+convert_increment:
+	a -> convert_incr_no_carry_1; L; b
+	b -> convert_incr_carry_1; L; a
+
+convert_incr_carry_1:
+	a -> convert_incr_no_carry_2; L; b
+	b -> convert_incr_carry_2; L; a
+
+convert_incr_no_carry_1:
+	a -> convert_incr_no_carry_2; L; a
+	b -> convert_incr_no_carry_2; L; b
+
+convert_incr_get_out_1:
+	a -> convert_incr_get_out_2; R; a
+	b -> convert_incr_get_out_2; R; b
+
+convert_incr_carry_2:
+	a -> convert_incr_no_carry_3; L; b
+	b -> convert_incr_carry_3; L; a
+
+convert_incr_no_carry_2:
+	a -> convert_incr_no_carry_3; L; a
+	b -> convert_incr_no_carry_3; L; b
+
+convert_incr_get_out_2:
+	a -> convert_incr_get_out_3; R; a
+	b -> convert_incr_get_out_3; R; b
+
+convert_incr_carry_3:
+	a -> convert_incr_no_carry_4; L; b
+	b -> convert_incr_carry_4; L; a
+
+convert_incr_no_carry_3:
+	a -> convert_incr_no_carry_4; L; a
+	b -> convert_incr_no_carry_4; L; b
+
+convert_incr_get_out_3:
+	a -> convert_incr_get_out_4; R; a
+	b -> convert_incr_get_out_4; R; b
+
+convert_incr_carry_4:
+	a -> convert_incr_no_carry_5; L; b
+	b -> convert_incr_carry_5; L; a
+
+convert_incr_no_carry_4:
+	a -> convert_incr_no_carry_5; L; a
+	b -> convert_incr_no_carry_5; L; b
+
+convert_incr_get_out_4:
+	a -> convert_incr_get_out_5; R; a
+	b -> convert_incr_get_out_5; R; b
+
+convert_incr_carry_5:
+	a -> convert_incr_get_out_1; R; b
+	b -> ERROR; -; b
+
+convert_incr_no_carry_5:
+	a -> convert_incr_get_out_1; R; a
+	b -> convert_incr_get_out_1; R; b
+
+convert_incr_get_out_5:
+	a -> convert_incrout; R; a
+	b -> convert_incrout; R; b
+
+convert_incrout:
+	a -> convert_get_to_second_a_right; R; a
+	b -> ERROR; -; b
+
+test_positive_end:
+	a -> epilogue_clean_up; L; a
+	b -> ERROR; -; b
+

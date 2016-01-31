@@ -39,8 +39,12 @@ function BUILTIN_assignNot !1 !0
 function checkGraphForOrderInvariance graph edges numVertices hl1 hl2 hl3 hl4 h1 h2 h3 h4 h5 h6 h7 h8 h9 h10 h11 h12 h13 h14 !0 !1 !2 !3 
 function BUILTIN_assign !0 h14
 [!0] E (IF_STATE_0_FALSE); 1 ()
-function hasAFree graph edges numVertices eightKN eightKNRFacFac k n r h1 h2 h3 h4 h5 h6 h7 h8 h9 hl1 hl2 hl3 hl4 hl5 hl6 hl7 hl8 hll !0 !1 !2 !3 
-IF_STATE_0_FALSE: function incrementList edges h1 h2 h4 h3 hl1 !0 !1 !2 
+function hasAFree graph edges numVertices eightKN eightKNRFacFac k n r h1 h2 h3 h4 h5 h6 h7 h8 hl1 hl2 hl3 hl4 hl5 hl6 hl7 hl8 hll h9 !0 !1 !2 !3 
+function BUILTIN_assign !0 h9
+function BUILTIN_assignNot !1 !0
+[!1] E (IF_STATE_1_FALSE); 1 ()
+return
+IF_STATE_1_FALSE: IF_STATE_0_FALSE: function incrementList edges h1 h2 h4 h3 hl1 !0 !1 !2 
 function BUILTIN_assign !0 hl1
 function BUILTIN_assign edges !0
 [!0] E (WHILE_TEST_5); 1 (WHILE_TEST_5)

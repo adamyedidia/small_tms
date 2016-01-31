@@ -1,0 +1,6 @@
+input x y z
+
+[x] 1 (LOOP); E (HALT)
+LOOP: function looperton x y
+HALT: function halterton x y z
+return 

@@ -22,8 +22,7 @@ def convertStatesToString(listOfStates, output):
 	
 	statesIveAlreadyPrinted = {}
 
-	for state in listOfStates:
-		
+	for state in listOfStates:		
 		try:
 			assert (not state.stateName in statesIveAlreadyPrinted)
 		except AssertionError:
@@ -181,6 +180,10 @@ def processSymbol(inState, name, outerSymbol, symbolMapping, conditions,
 		for symbol in conditions:
 			inState.setNextState(symbol, SimpleState("HALT"))
 			inState.setHeadMove(symbol, "L")
+	elif nextOuterState.stateName == "OUT":
+		for symbol in conditions:
+			inState.setNextState(symbol, SimpleState("OUT"))
+			inState.setHeadMove(symbol, "L")
 
 	elif outerWrite != outerSymbol:
 		# a symbol is being written	
@@ -287,6 +290,8 @@ if __name__ == "__main__":
 	outerStartState = sttm.startState
 
 	symbolMapping, reverseSymbolMapping = getSymbolMapping()
+	
+	listOfLegalSimpleStates = ["ACCEPT", "REJECT", "HALT", "ERROR", "OUT"]
 
 #	print symbolMapping
 
@@ -313,10 +318,16 @@ if __name__ == "__main__":
 		if numErrors == 3:
 			# This is an unprincipled hack; it says that if the state in question has only one non-ERROR thing that could be read, 
 			# and there's a thing to write, and you want to go right, then just write it as you go right.
+			
 						
 			nextState = outerState.getNextState(onlyAcceptableSymbol)
 			write = outerState.getWrite(onlyAcceptableSymbol)
 			headMove = outerState.getHeadMove(onlyAcceptableSymbol)
+			
+			if nextState.stateName in listOfLegalSimpleStates:
+				nextCoreState = SimpleState(nextState.stateName)
+			else:
+				nextCoreState = coreStateDictionary[nextState.stateName]
 			
 			listOfStates.append(coreState)		
 			
@@ -349,8 +360,8 @@ if __name__ == "__main__":
 				elif headMove == "L":					
 					writeSecondSymbolState.setHeadMove(onlyAcceptableMapping[1], "L")
 					
-					moveBy(goLeftState, outerState.stateName + "_go_left", 2, "L", coreStateDictionary[nextState.stateName],
-						listOfStates, alphabetMSToTS())	
+					moveBy(goLeftState, outerState.stateName + "_go_left", 2, "L", nextCoreState,
+						listOfStates, alphabetMSToTS())			
 					
 			else:
 				moveState = State(outerState.stateName + "_move", None, alphabetMSToTS())
@@ -364,8 +375,8 @@ if __name__ == "__main__":
 					coreState.setHeadMove(onlyAcceptableMapping[0], "R")	
 					
 				coreState.setWrite(onlyAcceptableMapping[0], writeMapping[0])
-				
-				moveState.setAllNextStates(coreStateDictionary[nextState.stateName])
+																																
+				moveState.setAllNextStates(nextCoreState)
 				
 				if headMove == "L" or headMove == "-":
 					moveState.setAllHeadMoves("L")
@@ -374,7 +385,10 @@ if __name__ == "__main__":
 		
 		else:
 			# There's more than one possible symbol that could be read; in the interest of simplicity,
-			# we do the more general and less parsimonious thing.						
+			# we do the more general and less parsimonious thing.		
+
+#			if outerState.stateName == "HALT":print outerState.stateName
+							
 			readResultDictionary = makeStateReadTree(outerState.stateName, 
 				coreStateDictionary[outerState.stateName], 
 				2 ** (wordLength - 1), reverseSymbolMapping, listOfStates)
@@ -396,6 +410,8 @@ if __name__ == "__main__":
 	#				if 
 
 			for word in readResultDictionary:
+
+				if readResultDictionary[word].stateName == "HALT": print readResultDictionary[word].stateName
 
 				listOfStates.append(readResultDictionary[word])
 

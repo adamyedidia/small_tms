@@ -1,0 +1,358 @@
+States: 89
+
+preamble_write_marker_a:
+	a -> preamble_first_b_signal; R; a
+	b -> ERROR; -; b
+
+preamble_first_b_signal:
+	a -> preamble_go_left; L; b
+	b -> ERROR; -; b
+
+preamble_go_left:
+	a -> data_0_bbbbb; R; a
+	b -> ERROR; -; b
+
+epilogue_found_code_head:
+	a -> OUT; R; a
+	b -> ERROR; -; b
+
+data_0_bbbbb:
+	a -> data_1_bbbba; R; b
+	b -> data_0_bbbbb; R; a
+
+data_1_bbbba:
+	a -> data_2_bbbab; R; b
+	b -> data_1_bbbba; R; a
+
+data_2_bbbab:
+	a -> data_3_bbbaa; R; b
+	b -> data_2_bbbab; R; a
+
+data_3_bbbaa:
+	a -> data_4_bbabb; R; b
+	b -> data_3_bbbaa; R; a
+
+data_4_bbabb:
+	a -> data_5_bbaba; R; b
+	b -> data_4_bbabb; R; a
+
+data_5_bbaba:
+	a -> data_6_bbaab; R; b
+	b -> data_5_bbaba; R; a
+
+data_6_bbaab:
+	a -> data_7_bbaaa; R; b
+	b -> data_6_bbaab; R; a
+
+data_7_bbaaa:
+	a -> data_8_babbb; R; b
+	b -> data_7_bbaaa; R; a
+
+data_8_babbb:
+	a -> data_9_babba; R; b
+	b -> data_8_babbb; R; a
+
+data_9_babba:
+	a -> data_10_babab; R; b
+	b -> data_9_babba; R; a
+
+data_10_babab:
+	a -> data_11_babaa; R; b
+	b -> data_10_babab; R; a
+
+data_11_babaa:
+	a -> data_12_baabb; R; b
+	b -> data_11_babaa; R; a
+
+data_12_baabb:
+	a -> data_13_baaba; R; b
+	b -> data_12_baabb; R; a
+
+data_13_baaba:
+	a -> data_14_baaab; R; b
+	b -> data_13_baaba; R; a
+
+data_14_baaab:
+	a -> data_15_baaaa; R; b
+	b -> data_14_baaab; R; a
+
+data_15_baaaa:
+	a -> data_16_abbbb; R; b
+	b -> data_15_baaaa; R; a
+
+data_16_abbbb:
+	a -> data_17_abbba; R; b
+	b -> data_16_abbbb; R; a
+
+data_17_abbba:
+	a -> data_18_abbab; R; b
+	b -> data_17_abbba; R; a
+
+data_18_abbab:
+	a -> data_19_abbaa; R; b
+	b -> data_18_abbab; R; a
+
+data_19_abbaa:
+	a -> data_20_ababb; R; b
+	b -> data_19_abbaa; R; a
+
+data_20_ababb:
+	a -> data_21_ababa; R; b
+	b -> data_20_ababb; R; a
+
+data_21_ababa:
+	a -> data_22_abaab; R; b
+	b -> data_21_ababa; R; a
+
+data_22_abaab:
+	a -> data_23_abaaa; R; b
+	b -> data_22_abaab; R; a
+
+data_23_abaaa:
+	a -> data_24_aabbb; R; b
+	b -> data_23_abaaa; R; a
+
+data_24_aabbb:
+	a -> data_25_aabba; R; b
+	b -> data_24_aabbb; R; a
+
+data_25_aabba:
+	a -> data_26_aabab; R; b
+	b -> data_25_aabba; R; a
+
+data_26_aabab:
+	a -> data_27_aabaa; R; b
+	b -> data_26_aabab; R; a
+
+data_27_aabaa:
+	a -> data_28_aaabb; R; b
+	b -> data_27_aabaa; R; a
+
+data_28_aaabb:
+	a -> data_29_aaaba; R; b
+	b -> data_28_aaabb; R; a
+
+data_29_aaaba:
+	a -> data_30_aaaab; R; b
+	b -> data_29_aaaba; R; a
+
+data_30_aaaab:
+	a -> data_31_aaaaa; R; b
+	b -> data_30_aaaab; R; a
+
+data_31_aaaaa:
+	a -> data_out; R; a
+	b -> data_31_aaaaa; R; a
+
+data_out:
+	a -> test_negative_continue; L; a
+	b -> test_positive_end; L; a
+
+test_negative_continue:
+	a -> create_blank_char_0_find_second_a; L; a
+	b -> test_negative_continue; L; b
+
+create_blank_char_0_find_second_a:
+	a -> create_blank_char_0_write_blank_char; R; a
+	b -> create_blank_char_0_find_second_a; L; b
+
+create_blank_char_0_write_blank_char:
+	a -> create_blank_char_0_push_middle_a; R; a
+	b -> create_blank_char_0_find_first_a_right; R; b
+
+create_blank_char_0_find_first_a_right:
+	a -> create_blank_char_0_push_middle_a; R; b
+	b -> create_blank_char_0_find_first_a_right; R; b
+
+create_blank_char_0_push_middle_a:
+	a -> create_blank_char_0_out_2; L; a
+	b -> create_blank_char_0_out_1; R; a
+
+create_blank_char_0_out_1:
+	a -> create_blank_char_0_out_2; L; b
+	b -> create_blank_char_0_out_1; R; b
+
+create_blank_char_0_out_2:
+	a -> create_blank_char_1_find_second_a; L; a
+	b -> create_blank_char_0_out_2; L; b
+
+create_blank_char_1_find_second_a:
+	a -> create_blank_char_1_write_blank_char; R; a
+	b -> create_blank_char_1_find_second_a; L; b
+
+create_blank_char_1_write_blank_char:
+	a -> create_blank_char_1_push_middle_a; R; a
+	b -> create_blank_char_1_find_first_a_right; R; b
+
+create_blank_char_1_find_first_a_right:
+	a -> create_blank_char_1_push_middle_a; R; b
+	b -> create_blank_char_1_find_first_a_right; R; b
+
+create_blank_char_1_push_middle_a:
+	a -> create_blank_char_1_out_2; L; a
+	b -> create_blank_char_1_out_1; R; a
+
+create_blank_char_1_out_1:
+	a -> create_blank_char_1_out_2; L; b
+	b -> create_blank_char_1_out_1; R; b
+
+create_blank_char_1_out_2:
+	a -> create_blank_char_2_find_second_a; L; a
+	b -> create_blank_char_1_out_2; L; b
+
+create_blank_char_2_find_second_a:
+	a -> create_blank_char_2_write_blank_char; R; a
+	b -> create_blank_char_2_find_second_a; L; b
+
+create_blank_char_2_write_blank_char:
+	a -> create_blank_char_2_push_middle_a; R; a
+	b -> create_blank_char_2_find_first_a_right; R; b
+
+create_blank_char_2_find_first_a_right:
+	a -> create_blank_char_2_push_middle_a; R; b
+	b -> create_blank_char_2_find_first_a_right; R; b
+
+create_blank_char_2_push_middle_a:
+	a -> create_blank_char_2_out_2; L; a
+	b -> create_blank_char_2_out_1; R; a
+
+create_blank_char_2_out_1:
+	a -> create_blank_char_2_out_2; L; b
+	b -> create_blank_char_2_out_1; R; b
+
+create_blank_char_2_out_2:
+	a -> create_blank_char_3_find_second_a; L; a
+	b -> create_blank_char_2_out_2; L; b
+
+create_blank_char_3_find_second_a:
+	a -> create_blank_char_3_write_blank_char; R; a
+	b -> create_blank_char_3_find_second_a; L; b
+
+create_blank_char_3_write_blank_char:
+	a -> create_blank_char_3_push_middle_a; R; a
+	b -> create_blank_char_3_find_first_a_right; R; b
+
+create_blank_char_3_find_first_a_right:
+	a -> create_blank_char_3_push_middle_a; R; b
+	b -> create_blank_char_3_find_first_a_right; R; b
+
+create_blank_char_3_push_middle_a:
+	a -> create_blank_char_3_out_2; L; a
+	b -> create_blank_char_3_out_1; R; a
+
+create_blank_char_3_out_1:
+	a -> create_blank_char_3_out_2; L; b
+	b -> create_blank_char_3_out_1; R; b
+
+create_blank_char_3_out_2:
+	a -> create_blank_char_4_find_second_a; L; a
+	b -> create_blank_char_3_out_2; L; b
+
+create_blank_char_4_find_second_a:
+	a -> create_blank_char_4_write_blank_char; R; a
+	b -> create_blank_char_4_find_second_a; L; b
+
+create_blank_char_4_write_blank_char:
+	a -> create_blank_char_4_push_middle_a; R; a
+	b -> create_blank_char_4_find_first_a_right; R; b
+
+create_blank_char_4_find_first_a_right:
+	a -> create_blank_char_4_push_middle_a; R; b
+	b -> create_blank_char_4_find_first_a_right; R; b
+
+create_blank_char_4_push_middle_a:
+	a -> create_blank_char_4_out_2; L; a
+	b -> create_blank_char_4_out_1; R; a
+
+create_blank_char_4_out_1:
+	a -> create_blank_char_4_out_2; R; b
+	b -> create_blank_char_4_out_1; R; b
+
+create_blank_char_4_out_2:
+	a -> convert_delete_last_b; L; a
+	b -> create_blank_char_4_out_2; R; b
+
+convert_delete_last_b:
+	a -> convert_make_new_b; R; a
+	b -> convert_get_to_first_a_left; L; a
+
+convert_get_to_first_a_left:
+	a -> convert_get_to_second_a_left; L; a
+	b -> convert_get_to_first_a_left; L; b
+
+convert_get_to_second_a_left:
+	a -> convert_increment; L; a
+	b -> convert_get_to_second_a_left; L; b
+
+convert_get_to_second_a_right:
+	a -> create_blank_char_4_out_2; R; a
+	b -> convert_get_to_second_a_right; R; b
+
+convert_make_new_b:
+	a -> convert_move_left; L; b
+	b -> ERROR; -; b
+
+convert_move_left:
+	a -> convert_clean_up_mess; L; a
+	b -> ERROR; -; b
+
+convert_clean_up_mess:
+	a -> data_0_bbbbb; R; a
+	b -> convert_clean_up_mess; L; a
+
+convert_incr_carry_1:
+	a -> convert_incr_no_carry_2; L; b
+	b -> convert_incr_carry_2; L; a
+
+convert_incr_no_carry_1:
+	a -> convert_incr_no_carry_2; L; a
+	b -> convert_incr_no_carry_2; L; b
+
+convert_incr_get_out_1:
+	a -> convert_incr_get_out_2; R; a
+	b -> convert_incr_get_out_2; R; b
+
+convert_incr_carry_2:
+	a -> convert_incr_no_carry_3; L; b
+	b -> convert_incr_carry_3; L; a
+
+convert_incr_no_carry_2:
+	a -> convert_incr_no_carry_3; L; a
+	b -> convert_incr_no_carry_3; L; b
+
+convert_incr_get_out_2:
+	a -> convert_incr_get_out_3; R; a
+	b -> convert_incr_get_out_3; R; b
+
+convert_incr_carry_3:
+	a -> convert_incr_no_carry_4; L; b
+	b -> convert_incr_carry_4; L; a
+
+convert_incr_no_carry_3:
+	a -> convert_incr_no_carry_4; L; a
+	b -> convert_incr_no_carry_4; L; b
+
+convert_incr_get_out_3:
+	a -> convert_incr_get_out_4; R; a
+	b -> convert_incr_get_out_4; R; b
+
+convert_incr_carry_4:
+	a -> convert_incr_get_out_1; R; b
+	b -> ERROR; -; b
+
+convert_incr_no_carry_4:
+	a -> convert_incr_get_out_1; R; a
+	b -> convert_incr_get_out_1; R; b
+
+convert_incr_get_out_4:
+	a -> convert_incrout; R; a
+	b -> convert_incrout; R; b
+
+convert_incrout:
+	a -> convert_get_to_second_a_right; R; a
+	b -> ERROR; -; b
+
+test_positive_end:
+	a -> test_positive_end; L; a
+	b -> epilogue_found_code_head; R; b
+

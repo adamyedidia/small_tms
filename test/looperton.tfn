@@ -1,0 +1,5 @@
+input halterton a
+
+LOOP: [a] E (LOOP); 1 (LOOP); _ (LOOP)
+
+return

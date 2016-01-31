@@ -1,0 +1,11 @@
+input a b c d e f
+
+[e] E (1)
+function maybeton b e f
+
+RETURN: return
+
+// return
+// GO_RIGHT: [c] _ (1, GO_LEFT); E (1, R, GO_RIGHT)
+// NEVER_HERE: return
+// GO_LEFT: [c] _ (E, GO_RIGHT); 1 (E, L, GO_LEFT)

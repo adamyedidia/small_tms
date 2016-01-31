@@ -34,7 +34,7 @@ def convertStatesToString(listOfStates, output):
 				state.getHeadMove(symbol) + "; " + state.getWrite(symbol) + "\n")
 		
 		output.write("\n")
-        
+        		
 def getFunctionLabelDictionary(functions, path):
 
     # All line numbers ignore empty lines, input lines and comments. The number that appears in your editor I call a "text number."
@@ -558,6 +558,8 @@ def writeProgramSkeleton(listOfStates, inState, functions, functionVariableDicti
 
 	listOfFunctionGroups[-1].outState.setNextState("_", outState)
     
+	print characteristicString
+	
 	return outState
 	
 def incrementLineNumberIDs(listOfStates, inState):

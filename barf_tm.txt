@@ -1,0 +1,362 @@
+States: 90
+
+START write_code_symbol_0:
+	a -> write_code_symbol_1; R; b
+	b -> ERROR; -; b
+
+write_code_symbol_1:
+	a -> write_code_symbol_2; R; a
+	b -> ERROR; -; b
+
+write_code_symbol_2:
+	a -> write_code_symbol_3; R; b
+	b -> ERROR; -; b
+
+write_code_symbol_3:
+	a -> write_code_symbol_4; R; a
+	b -> ERROR; -; b
+
+write_code_symbol_4:
+	a -> write_code_symbol_5; R; b
+	b -> ERROR; -; b
+
+write_code_symbol_5:
+	a -> write_code_symbol_6; R; a
+	b -> ERROR; -; b
+
+write_code_symbol_6:
+	a -> write_code_symbol_7; R; b
+	b -> ERROR; -; b
+
+write_code_symbol_7:
+	a -> write_code_symbol_8; R; b
+	b -> ERROR; -; b
+
+write_code_symbol_8:
+	a -> write_code_symbol_9; R; a
+	b -> ERROR; -; b
+
+write_code_symbol_9:
+	a -> write_code_symbol_10; R; a
+	b -> ERROR; -; b
+
+write_code_symbol_10:
+	a -> write_code_symbol_11; R; b
+	b -> ERROR; -; b
+
+write_code_symbol_11:
+	a -> write_code_symbol_12; R; a
+	b -> ERROR; -; b
+
+write_code_symbol_12:
+	a -> write_code_symbol_13; R; b
+	b -> ERROR; -; b
+
+write_code_symbol_13:
+	a -> write_code_symbol_14; R; b
+	b -> ERROR; -; b
+
+write_code_symbol_14:
+	a -> write_code_symbol_15; R; a
+	b -> ERROR; -; b
+
+write_code_symbol_15:
+	a -> write_code_symbol_16; R; b
+	b -> ERROR; -; b
+
+write_code_symbol_16:
+	a -> write_code_symbol_17; R; a
+	b -> ERROR; -; b
+
+write_code_symbol_17:
+	a -> write_code_symbol_18; R; a
+	b -> ERROR; -; b
+
+write_code_symbol_18:
+	a -> write_code_symbol_19; R; b
+	b -> ERROR; -; b
+
+write_code_symbol_19:
+	a -> write_code_symbol_20; R; b
+	b -> ERROR; -; b
+
+write_code_symbol_20:
+	a -> write_code_symbol_21; R; a
+	b -> ERROR; -; b
+
+write_code_symbol_21:
+	a -> write_code_symbol_22; R; a
+	b -> ERROR; -; b
+
+write_code_symbol_22:
+	a -> write_code_symbol_23; R; a
+	b -> ERROR; -; b
+
+write_code_symbol_23:
+	a -> write_code_symbol_24; R; a
+	b -> ERROR; -; b
+
+write_code_symbol_24:
+	a -> write_code_symbol_25; R; b
+	b -> ERROR; -; b
+
+write_code_symbol_25:
+	a -> write_code_symbol_26; R; a
+	b -> ERROR; -; b
+
+write_code_symbol_26:
+	a -> write_code_symbol_27; R; a
+	b -> ERROR; -; b
+
+write_code_symbol_27:
+	a -> write_code_symbol_28; R; b
+	b -> ERROR; -; b
+
+write_code_symbol_28:
+	a -> write_code_symbol_29; R; a
+	b -> ERROR; -; b
+
+write_code_symbol_29:
+	a -> write_code_symbol_30; R; b
+	b -> ERROR; -; b
+
+write_code_symbol_30:
+	a -> write_code_symbol_31; R; a
+	b -> ERROR; -; b
+
+write_code_symbol_31:
+	a -> write_code_symbol_32; R; a
+	b -> ERROR; -; b
+
+write_code_symbol_32:
+	a -> write_code_symbol_33; R; a
+	b -> ERROR; -; b
+
+write_code_symbol_33:
+	a -> write_code_symbol_34; R; b
+	b -> ERROR; -; b
+
+write_code_symbol_34:
+	a -> write_code_symbol_35; R; b
+	b -> ERROR; -; b
+
+write_code_symbol_35:
+	a -> write_code_symbol_36; R; b
+	b -> ERROR; -; b
+
+write_code_symbol_36:
+	a -> write_code_symbol_37; R; b
+	b -> ERROR; -; b
+
+write_code_symbol_37:
+	a -> write_code_symbol_38; R; b
+	b -> ERROR; -; b
+
+write_code_symbol_38:
+	a -> write_code_symbol_39; R; b
+	b -> ERROR; -; b
+
+write_code_symbol_39:
+	a -> write_code_symbol_40; R; b
+	b -> ERROR; -; b
+
+write_code_symbol_40:
+	a -> write_code_symbol_41; R; b
+	b -> ERROR; -; b
+
+write_code_symbol_41:
+	a -> write_code_symbol_42; R; b
+	b -> ERROR; -; b
+
+write_code_symbol_42:
+	a -> write_code_symbol_43; R; a
+	b -> ERROR; -; b
+
+write_code_symbol_43:
+	a -> write_code_symbol_44; R; a
+	b -> ERROR; -; b
+
+write_code_symbol_44:
+	a -> write_code_symbol_45; R; a
+	b -> ERROR; -; b
+
+write_code_symbol_45:
+	a -> write_code_symbol_46; R; b
+	b -> ERROR; -; b
+
+write_code_symbol_46:
+	a -> write_code_symbol_47; R; a
+	b -> ERROR; -; b
+
+write_code_symbol_47:
+	a -> write_code_symbol_48; R; b
+	b -> ERROR; -; b
+
+write_code_symbol_48:
+	a -> write_code_symbol_49; R; a
+	b -> ERROR; -; b
+
+write_code_symbol_49:
+	a -> write_code_symbol_50; R; a
+	b -> ERROR; -; b
+
+write_code_symbol_50:
+	a -> write_code_symbol_51; R; a
+	b -> ERROR; -; b
+
+write_code_symbol_51:
+	a -> write_code_symbol_52; R; a
+	b -> ERROR; -; b
+
+write_code_symbol_52:
+	a -> write_code_symbol_53; R; a
+	b -> ERROR; -; b
+
+write_code_symbol_53:
+	a -> write_code_symbol_54; R; a
+	b -> ERROR; -; b
+
+write_code_symbol_54:
+	a -> write_code_symbol_55; R; a
+	b -> ERROR; -; b
+
+write_code_symbol_55:
+	a -> write_code_symbol_56; R; a
+	b -> ERROR; -; b
+
+write_code_symbol_56:
+	a -> write_code_symbol_57; R; b
+	b -> ERROR; -; b
+
+write_code_symbol_57:
+	a -> write_code_symbol_58; R; a
+	b -> ERROR; -; b
+
+write_code_symbol_58:
+	a -> write_code_symbol_59; R; a
+	b -> ERROR; -; b
+
+write_code_symbol_59:
+	a -> write_code_symbol_60; R; a
+	b -> ERROR; -; b
+
+write_code_symbol_60:
+	a -> write_code_symbol_61; R; b
+	b -> ERROR; -; b
+
+write_code_symbol_61:
+	a -> write_code_symbol_62; R; a
+	b -> ERROR; -; b
+
+write_code_symbol_62:
+	a -> write_code_symbol_63; R; b
+	b -> ERROR; -; b
+
+write_code_symbol_63:
+	a -> write_code_symbol_64; R; a
+	b -> ERROR; -; b
+
+write_code_symbol_64:
+	a -> write_code_symbol_65; R; b
+	b -> ERROR; -; b
+
+write_code_symbol_65:
+	a -> write_code_symbol_66; R; b
+	b -> ERROR; -; b
+
+write_code_symbol_66:
+	a -> write_code_symbol_67; R; a
+	b -> ERROR; -; b
+
+write_code_symbol_67:
+	a -> write_code_symbol_68; R; a
+	b -> ERROR; -; b
+
+write_code_symbol_68:
+	a -> write_code_symbol_69; R; b
+	b -> ERROR; -; b
+
+write_code_symbol_69:
+	a -> write_code_symbol_70; R; a
+	b -> ERROR; -; b
+
+write_code_symbol_70:
+	a -> write_code_symbol_71; R; a
+	b -> ERROR; -; b
+
+write_code_symbol_71:
+	a -> write_code_symbol_72; R; b
+	b -> ERROR; -; b
+
+write_code_symbol_72:
+	a -> write_code_symbol_73; R; b
+	b -> ERROR; -; b
+
+write_code_symbol_73:
+	a -> write_code_symbol_74; R; b
+	b -> ERROR; -; b
+
+write_code_symbol_74:
+	a -> write_code_symbol_75; R; a
+	b -> ERROR; -; b
+
+write_code_symbol_75:
+	a -> write_code_symbol_76; R; a
+	b -> ERROR; -; b
+
+write_code_symbol_76:
+	a -> write_code_symbol_77; R; a
+	b -> ERROR; -; b
+
+write_code_symbol_77:
+	a -> write_code_symbol_78; R; b
+	b -> ERROR; -; b
+
+write_code_symbol_78:
+	a -> write_code_symbol_79; R; a
+	b -> ERROR; -; b
+
+write_code_symbol_79:
+	a -> write_code_symbol_80; R; a
+	b -> ERROR; -; b
+
+write_code_symbol_80:
+	a -> write_code_symbol_81; R; b
+	b -> ERROR; -; b
+
+write_code_symbol_81:
+	a -> write_code_symbol_82; R; b
+	b -> ERROR; -; b
+
+write_code_symbol_82:
+	a -> write_code_symbol_83; R; a
+	b -> ERROR; -; b
+
+write_code_symbol_83:
+	a -> write_code_symbol_84; R; a
+	b -> ERROR; -; b
+
+write_code_symbol_84:
+	a -> write_code_symbol_85; R; a
+	b -> ERROR; -; b
+
+write_code_symbol_85:
+	a -> write_code_symbol_86; R; a
+	b -> ERROR; -; b
+
+write_code_symbol_86:
+	a -> write_code_symbol_87; R; a
+	b -> ERROR; -; b
+
+write_code_symbol_87:
+	a -> write_code_symbol_88; R; a
+	b -> ERROR; -; b
+
+write_code_symbol_88:
+	a -> write_code_symbol_89; R; b
+	b -> ERROR; -; b
+
+write_code_symbol_89:
+	a -> OUT; R; b
+	b -> ERROR; -; b
+

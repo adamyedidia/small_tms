@@ -1,7 +1,7 @@
 import string
 import sys
 
-sys.path.insert(0, '/home/adamyedidia/thesis/turdtotm')
+sys.path.insert(0, '/home/adamyedidia/small_tms/thesis/turdtotm')
 from state import *
 #from constantsTurdToTM import *
 from tmsim import *
@@ -37,6 +37,7 @@ class SingleTapeTuringMachine:
 		self.tape = Tape(None, alphabet[0])
 
 		listOfSymbols = alphabet
+#		print listOfSymbols
 
 		inp = open(path, "r")
 		tmLines = inp.readlines()
@@ -44,7 +45,8 @@ class SingleTapeTuringMachine:
 		self.stateDictionary = {"ACCEPT": SimpleState("ACCEPT", alphabet),
 			"REJECT": SimpleState("REJECT", alphabet),
 			"ERROR": SimpleState("ERROR", alphabet),
-			"HALT": SimpleState("HALT", alphabet)}
+			"HALT": SimpleState("HALT", alphabet),
+			"OUT": SimpleState("OUT", alphabet)}
 
 		self.listOfRealStates = []
 
@@ -52,6 +54,8 @@ class SingleTapeTuringMachine:
 		for line in tmLines[1:]:
 			if line != "\n": # not a blank line
 				lineSplit = string.split(line)
+				
+#				print lineSplit[0], lineSplit[0] in listOfSymbols
                 
 				if lineSplit[0] == "START":
 					stateName = getStateName(line[6:])
@@ -59,7 +63,7 @@ class SingleTapeTuringMachine:
 					self.stateDictionary[stateName] = self.startState
 					self.listOfRealStates.append(self.stateDictionary[stateName])
 					self.startState.makeStartState()
-				
+								
 				elif not lineSplit[0] in listOfSymbols:
 					stateName = getStateName(line)
 					self.stateDictionary[stateName] = State(stateName, None, alphabet)
@@ -98,10 +102,10 @@ class SingleTapeTuringMachine:
 		halted = False
 
 		while stepCounter < float(numSteps):
-			if stepCounter > 39000 and stepCounter < 42000:
-#			if True:
+#			if stepCounter > 20000 and stepCounter < 23000:
+			if True:
 				if not quiet:
-					self.printTape(-2, 250, output)
+					self.printTape(-2, 340, output)
 			
 #			print stepCounter, float(numSteps), stepCounter < float(numSteps)
 
@@ -126,6 +130,10 @@ class SingleTapeTuringMachine:
 				print "Turing machine halted."
 				halted = True
 				break
+				
+			if self.state.stateName == "OUT":
+				print "Turing machine execution incomplete: reached out state."
+				print "Perhaps this Turing machine wants to be melded with another machine."
 
 			symbol = self.tape.readSymbol()
 

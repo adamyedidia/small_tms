@@ -1,0 +1,376 @@
+4240c4240
+< write_code_symbol_0
+---
+> write_aux_incr_out_read_
+4243c4243
+< write_code_symbol_1
+---
+> write_aux_incr_out_move
+4246c4246
+< write_code_symbol_2
+---
+> write_code_add_underscore_2_read_
+4249c4249
+< write_code_symbol_3
+---
+> write_code_add_underscore_2_move
+4252c4252
+< write_code_symbol_4
+---
+> write_code_add_underscore_3_read_
+4255c4255
+< write_code_symbol_5
+---
+> write_code_add_underscore_3_move
+4258c4258
+< write_code_symbol_6
+---
+> write_code_add_0_read_
+4261c4261
+< write_code_symbol_7
+---
+> write_code_add_0_write_next
+4264c4264
+< write_code_symbol_8
+---
+> write_code_add_3_underscore_1_read_
+4267c4267
+< write_code_symbol_9
+---
+> write_code_add_3_underscore_1_move
+4270c4270
+< write_code_symbol_10
+---
+> write_code_add_3ln_H_read_
+4273c4273
+< write_code_symbol_11
+---
+> write_code_add_3ln_H_move
+4276c4276
+< write_code_symbol_12
+---
+> write_code_add_3_varname_preamble_1_read_
+4279c4279
+< write_code_symbol_13
+---
+> write_code_add_3_varname_preamble_1_write_next
+4282c4282
+< write_code_symbol_14
+---
+> write_code_add_3_varname_0_read_
+4285c4285
+< write_code_symbol_15
+---
+> write_code_add_3_varname_0_write_next
+4288c4288
+< write_code_symbol_16
+---
+> write_code_add_3_E_underscore_read_
+4291c4291
+< write_code_symbol_17
+---
+> write_code_add_3_E_underscore_move
+4294c4294
+< write_code_symbol_18
+---
+> write_code_add_3_E_one_read_
+4297c4297
+< write_code_symbol_19
+---
+> write_code_add_3_E_one_write_next
+4300c4300
+< write_code_symbol_20
+---
+> write_code_add_3_E_read_read_
+4303c4303
+< write_code_symbol_21
+---
+> write_code_add_3_E_read_write_next
+4306c4306
+< write_code_symbol_22
+---
+> write_code_add_3_E_write_read_
+4309c4309
+< write_code_symbol_23
+---
+> write_code_add_3_E_write_write_next
+4312c4312
+< write_code_symbol_24
+---
+> write_code_add_3_E_headmove_read_
+4315c4315
+< write_code_symbol_25
+---
+> write_code_add_3_E_headmove_move
+4318c4318
+< write_code_symbol_26
+---
+> write_code_add_3_E_linenumber_0_read_
+4321c4321
+< write_code_symbol_27
+---
+> write_code_add_3_E_linenumber_0_write_next
+4324c4324
+< write_code_symbol_28
+---
+> write_code_add_3_E_linenumber_1_read_
+4327c4327
+< write_code_symbol_29
+---
+> write_code_add_3_E_linenumber_1_write_next
+4330c4330
+< write_code_symbol_30
+---
+> write_code_add_4_underscore_1_read_
+4333c4333
+< write_code_symbol_31
+---
+> write_code_add_4_underscore_1_move
+4336c4336
+< write_code_symbol_32
+---
+> write_code_add_4_ln_underscore_2_read_
+4339c4339
+< write_code_symbol_33
+---
+> write_code_add_4_ln_underscore_2_move
+4342c4342
+< write_code_symbol_34
+---
+> write_code_add_4ln_H_read_
+4345c4345
+< write_code_symbol_35
+---
+> write_code_add_4ln_H_move
+4348c4348
+< write_code_symbol_36
+---
+> write_code_add_4_funcname_preamble_E_read_
+4351c4351
+< write_code_symbol_37
+---
+> write_code_add_4_funcname_preamble_E_write_next
+4354c4354
+< write_code_symbol_38
+---
+> write_code_add_4_funcname_0_read_
+4357c4357
+< write_code_symbol_39
+---
+> write_code_add_4_funcname_0_write_next
+4360c4360
+< write_code_symbol_40
+---
+> write_code_add_4_b_underscore_read_
+4363c4363
+< write_code_symbol_41
+---
+> write_code_add_4_b_underscore_move
+4366c4366
+< write_code_symbol_42
+---
+> write_code_add_4_b_name_0_read_
+4369c4369
+< write_code_symbol_43
+---
+> write_code_add_4_b_name_0_write_next
+4372c4372
+< write_code_symbol_44
+---
+> write_code_add_4_c_underscore_read_
+4375c4375
+< write_code_symbol_45
+---
+> write_code_add_4_c_underscore_move
+4378c4378
+< write_code_symbol_46
+---
+> write_code_add_4_c_name_0_read_
+4381c4381
+< write_code_symbol_47
+---
+> write_code_add_4_c_name_0_write_next
+4384c4384
+< write_code_symbol_48
+---
+> write_code_add_4_c_name_1_read_
+4387c4387
+< write_code_symbol_49
+---
+> write_code_add_4_c_name_1_write_next
+4390c4390
+< write_code_symbol_50
+---
+> write_code_add_4_a_underscore_read_
+4393c4393
+< write_code_symbol_51
+---
+> write_code_add_4_a_underscore_move
+4396c4396
+< write_code_symbol_52
+---
+> write_code_add_4_a_name_0_read_
+4399c4399
+< write_code_symbol_53
+---
+> write_code_add_4_a_name_0_write_next
+4402c4402
+< write_code_symbol_54
+---
+> write_code_add_5_underscore_1_read_
+4405c4405
+< write_code_symbol_55
+---
+> write_code_add_5_underscore_1_move
+4408c4408
+< write_code_symbol_56
+---
+> write_code_add_5_ln_underscore_2_read_
+4411c4411
+< write_code_symbol_57
+---
+> write_code_add_5_ln_underscore_2_move
+4414c4414
+< write_code_symbol_58
+---
+> write_code_add_5ln_H_read_
+4417c4417
+< write_code_symbol_59
+---
+> write_code_add_5ln_H_move
+4420c4420
+< write_code_symbol_60
+---
+> write_code_add_5_varname_preamble_1_read_
+4423c4423
+< write_code_symbol_61
+---
+> write_code_add_5_varname_preamble_1_write_next
+4426c4426
+< write_code_symbol_62
+---
+> write_code_add_5_varname_0_read_
+4429c4429
+< write_code_symbol_63
+---
+> write_code_add_5_varname_0_write_next
+4432c4432
+< write_code_symbol_64
+---
+> write_code_add_5_E_underscore_read_
+4435c4435
+< write_code_symbol_65
+---
+> write_code_add_5_E_underscore_move
+4438c4438
+< write_code_symbol_66
+---
+> write_code_add_5_E_one_read_
+4441c4441
+< write_code_symbol_67
+---
+> write_code_add_5_E_one_write_next
+4444c4444
+< write_code_symbol_68
+---
+> write_code_add_5_E_read_read_
+4447c4447
+< write_code_symbol_69
+---
+> write_code_add_5_E_read_write_next
+4450c4450
+< write_code_symbol_70
+---
+> write_code_add_5_E_write_read_
+4453c4453
+< write_code_symbol_71
+---
+> write_code_add_5_E_write_write_next
+4456c4456
+< write_code_symbol_72
+---
+> write_code_add_5_E_headmove_read_
+4459c4459
+< write_code_symbol_73
+---
+> write_code_add_5_E_headmove_move
+4462c4462
+< write_code_symbol_74
+---
+> write_code_add_5_E_linenumber_0_read_
+4465c4465
+< write_code_symbol_75
+---
+> write_code_add_5_E_linenumber_0_write_next
+4468c4468
+< write_code_symbol_76
+---
+> write_code_add_5_1_underscore_read_
+4471c4471
+< write_code_symbol_77
+---
+> write_code_add_5_1_underscore_move
+4474c4474
+< write_code_symbol_78
+---
+> write_code_add_5_1_one_read_
+4477c4477
+< write_code_symbol_79
+---
+> write_code_add_5_1_one_write_next
+4480c4480
+< write_code_symbol_80
+---
+> write_code_add_5_1_read_read_
+4483c4483
+< write_code_symbol_81
+---
+> write_code_add_5_1_read_write_next
+4486c4486
+< write_code_symbol_82
+---
+> write_code_add_5_1_write_read_
+4489c4489
+< write_code_symbol_83
+---
+> write_code_add_5_1_write_write_next
+4492c4492
+< write_code_symbol_84
+---
+> write_code_add_5_1_headmove_read_
+4495c4495
+< write_code_symbol_85
+---
+> write_code_add_5_1_headmove_move
+4498c4498
+< write_code_symbol_86
+---
+> write_code_add_6_underscore_1_read_
+4501c4501
+< write_code_symbol_87
+---
+> write_code_add_6_underscore_1_move
+4504c4504
+< write_code_symbol_88
+---
+> write_code_add_6_ln_underscore_2_read_
+4507c4507
+< write_code_symbol_89
+---
+> write_code_add_6_ln_underscore_2_move
+4510c4510
+< write_code_symbol_90
+---
+> write_code_add_6ln_H_read_
+4513c4513
+< write_code_symbol_91
+---
+> write_code_add_6ln_H_move
+4516c4516
+< start_runner_read_
+---
+> write_code_skeleton_out_read_
+4519c4519
+< start_runner_move
+---
+> write_code_skeleton_out_move

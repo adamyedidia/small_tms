@@ -1,0 +1,1322 @@
+States: 330
+
+START start_read_:
+	a -> start_write_next; R; a
+	b -> ERROR; -; b
+
+start_write_next:
+	a -> write_var_counter_H_read_; R; b
+	b -> ERROR; -; b
+
+write_var_counter_H_read_:
+	a -> write_var_counter_H_move; R; b
+	b -> ERROR; -; b
+
+write_var_counter_H_move:
+	a -> write_var_counter_out_read_; R; a
+	b -> write_var_counter_out_read_; R; b
+
+write_var_counter_out_read_:
+	a -> write_var_counter_out_move; R; a
+	b -> ERROR; -; b
+
+write_var_counter_out_move:
+	a -> write_var_value_underscore_2_read_; R; a
+	b -> write_var_value_underscore_2_read_; R; b
+
+write_var_value_underscore_2_read_:
+	a -> write_var_value_underscore_2_move; R; a
+	b -> ERROR; -; b
+
+write_var_value_underscore_2_move:
+	a -> write_var_value_name_space_0_read_; R; a
+	b -> write_var_value_name_space_0_read_; R; b
+
+write_var_value_name_read_:
+	a -> write_var_value_name_write_next; R; b
+	b -> ERROR; -; b
+
+write_var_value_name_write_next:
+	a -> write_var_value_underscore_3_read_; R; b
+	b -> ERROR; -; b
+
+write_var_value_underscore_3_read_:
+	a -> write_var_value_underscore_3_move; R; a
+	b -> ERROR; -; b
+
+write_var_value_underscore_3_move:
+	a -> write_var_value_underscore_4_read_; R; a
+	b -> write_var_value_underscore_4_read_; R; b
+
+write_var_value_underscore_4_read_:
+	a -> write_var_value_underscore_4_move; R; a
+	b -> ERROR; -; b
+
+write_var_value_underscore_4_move:
+	a -> write_var_value_underscore_5_read_; R; a
+	b -> write_var_value_underscore_5_read_; R; b
+
+write_var_value_underscore_5_read_:
+	a -> write_var_value_underscore_5_move; R; a
+	b -> ERROR; -; b
+
+write_var_value_underscore_5_move:
+	a -> write_var_value_underscore_6_read_; R; a
+	b -> write_var_value_underscore_6_read_; R; b
+
+write_var_value_underscore_6_read_:
+	a -> write_var_value_underscore_6_move; R; a
+	b -> ERROR; -; b
+
+write_var_value_underscore_6_move:
+	a -> write_var_value_initvalue_0_read_; R; a
+	b -> write_var_value_initvalue_0_read_; R; b
+
+write_var_value_find_H_1_read_:
+	a -> write_var_value_find_H_1_read_a; R; a
+	b -> write_var_value_find_H_1_read_b; R; b
+
+write_var_value_find_H_1_read_a:
+	a -> write_var_value_find_H_1_read___move.1; L; a
+	b -> write_var_value_find_H_1_read_1_move.1; L; b
+
+write_var_value_find_H_1_read___move.1:
+	a -> write_var_value_find_H_1_read___move_by_1; L; a
+	b -> write_var_value_find_H_1_read___move_by_1; L; b
+
+write_var_value_find_H_1_read___move_by_1:
+	a -> write_var_value_find_H_1_read_; L; a
+	b -> write_var_value_find_H_1_read_; L; b
+
+write_var_value_find_H_1_read_1_move.1:
+	a -> write_var_value_find_H_1_read_1_move_by_1; L; a
+	b -> write_var_value_find_H_1_read_1_move_by_1; L; b
+
+write_var_value_find_H_1_read_1_move_by_1:
+	a -> write_var_value_find_H_1_read_; L; a
+	b -> write_var_value_find_H_1_read_; L; b
+
+write_var_value_find_H_1_read_b:
+	a -> write_var_value_find_H_1_read_H_move.1; L; a
+	b -> write_var_value_find_H_1_read_E_move.1; L; b
+
+write_var_value_find_H_1_read_H_move.1:
+	a -> write_var_value_find_H_1_read_H_move_by_1; L; a
+	b -> write_var_value_find_H_1_read_H_move_by_1; L; b
+
+write_var_value_find_H_1_read_H_move_by_1:
+	a -> write_var_value_decrement_counter_read_; L; a
+	b -> write_var_value_decrement_counter_read_; L; b
+
+write_var_value_find_H_1_read_E_move.1:
+	a -> write_var_value_find_H_1_read_E_move_by_1; L; a
+	b -> write_var_value_find_H_1_read_E_move_by_1; L; b
+
+write_var_value_find_H_1_read_E_move_by_1:
+	a -> write_var_value_find_H_1_read_; L; a
+	b -> write_var_value_find_H_1_read_; L; b
+
+write_var_value_decrement_counter_read_:
+	a -> write_var_value_decrement_counter_read_a; R; a
+	b -> write_var_value_decrement_counter_read_b; R; b
+
+write_var_value_decrement_counter_read_a:
+	a -> write_var_value_delete_1_read_; R; a
+	b -> write_var_value_decrement_counter_read_1_write.1; L; b
+
+write_var_value_decrement_counter_read_1_write.1:
+	a -> write_var_value_decrement_counter_read_1_move.1; R; b
+	b -> write_var_value_decrement_counter_read_1_move.1; R; b
+
+write_var_value_decrement_counter_read_1_move.1:
+	a -> write_var_value_find_H_2_read_; L; a
+	b -> write_var_value_find_H_2_read_; L; b
+
+write_var_value_decrement_counter_read_b:
+	a -> ERROR; L; a
+	b -> write_var_value_decrement_counter_read_E_write.1; L; b
+
+write_var_value_decrement_counter_read_E_write.1:
+	a -> write_var_value_decrement_counter_read_E_move.1; L; a
+	b -> write_var_value_decrement_counter_read_E_move.1; L; a
+
+write_var_value_decrement_counter_read_E_move.1:
+	a -> write_var_value_decrement_counter_read_; L; a
+	b -> write_var_value_decrement_counter_read_; L; b
+
+write_var_value_delete_1_read_:
+	a -> write_var_value_delete_1_read_a; R; a
+	b -> write_var_value_delete_1_read_b; R; b
+
+write_var_value_delete_1_read_a:
+	a -> ERROR; L; a
+	b -> write_var_value_delete_1_read_1_write.1; L; a
+
+write_var_value_delete_1_read_1_write.1:
+	a -> write_var_value_delete_1_read_1_move.1; R; a
+	b -> write_var_value_delete_1_read_1_move.1; R; a
+
+write_var_value_delete_1_read_1_move.1:
+	a -> write_var_value_find_H_2_read_; L; a
+	b -> write_var_value_find_H_2_read_; L; b
+
+write_var_value_delete_1_read_b:
+	a -> write_var_value_out_read_; R; a
+	b -> ERROR; L; b
+
+write_var_value_find_H_2_read_:
+	a -> write_var_value_find_H_2_read_a; R; a
+	b -> write_var_value_find_H_2_read_b; R; b
+
+write_var_value_find_H_2_read_a:
+	a -> write_var_value_find_H_2_read_; R; a
+	b -> write_var_value_find_H_2_read_; R; b
+
+write_var_value_find_H_2_read_b:
+	a -> write_var_value_find_H_3_read_; R; a
+	b -> write_var_value_find_H_2_read_; R; b
+
+write_var_value_find_H_3_read_:
+	a -> write_var_value_find_H_3_read_a; R; a
+	b -> write_var_value_find_H_3_read_b; R; b
+
+write_var_value_find_H_3_read_a:
+	a -> write_var_value_find_H_3_read_; R; a
+	b -> write_var_value_find_H_3_read_; R; b
+
+write_var_value_find_H_3_read_b:
+	a -> write_var_value_find_H_3_read_H_write.1; L; a
+	b -> write_var_value_find_H_3_read_; R; b
+
+write_var_value_find_H_3_read_H_write.1:
+	a -> write_var_value_find_H_3_read_H_move.1; R; a
+	b -> write_var_value_find_H_3_read_H_move.1; R; a
+
+write_var_value_find_H_3_read_H_move.1:
+	a -> write_var_counter_out_read_; R; a
+	b -> write_var_counter_out_read_; R; b
+
+write_var_value_name_space_0_read_:
+	a -> write_var_value_name_space_0_move; R; a
+	b -> ERROR; -; b
+
+write_var_value_name_space_0_move:
+	a -> write_var_value_name_read_; R; a
+	b -> write_var_value_name_read_; R; b
+
+write_var_value_initvalue_0_read_:
+	a -> write_var_value_initvalue_0_write_next; R; b
+	b -> ERROR; -; b
+
+write_var_value_initvalue_0_write_next:
+	a -> write_var_value_initvalue_1_read_; R; b
+	b -> ERROR; -; b
+
+write_var_value_initvalue_1_read_:
+	a -> write_var_value_initvalue_1_move; L; b
+	b -> ERROR; -; b
+
+write_var_value_initvalue_1_move:
+	a -> write_var_value_find_H_1_read_; L; a
+	b -> write_var_value_find_H_1_read_; L; b
+
+write_var_value_out_read_:
+	a -> write_var_value_out_read_a; R; a
+	b -> write_var_value_out_read_b; R; b
+
+write_var_value_out_read_a:
+	a -> write_var_value_out_read_; R; a
+	b -> write_var_value_out_read_1_move.1; L; b
+
+write_var_value_out_read_1_move.1:
+	a -> write_var_incr_mark_read_; -; a
+	b -> write_var_incr_mark_read_; -; b
+
+write_var_value_out_read_b:
+	a -> ERROR; L; a
+	b -> write_var_value_out_read_E_move.1; L; b
+
+write_var_value_out_read_E_move.1:
+	a -> write_var_incr_mark_read_; -; a
+	b -> write_var_incr_mark_read_; -; b
+
+write_var_incr_mark_read_:
+	a -> write_var_incr_mark_read_a; R; a
+	b -> write_var_incr_mark_read_b; R; b
+
+write_var_incr_mark_read_a:
+	a -> write_var_incr_mark_read___write.1; L; a
+	b -> write_var_incr_mark_read_; R; b
+
+write_var_incr_mark_read___write.1:
+	a -> write_var_incr_mark_read___move.1; R; b
+	b -> write_var_incr_mark_read___move.1; R; b
+
+write_var_incr_mark_read___move.1:
+	a -> write_var_incr_find_fin_read_; R; a
+	b -> write_var_incr_find_fin_read_; R; b
+
+write_var_incr_mark_read_b:
+	a -> write_var_incr_mark_read_; R; a
+	b -> write_var_incr_mark_read_; R; b
+
+write_var_incr_find_fin_read_:
+	a -> write_var_incr_find_fin_read_a; R; a
+	b -> write_var_incr_find_fin_read_b; R; b
+
+write_var_incr_find_fin_read_a:
+	a -> write_var_incr_find_fin_read_; R; a
+	b -> write_var_incr_find_fin_read_; R; b
+
+write_var_incr_find_fin_read_b:
+	a -> write_var_incr_find_fin_read_H_move.1; L; a
+	b -> write_var_incr_find_fin_read_; R; b
+
+write_var_incr_find_fin_read_H_move.1:
+	a -> write_var_incr_find_fin_read_H_move_by_1; L; a
+	b -> write_var_incr_find_fin_read_H_move_by_1; L; b
+
+write_var_incr_find_fin_read_H_move_by_1:
+	a -> write_var_incr_get_past_value_left_read_; L; a
+	b -> write_var_incr_get_past_value_left_read_; L; b
+
+write_var_incr_get_past_value_left_read_:
+	a -> write_var_incr_get_past_value_left_read_a; R; a
+	b -> write_var_incr_get_past_value_left_read_b; R; b
+
+write_var_incr_get_past_value_left_read_a:
+	a -> write_var_incr_get_past_value_left_read___move.1; L; a
+	b -> write_var_incr_get_past_value_left_read_1_move.1; L; b
+
+write_var_incr_get_past_value_left_read___move.1:
+	a -> write_var_incr_find_id_read_; -; a
+	b -> write_var_incr_find_id_read_; -; b
+
+write_var_incr_get_past_value_left_read_1_move.1:
+	a -> write_var_incr_get_past_value_left_read_1_move_by_1; L; a
+	b -> write_var_incr_get_past_value_left_read_1_move_by_1; L; b
+
+write_var_incr_get_past_value_left_read_1_move_by_1:
+	a -> write_var_incr_get_past_value_left_read_; L; a
+	b -> write_var_incr_get_past_value_left_read_; L; b
+
+write_var_incr_get_past_value_left_read_b:
+	a -> write_var_incr_get_past_value_left_read_H_move.1; L; a
+	b -> write_var_incr_get_past_value_left_read_E_move.1; L; b
+
+write_var_incr_get_past_value_left_read_H_move.1:
+	a -> write_var_incr_get_past_value_left_read_H_move_by_1; L; a
+	b -> write_var_incr_get_past_value_left_read_H_move_by_1; L; b
+
+write_var_incr_get_past_value_left_read_H_move_by_1:
+	a -> write_var_incr_get_past_value_left_read_; L; a
+	b -> write_var_incr_get_past_value_left_read_; L; b
+
+write_var_incr_get_past_value_left_read_E_move.1:
+	a -> write_var_incr_get_past_value_left_read_E_move_by_1; L; a
+	b -> write_var_incr_get_past_value_left_read_E_move_by_1; L; b
+
+write_var_incr_get_past_value_left_read_E_move_by_1:
+	a -> write_var_incr_get_past_value_left_read_; L; a
+	b -> write_var_incr_get_past_value_left_read_; L; b
+
+write_var_incr_find_id_read_:
+	a -> write_var_incr_find_id_read_a; R; a
+	b -> write_var_incr_find_id_read_b; R; b
+
+write_var_incr_find_id_read_a:
+	a -> write_var_incr_find_id_read___move.1; L; a
+	b -> write_var_incr_find_id_read_1_move.1; L; b
+
+write_var_incr_find_id_read___move.1:
+	a -> write_var_incr_find_id_read___move_by_1; L; a
+	b -> write_var_incr_find_id_read___move_by_1; L; b
+
+write_var_incr_find_id_read___move_by_1:
+	a -> write_var_incr_find_id_read_; L; a
+	b -> write_var_incr_find_id_read_; L; b
+
+write_var_incr_find_id_read_1_move.1:
+	a -> write_var_incr_id_read_; -; a
+	b -> write_var_incr_id_read_; -; b
+
+write_var_incr_find_id_read_b:
+	a -> write_var_incr_find_id_read_H_write.1; L; a
+	b -> write_var_incr_find_id_read_E_move.1; L; b
+
+write_var_incr_find_id_read_H_write.1:
+	a -> write_var_incr_find_id_read_H_move.1; R; a
+	b -> write_var_incr_find_id_read_H_move.1; R; a
+
+write_var_incr_find_id_read_H_move.1:
+	a -> write_var_incr_find_value_right_read_; L; a
+	b -> write_var_incr_find_value_right_read_; L; b
+
+write_var_incr_find_id_read_E_move.1:
+	a -> write_var_incr_id_read_; -; a
+	b -> write_var_incr_id_read_; -; b
+
+write_var_incr_id_read_:
+	a -> write_var_incr_id_read_a; R; a
+	b -> write_var_incr_id_read_b; R; b
+
+write_var_incr_id_read_a:
+	a -> write_var_incr_id_read___write.1; L; b
+	b -> write_var_incr_id_read_1_write.1; L; b
+
+write_var_incr_id_read___write.1:
+	a -> write_var_incr_id_read___move.1; L; b
+	b -> write_var_incr_id_read___move.1; L; b
+
+write_var_incr_id_read___move.1:
+	a -> write_var_incr_find_value_left_read_; L; a
+	b -> write_var_incr_find_value_left_read_; L; b
+
+write_var_incr_id_read_1_write.1:
+	a -> write_var_incr_id_read_1_move.1; L; b
+	b -> write_var_incr_id_read_1_move.1; L; b
+
+write_var_incr_id_read_1_move.1:
+	a -> write_var_incr_id_read_; L; a
+	b -> write_var_incr_id_read_; L; b
+
+write_var_incr_id_read_b:
+	a -> ERROR; L; a
+	b -> write_var_incr_id_read_E_write.1; L; b
+
+write_var_incr_id_read_E_write.1:
+	a -> write_var_incr_id_read_E_move.1; R; a
+	b -> write_var_incr_id_read_E_move.1; R; a
+
+write_var_incr_id_read_E_move.1:
+	a -> write_var_incr_find_underscore_read_; L; a
+	b -> write_var_incr_find_underscore_read_; L; b
+
+write_var_incr_find_underscore_read_:
+	a -> write_var_incr_find_underscore_read_a; R; a
+	b -> write_var_incr_find_underscore_read_b; R; b
+
+write_var_incr_find_underscore_read_a:
+	a -> write_var_incr_find_underscore_read___move.1; L; a
+	b -> write_var_incr_find_underscore_read_1_move.1; L; b
+
+write_var_incr_find_underscore_read___move.1:
+	a -> write_var_incr_find_value_left_read_; -; a
+	b -> write_var_incr_find_value_left_read_; -; b
+
+write_var_incr_find_underscore_read_1_move.1:
+	a -> write_var_incr_find_underscore_read_1_move_by_1; L; a
+	b -> write_var_incr_find_underscore_read_1_move_by_1; L; b
+
+write_var_incr_find_underscore_read_1_move_by_1:
+	a -> write_var_incr_find_underscore_read_; L; a
+	b -> write_var_incr_find_underscore_read_; L; b
+
+write_var_incr_find_underscore_read_b:
+	a -> write_var_incr_find_underscore_read_H_move.1; L; a
+	b -> write_var_incr_find_underscore_read_E_move.1; L; b
+
+write_var_incr_find_underscore_read_H_move.1:
+	a -> write_var_incr_find_underscore_read_H_move_by_1; L; a
+	b -> write_var_incr_find_underscore_read_H_move_by_1; L; b
+
+write_var_incr_find_underscore_read_H_move_by_1:
+	a -> write_var_incr_find_underscore_read_; L; a
+	b -> write_var_incr_find_underscore_read_; L; b
+
+write_var_incr_find_underscore_read_E_move.1:
+	a -> write_var_incr_find_underscore_read_E_move_by_1; L; a
+	b -> write_var_incr_find_underscore_read_E_move_by_1; L; b
+
+write_var_incr_find_underscore_read_E_move_by_1:
+	a -> write_var_incr_find_underscore_read_; L; a
+	b -> write_var_incr_find_underscore_read_; L; b
+
+write_var_incr_find_value_left_read_:
+	a -> write_var_incr_find_value_left_read_a; R; a
+	b -> write_var_incr_find_value_left_read_b; R; b
+
+write_var_incr_find_value_left_read_a:
+	a -> write_var_incr_find_value_left_read___move.1; L; a
+	b -> write_var_incr_find_value_left_read_1_move.1; L; b
+
+write_var_incr_find_value_left_read___move.1:
+	a -> write_var_incr_find_value_left_read___move_by_1; L; a
+	b -> write_var_incr_find_value_left_read___move_by_1; L; b
+
+write_var_incr_find_value_left_read___move_by_1:
+	a -> write_var_incr_find_value_left_read_; L; a
+	b -> write_var_incr_find_value_left_read_; L; b
+
+write_var_incr_find_value_left_read_1_move.1:
+	a -> write_var_incr_get_past_value_left_read_; -; a
+	b -> write_var_incr_get_past_value_left_read_; -; b
+
+write_var_incr_find_value_left_read_b:
+	a -> ERROR; L; a
+	b -> write_var_incr_find_value_left_read_E_move.1; L; b
+
+write_var_incr_find_value_left_read_E_move.1:
+	a -> write_var_incr_get_past_value_left_read_; -; a
+	b -> write_var_incr_get_past_value_left_read_; -; b
+
+write_var_incr_find_value_right_read_:
+	a -> write_var_incr_find_value_right_read_a; R; a
+	b -> write_var_incr_find_value_right_read_b; R; b
+
+write_var_incr_find_value_right_read_a:
+	a -> write_var_incr_find_value_right_read_; R; a
+	b -> write_var_incr_find_value_right_read_1_move.1; L; b
+
+write_var_incr_find_value_right_read_1_move.1:
+	a -> write_var_incr_get_past_value_right_read_; -; a
+	b -> write_var_incr_get_past_value_right_read_; -; b
+
+write_var_incr_find_value_right_read_b:
+	a -> ERROR; L; a
+	b -> write_var_incr_find_value_right_read_E_move.1; L; b
+
+write_var_incr_find_value_right_read_E_move.1:
+	a -> write_var_incr_get_past_value_right_read_; -; a
+	b -> write_var_incr_get_past_value_right_read_; -; b
+
+write_var_incr_get_past_value_right_read_:
+	a -> write_var_incr_get_past_value_right_read_a; R; a
+	b -> write_var_incr_get_past_value_right_read_b; R; b
+
+write_var_incr_get_past_value_right_read_a:
+	a -> write_var_incr_get_past_value_right_read___move.1; L; a
+	b -> write_var_incr_get_past_value_right_read_; R; b
+
+write_var_incr_get_past_value_right_read___move.1:
+	a -> write_var_value_out_read_; -; a
+	b -> write_var_value_out_read_; -; b
+
+write_var_incr_get_past_value_right_read_b:
+	a -> write_var_incr_get_past_value_right_read_H_write.1; L; a
+	b -> write_var_incr_get_past_value_right_read_; R; b
+
+write_var_incr_get_past_value_right_read_H_write.1:
+	a -> write_var_incr_get_past_value_right_read_H_move.1; R; a
+	b -> write_var_incr_get_past_value_right_read_H_move.1; R; a
+
+write_var_incr_get_past_value_right_read_H_move.1:
+	a -> write_var_incr_out_read_; R; a
+	b -> write_var_incr_out_read_; R; b
+
+write_var_incr_out_read_:
+	a -> write_var_incr_out_move; R; a
+	b -> ERROR; -; b
+
+write_var_incr_out_move:
+	a -> write_var_heads_write_H_read_; R; a
+	b -> write_var_heads_write_H_read_; R; b
+
+write_var_heads_write_H_read_:
+	a -> write_var_heads_write_H_move; L; b
+	b -> ERROR; -; b
+
+write_var_heads_write_H_move:
+	a -> write_var_heads_find_value_read_; L; a
+	b -> write_var_heads_find_value_read_; L; b
+
+write_var_heads_find_value_read_:
+	a -> write_var_heads_find_value_read_a; R; a
+	b -> write_var_heads_find_value_read_b; R; b
+
+write_var_heads_find_value_read_a:
+	a -> write_var_heads_find_value_read___move.1; L; a
+	b -> write_var_heads_find_value_read_1_move.1; L; b
+
+write_var_heads_find_value_read___move.1:
+	a -> write_var_heads_find_value_read___move_by_1; L; a
+	b -> write_var_heads_find_value_read___move_by_1; L; b
+
+write_var_heads_find_value_read___move_by_1:
+	a -> write_var_heads_find_value_read_; L; a
+	b -> write_var_heads_find_value_read_; L; b
+
+write_var_heads_find_value_read_1_move.1:
+	a -> write_var_heads_get_past_value_read_; -; a
+	b -> write_var_heads_get_past_value_read_; -; b
+
+write_var_heads_find_value_read_b:
+	a -> write_var_heads_get_to_fin_read_; R; a
+	b -> write_var_heads_find_value_read_E_move.1; L; b
+
+write_var_heads_find_value_read_E_move.1:
+	a -> write_var_heads_get_past_value_read_; -; a
+	b -> write_var_heads_get_past_value_read_; -; b
+
+write_var_heads_get_past_value_read_:
+	a -> write_var_heads_get_past_value_read_a; R; a
+	b -> write_var_heads_get_past_value_read_b; R; b
+
+write_var_heads_get_past_value_read_a:
+	a -> write_var_heads_get_past_value_read___write.1; L; a
+	b -> write_var_heads_get_past_value_read_1_move.1; L; b
+
+write_var_heads_get_past_value_read___write.1:
+	a -> write_var_heads_get_past_value_read___move.1; L; b
+	b -> write_var_heads_get_past_value_read___move.1; L; b
+
+write_var_heads_get_past_value_read___move.1:
+	a -> write_var_heads_find_id_read_; L; a
+	b -> write_var_heads_find_id_read_; L; b
+
+write_var_heads_get_past_value_read_1_move.1:
+	a -> write_var_heads_get_past_value_read_1_move_by_1; L; a
+	b -> write_var_heads_get_past_value_read_1_move_by_1; L; b
+
+write_var_heads_get_past_value_read_1_move_by_1:
+	a -> write_var_heads_get_past_value_read_; L; a
+	b -> write_var_heads_get_past_value_read_; L; b
+
+write_var_heads_get_past_value_read_b:
+	a -> write_var_heads_get_past_value_read_H_move.1; L; a
+	b -> write_var_heads_get_past_value_read_E_move.1; L; b
+
+write_var_heads_get_past_value_read_H_move.1:
+	a -> write_var_heads_get_past_value_read_H_move_by_1; L; a
+	b -> write_var_heads_get_past_value_read_H_move_by_1; L; b
+
+write_var_heads_get_past_value_read_H_move_by_1:
+	a -> write_var_heads_get_past_value_read_; L; a
+	b -> write_var_heads_get_past_value_read_; L; b
+
+write_var_heads_get_past_value_read_E_move.1:
+	a -> write_var_heads_get_past_value_read_E_move_by_1; L; a
+	b -> write_var_heads_get_past_value_read_E_move_by_1; L; b
+
+write_var_heads_get_past_value_read_E_move_by_1:
+	a -> write_var_heads_get_past_value_read_; L; a
+	b -> write_var_heads_get_past_value_read_; L; b
+
+write_var_heads_find_id_read_:
+	a -> write_var_heads_find_id_read_a; R; a
+	b -> write_var_heads_find_id_read_b; R; b
+
+write_var_heads_find_id_read_a:
+	a -> write_var_heads_find_id_read___move.1; L; a
+	b -> write_var_heads_find_id_read_1_move.1; L; b
+
+write_var_heads_find_id_read___move.1:
+	a -> write_var_heads_find_id_read___move_by_1; L; a
+	b -> write_var_heads_find_id_read___move_by_1; L; b
+
+write_var_heads_find_id_read___move_by_1:
+	a -> write_var_heads_find_id_read_; L; a
+	b -> write_var_heads_find_id_read_; L; b
+
+write_var_heads_find_id_read_1_move.1:
+	a -> write_var_heads_get_past_id_read_; -; a
+	b -> write_var_heads_get_past_id_read_; -; b
+
+write_var_heads_find_id_read_b:
+	a -> ERROR; L; a
+	b -> write_var_heads_find_id_read_E_move.1; L; b
+
+write_var_heads_find_id_read_E_move.1:
+	a -> write_var_heads_get_past_id_read_; -; a
+	b -> write_var_heads_get_past_id_read_; -; b
+
+write_var_heads_get_past_id_read_:
+	a -> write_var_heads_get_past_id_read_a; R; a
+	b -> write_var_heads_get_past_id_read_b; R; b
+
+write_var_heads_get_past_id_read_a:
+	a -> write_var_heads_get_past_id_read___move.1; L; a
+	b -> write_var_heads_get_past_id_read_1_move.1; L; b
+
+write_var_heads_get_past_id_read___move.1:
+	a -> write_var_heads_find_value_read_; -; a
+	b -> write_var_heads_find_value_read_; -; b
+
+write_var_heads_get_past_id_read_1_move.1:
+	a -> write_var_heads_get_past_id_read_1_move_by_1; L; a
+	b -> write_var_heads_get_past_id_read_1_move_by_1; L; b
+
+write_var_heads_get_past_id_read_1_move_by_1:
+	a -> write_var_heads_get_past_id_read_; L; a
+	b -> write_var_heads_get_past_id_read_; L; b
+
+write_var_heads_get_past_id_read_b:
+	a -> write_var_heads_get_past_id_read_H_move.1; L; a
+	b -> write_var_heads_get_past_id_read_E_move.1; L; b
+
+write_var_heads_get_past_id_read_H_move.1:
+	a -> write_var_heads_get_past_id_read_H_move_by_1; L; a
+	b -> write_var_heads_get_past_id_read_H_move_by_1; L; b
+
+write_var_heads_get_past_id_read_H_move_by_1:
+	a -> write_var_heads_get_past_id_read_; L; a
+	b -> write_var_heads_get_past_id_read_; L; b
+
+write_var_heads_get_past_id_read_E_move.1:
+	a -> write_var_heads_get_past_id_read_E_move_by_1; L; a
+	b -> write_var_heads_get_past_id_read_E_move_by_1; L; b
+
+write_var_heads_get_past_id_read_E_move_by_1:
+	a -> write_var_heads_get_past_id_read_; L; a
+	b -> write_var_heads_get_past_id_read_; L; b
+
+write_var_heads_get_to_fin_read_:
+	a -> write_var_heads_get_to_fin_read_a; R; a
+	b -> write_var_heads_get_to_fin_read_b; R; b
+
+write_var_heads_get_to_fin_read_a:
+	a -> write_var_heads_get_to_fin_read_; R; a
+	b -> write_var_heads_get_to_fin_read_; R; b
+
+write_var_heads_get_to_fin_read_b:
+	a -> write_var_heads_recog_pattern_H_read_; R; a
+	b -> write_var_heads_get_to_fin_read_; R; b
+
+write_var_heads_recog_pattern_H_read_:
+	a -> write_var_heads_recog_pattern_H_read_a; R; a
+	b -> write_var_heads_recog_pattern_H_read_b; R; b
+
+write_var_heads_recog_pattern_H_read_a:
+	a -> write_var_heads_recog_pattern_H_read___write.1; L; a
+	b -> write_var_heads_get_to_fin_read_; R; b
+
+write_var_heads_recog_pattern_H_read___write.1:
+	a -> write_var_heads_recog_pattern_H_read___move.1; R; b
+	b -> write_var_heads_recog_pattern_H_read___move.1; R; b
+
+write_var_heads_recog_pattern_H_read___move.1:
+	a -> write_var_heads_out_read_; R; a
+	b -> write_var_heads_out_read_; R; b
+
+write_var_heads_recog_pattern_H_read_b:
+	a -> write_var_heads_recog_pattern_H_read_; R; a
+	b -> write_var_heads_get_to_fin_read_; R; b
+
+write_var_heads_out_read_:
+	a -> write_var_heads_out_move; R; a
+	b -> ERROR; -; b
+
+write_var_heads_out_move:
+	a -> write_aux_underscore_2_read_; R; a
+	b -> write_aux_underscore_2_read_; R; b
+
+write_aux_underscore_2_read_:
+	a -> write_aux_underscore_2_move; R; a
+	b -> ERROR; -; b
+
+write_aux_underscore_2_move:
+	a -> write_aux_underscore_3_read_; R; a
+	b -> write_aux_underscore_3_read_; R; b
+
+write_aux_underscore_3_read_:
+	a -> write_aux_underscore_3_move; R; a
+	b -> ERROR; -; b
+
+write_aux_underscore_3_move:
+	a -> write_aux_line_number_space_0_read_; R; a
+	b -> write_aux_line_number_space_0_read_; R; b
+
+write_aux_E_1_read_:
+	a -> write_aux_E_1_write_next; R; b
+	b -> ERROR; -; b
+
+write_aux_E_1_write_next:
+	a -> write_aux_underscore_4_read_; R; b
+	b -> ERROR; -; b
+
+write_aux_underscore_4_read_:
+	a -> write_aux_underscore_4_move; R; a
+	b -> ERROR; -; b
+
+write_aux_underscore_4_move:
+	a -> write_aux_counter_in_read_; R; a
+	b -> write_aux_counter_in_read_; R; b
+
+write_aux_E_2_read_:
+	a -> write_aux_E_2_write_next; R; b
+	b -> ERROR; -; b
+
+write_aux_E_2_write_next:
+	a -> write_aux_H_read_; R; b
+	b -> ERROR; -; b
+
+write_aux_H_read_:
+	a -> write_aux_H_move; L; b
+	b -> ERROR; -; b
+
+write_aux_H_move:
+	a -> write_aux_out_read_; L; a
+	b -> write_aux_out_read_; L; b
+
+write_aux_line_number_space_0_read_:
+	a -> write_aux_line_number_space_0_move; R; a
+	b -> ERROR; -; b
+
+write_aux_line_number_space_0_move:
+	a -> write_aux_line_number_space_1_read_; R; a
+	b -> write_aux_line_number_space_1_read_; R; b
+
+write_aux_line_number_space_1_read_:
+	a -> write_aux_line_number_space_1_move; R; a
+	b -> ERROR; -; b
+
+write_aux_line_number_space_1_move:
+	a -> write_aux_line_number_space_2_read_; R; a
+	b -> write_aux_line_number_space_2_read_; R; b
+
+write_aux_line_number_space_2_read_:
+	a -> write_aux_line_number_space_2_move; R; a
+	b -> ERROR; -; b
+
+write_aux_line_number_space_2_move:
+	a -> write_aux_E_1_read_; R; a
+	b -> write_aux_E_1_read_; R; b
+
+write_aux_counter_in_read_:
+	a -> write_aux_counter_in_write_next; R; b
+	b -> ERROR; -; b
+
+write_aux_counter_in_write_next:
+	a -> write_aux_counter_1_read_; R; b
+	b -> ERROR; -; b
+
+write_aux_counter_H_read_:
+	a -> write_aux_counter_H_move; R; b
+	b -> ERROR; -; b
+
+write_aux_counter_H_move:
+	a -> write_aux_counter_out_read_; R; a
+	b -> write_aux_counter_out_read_; R; b
+
+write_aux_counter_1_read_:
+	a -> write_aux_counter_1_write_next; R; b
+	b -> ERROR; -; b
+
+write_aux_counter_1_write_next:
+	a -> write_aux_counter_H_read_; R; b
+	b -> ERROR; -; b
+
+write_aux_counter_out_read_:
+	a -> write_aux_counter_out_move; R; a
+	b -> ERROR; -; b
+
+write_aux_counter_out_move:
+	a -> write_aux_function_name_space_0_read_; R; a
+	b -> write_aux_function_name_space_0_read_; R; b
+
+write_aux_function_name_space_0_read_:
+	a -> write_aux_function_name_space_0_move; R; a
+	b -> ERROR; -; b
+
+write_aux_function_name_space_0_move:
+	a -> write_aux_function_name_space_1_read_; R; a
+	b -> write_aux_function_name_space_1_read_; R; b
+
+write_aux_function_name_space_1_read_:
+	a -> write_aux_function_name_space_1_move; R; a
+	b -> ERROR; -; b
+
+write_aux_function_name_space_1_move:
+	a -> write_aux_E_2_read_; R; a
+	b -> write_aux_E_2_read_; R; b
+
+write_aux_out_read_:
+	a -> write_aux_out_read_a; R; a
+	b -> write_aux_out_read_b; R; b
+
+write_aux_out_read_a:
+	a -> write_aux_out_read___move.1; L; a
+	b -> write_aux_out_read_1_move.1; L; b
+
+write_aux_out_read___move.1:
+	a -> write_aux_out_read___move_by_1; L; a
+	b -> write_aux_out_read___move_by_1; L; b
+
+write_aux_out_read___move_by_1:
+	a -> write_aux_out_read_; L; a
+	b -> write_aux_out_read_; L; b
+
+write_aux_out_read_1_move.1:
+	a -> write_aux_out_read_1_move_by_1; L; a
+	b -> write_aux_out_read_1_move_by_1; L; b
+
+write_aux_out_read_1_move_by_1:
+	a -> write_aux_out_read_; L; a
+	b -> write_aux_out_read_; L; b
+
+write_aux_out_read_b:
+	a -> write_aux_out_read_H_move.1; L; a
+	b -> write_aux_out_read_E_move.1; L; b
+
+write_aux_out_read_H_move.1:
+	a -> write_aux_out_read_H_move_by_1; L; a
+	b -> write_aux_out_read_H_move_by_1; L; b
+
+write_aux_out_read_H_move_by_1:
+	a -> write_aux_var_decr_counter_read_; L; a
+	b -> write_aux_var_decr_counter_read_; L; b
+
+write_aux_out_read_E_move.1:
+	a -> write_aux_out_read_E_move_by_1; L; a
+	b -> write_aux_out_read_E_move_by_1; L; b
+
+write_aux_out_read_E_move_by_1:
+	a -> write_aux_out_read_; L; a
+	b -> write_aux_out_read_; L; b
+
+write_aux_var_decr_counter_read_:
+	a -> write_aux_var_decr_counter_read_a; R; a
+	b -> write_aux_var_decr_counter_read_b; R; b
+
+write_aux_var_decr_counter_read_a:
+	a -> write_aux_var_delete_1_read_; R; a
+	b -> write_aux_var_decr_counter_read_1_write.1; L; b
+
+write_aux_var_decr_counter_read_1_write.1:
+	a -> write_aux_var_decr_counter_read_1_move.1; R; b
+	b -> write_aux_var_decr_counter_read_1_move.1; R; b
+
+write_aux_var_decr_counter_read_1_move.1:
+	a -> write_aux_var_get_past_H_read_; L; a
+	b -> write_aux_var_get_past_H_read_; L; b
+
+write_aux_var_decr_counter_read_b:
+	a -> ERROR; L; a
+	b -> write_aux_var_decr_counter_read_E_write.1; L; b
+
+write_aux_var_decr_counter_read_E_write.1:
+	a -> write_aux_var_decr_counter_read_E_move.1; L; a
+	b -> write_aux_var_decr_counter_read_E_move.1; L; a
+
+write_aux_var_decr_counter_read_E_move.1:
+	a -> write_aux_var_decr_counter_read_; L; a
+	b -> write_aux_var_decr_counter_read_; L; b
+
+write_aux_var_delete_1_read_:
+	a -> write_aux_var_delete_1_read_a; R; a
+	b -> write_aux_var_delete_1_read_b; R; b
+
+write_aux_var_delete_1_read_a:
+	a -> ERROR; L; a
+	b -> write_aux_var_delete_1_read_1_write.1; L; a
+
+write_aux_var_delete_1_read_1_write.1:
+	a -> write_aux_var_delete_1_read_1_move.1; R; a
+	b -> write_aux_var_delete_1_read_1_move.1; R; a
+
+write_aux_var_delete_1_read_1_move.1:
+	a -> write_aux_var_get_past_H_read_; L; a
+	b -> write_aux_var_get_past_H_read_; L; b
+
+write_aux_var_delete_1_read_b:
+	a -> write_aux_var_delete_1_read_H_write.1; L; a
+	b -> ERROR; L; b
+
+write_aux_var_delete_1_read_H_write.1:
+	a -> write_aux_var_delete_1_read_H_move.1; R; a
+	b -> write_aux_var_delete_1_read_H_move.1; R; a
+
+write_aux_var_delete_1_read_H_move.1:
+	a -> write_aux_var_out_read_; R; a
+	b -> write_aux_var_out_read_; R; b
+
+write_aux_var_get_past_H_read_:
+	a -> write_aux_var_get_past_H_read_a; R; a
+	b -> write_aux_var_get_past_H_read_b; R; b
+
+write_aux_var_get_past_H_read_a:
+	a -> write_aux_var_get_past_H_read_; R; a
+	b -> write_aux_var_get_past_H_read_; R; b
+
+write_aux_var_get_past_H_read_b:
+	a -> write_aux_var_find_new_var_read_; R; a
+	b -> write_aux_var_get_past_H_read_; R; b
+
+write_aux_var_find_new_var_read_:
+	a -> write_aux_var_find_new_var_read_a; R; a
+	b -> write_aux_var_find_new_var_read_b; R; b
+
+write_aux_var_find_new_var_read_a:
+	a -> write_aux_var_find_new_var_read_; R; a
+	b -> write_aux_var_find_new_var_read_; R; b
+
+write_aux_var_find_new_var_read_b:
+	a -> write_aux_var_find_new_var_read_H_write.1; L; a
+	b -> write_aux_var_find_new_var_read_; R; b
+
+write_aux_var_find_new_var_read_H_write.1:
+	a -> write_aux_var_find_new_var_read_H_move.1; R; a
+	b -> write_aux_var_find_new_var_read_H_move.1; R; a
+
+write_aux_var_find_new_var_read_H_move.1:
+	a -> write_aux_var_write_E_read_; R; a
+	b -> write_aux_var_write_E_read_; R; b
+
+write_aux_var_write_E_read_:
+	a -> write_aux_var_write_E_write_next; R; b
+	b -> ERROR; -; b
+
+write_aux_var_write_E_write_next:
+	a -> write_aux_var_write_H_read_; R; b
+	b -> ERROR; -; b
+
+write_aux_var_write_H_read_:
+	a -> write_aux_var_write_H_move; L; b
+	b -> ERROR; -; b
+
+write_aux_var_write_H_move:
+	a -> write_aux_out_read_; L; a
+	b -> write_aux_out_read_; L; b
+
+write_aux_var_out_read_:
+	a -> write_aux_var_out_read_a; R; a
+	b -> write_aux_var_out_read_b; R; b
+
+write_aux_var_out_read_a:
+	a -> write_aux_var_out_read_; R; a
+	b -> write_aux_var_out_read_; R; b
+
+write_aux_var_out_read_b:
+	a -> write_aux_var_out_read_; R; a
+	b -> write_aux_incr_go_right_twice_read_; R; b
+
+write_aux_incr_go_right_twice_read_:
+	a -> write_aux_incr_go_right_twice_read_a; R; a
+	b -> write_aux_incr_go_right_twice_read_b; R; b
+
+write_aux_incr_go_right_twice_read_a:
+	a -> write_aux_incr_go_right_twice_move_by_1_read_; R; a
+	b -> write_aux_incr_go_right_twice_move_by_1_read_; R; b
+
+write_aux_incr_go_right_twice_read_b:
+	a -> write_aux_incr_go_right_twice_move_by_1_read_; R; a
+	b -> write_aux_incr_go_right_twice_move_by_1_read_; R; b
+
+write_aux_incr_write_H_1_read_:
+	a -> write_aux_incr_write_H_1_move; R; b
+	b -> ERROR; -; b
+
+write_aux_incr_write_H_1_move:
+	a -> write_aux_incr_get_to_fin_read_; R; a
+	b -> write_aux_incr_get_to_fin_read_; R; b
+
+write_aux_incr_get_to_fin_read_:
+	a -> write_aux_incr_get_to_fin_read_a; R; a
+	b -> write_aux_incr_get_to_fin_read_b; R; b
+
+write_aux_incr_get_to_fin_read_a:
+	a -> write_aux_incr_get_to_fin_read_; R; a
+	b -> write_aux_incr_get_to_fin_read_; R; b
+
+write_aux_incr_get_to_fin_read_b:
+	a -> write_aux_incr_get_to_fin_read_H_move.1; L; a
+	b -> write_aux_incr_get_to_fin_read_; R; b
+
+write_aux_incr_get_to_fin_read_H_move.1:
+	a -> write_aux_incr_get_to_fin_read_H_move_by_1; L; a
+	b -> write_aux_incr_get_to_fin_read_H_move_by_1; L; b
+
+write_aux_incr_get_to_fin_read_H_move_by_1:
+	a -> write_aux_incr_incr_read_; L; a
+	b -> write_aux_incr_incr_read_; L; b
+
+write_aux_incr_incr_read_:
+	a -> write_aux_incr_incr_read_a; R; a
+	b -> write_aux_incr_incr_read_b; R; b
+
+write_aux_incr_incr_read_a:
+	a -> write_aux_incr_push_E_read_; R; a
+	b -> write_aux_incr_incr_read_1_write.1; L; b
+
+write_aux_incr_incr_read_1_write.1:
+	a -> write_aux_incr_incr_read_1_move.1; L; b
+	b -> write_aux_incr_incr_read_1_move.1; L; b
+
+write_aux_incr_incr_read_1_move.1:
+	a -> write_aux_incr_incr_read_; L; a
+	b -> write_aux_incr_incr_read_; L; b
+
+write_aux_incr_incr_read_b:
+	a -> write_aux_incr_push_E_read_; R; a
+	b -> write_aux_incr_incr_read_E_write.1; L; b
+
+write_aux_incr_incr_read_E_write.1:
+	a -> write_aux_incr_incr_read_E_move.1; R; a
+	b -> write_aux_incr_incr_read_E_move.1; R; a
+
+write_aux_incr_incr_read_E_move.1:
+	a -> write_aux_incr_get_past_number_read_; L; a
+	b -> write_aux_incr_get_past_number_read_; L; b
+
+write_aux_incr_push___read_:
+	a -> write_aux_incr_push___read_a; R; a
+	b -> write_aux_incr_push___read_b; R; b
+
+write_aux_incr_push___read_a:
+	a -> write_aux_incr_push___read_; R; a
+	b -> write_aux_incr_push___read_1_write.1; L; a
+
+write_aux_incr_push___read_1_write.1:
+	a -> write_aux_incr_push___read_1_move.1; R; a
+	b -> write_aux_incr_push___read_1_move.1; R; a
+
+write_aux_incr_push___read_1_move.1:
+	a -> write_aux_incr_push_1_read_; R; a
+	b -> write_aux_incr_push_1_read_; R; b
+
+write_aux_incr_push___read_b:
+	a -> write_aux_incr_push___read_H_write.1; L; a
+	b -> write_aux_incr_push___read_E_write.1; L; a
+
+write_aux_incr_push___read_H_write.1:
+	a -> write_aux_incr_push___read_H_move.1; R; a
+	b -> write_aux_incr_push___read_H_move.1; R; a
+
+write_aux_incr_push___read_H_move.1:
+	a -> write_aux_incr_exit_push_read_; R; a
+	b -> write_aux_incr_exit_push_read_; R; b
+
+write_aux_incr_push___read_E_write.1:
+	a -> write_aux_incr_push___read_E_move.1; R; a
+	b -> write_aux_incr_push___read_E_move.1; R; a
+
+write_aux_incr_push___read_E_move.1:
+	a -> write_aux_incr_push_E_read_; R; a
+	b -> write_aux_incr_push_E_read_; R; b
+
+write_aux_incr_push_1_read_:
+	a -> write_aux_incr_push_1_read_a; R; a
+	b -> write_aux_incr_push_1_read_b; R; b
+
+write_aux_incr_push_1_read_a:
+	a -> write_aux_incr_push_1_read___write.1; L; b
+	b -> write_aux_incr_push_1_read_; R; b
+
+write_aux_incr_push_1_read___write.1:
+	a -> write_aux_incr_push_1_read___move.1; R; a
+	b -> write_aux_incr_push_1_read___move.1; R; a
+
+write_aux_incr_push_1_read___move.1:
+	a -> write_aux_incr_push___read_; R; a
+	b -> write_aux_incr_push___read_; R; b
+
+write_aux_incr_push_1_read_b:
+	a -> write_aux_incr_push_1_read_H_write.1; L; b
+	b -> write_aux_incr_push_1_read_E_write.1; L; b
+
+write_aux_incr_push_1_read_H_write.1:
+	a -> write_aux_incr_push_1_read_H_move.1; R; a
+	b -> write_aux_incr_push_1_read_H_move.1; R; a
+
+write_aux_incr_push_1_read_H_move.1:
+	a -> write_aux_incr_exit_push_read_; R; a
+	b -> write_aux_incr_exit_push_read_; R; b
+
+write_aux_incr_push_1_read_E_write.1:
+	a -> write_aux_incr_push_1_read_E_move.1; R; a
+	b -> write_aux_incr_push_1_read_E_move.1; R; a
+
+write_aux_incr_push_1_read_E_move.1:
+	a -> write_aux_incr_push_E_read_; R; a
+	b -> write_aux_incr_push_E_read_; R; b
+
+write_aux_incr_push_E_read_:
+	a -> write_aux_incr_push_E_read_a; R; a
+	b -> write_aux_incr_push_E_read_b; R; b
+
+write_aux_incr_push_E_read_a:
+	a -> write_aux_incr_push_E_read___write.1; L; b
+	b -> write_aux_incr_push_E_read_1_write.1; L; b
+
+write_aux_incr_push_E_read___write.1:
+	a -> write_aux_incr_push_E_read___move.1; R; b
+	b -> write_aux_incr_push_E_read___move.1; R; b
+
+write_aux_incr_push_E_read___move.1:
+	a -> write_aux_incr_push___read_; R; a
+	b -> write_aux_incr_push___read_; R; b
+
+write_aux_incr_push_E_read_1_write.1:
+	a -> write_aux_incr_push_E_read_1_move.1; R; b
+	b -> write_aux_incr_push_E_read_1_move.1; R; b
+
+write_aux_incr_push_E_read_1_move.1:
+	a -> write_aux_incr_push_1_read_; R; a
+	b -> write_aux_incr_push_1_read_; R; b
+
+write_aux_incr_push_E_read_b:
+	a -> write_aux_incr_push_E_read_H_write.1; L; b
+	b -> write_aux_incr_push_E_read_; R; b
+
+write_aux_incr_push_E_read_H_write.1:
+	a -> write_aux_incr_push_E_read_H_move.1; R; b
+	b -> write_aux_incr_push_E_read_H_move.1; R; b
+
+write_aux_incr_push_E_read_H_move.1:
+	a -> write_aux_incr_exit_push_read_; R; a
+	b -> write_aux_incr_exit_push_read_; R; b
+
+write_aux_incr_exit_push_read_:
+	a -> write_aux_incr_exit_push_move; L; b
+	b -> ERROR; -; b
+
+write_aux_incr_exit_push_move:
+	a -> write_aux_incr_find_pushy_read_; L; a
+	b -> write_aux_incr_find_pushy_read_; L; b
+
+write_aux_incr_find_pushy_read_:
+	a -> write_aux_incr_find_pushy_read_a; R; a
+	b -> write_aux_incr_find_pushy_read_b; R; b
+
+write_aux_incr_find_pushy_read_a:
+	a -> write_aux_incr_find_pushy_read___move.1; L; a
+	b -> write_aux_incr_find_pushy_read_1_move.1; L; b
+
+write_aux_incr_find_pushy_read___move.1:
+	a -> write_aux_incr_find_pushy_read___move_by_1; L; a
+	b -> write_aux_incr_find_pushy_read___move_by_1; L; b
+
+write_aux_incr_find_pushy_read___move_by_1:
+	a -> write_aux_incr_find_pushy_read_; L; a
+	b -> write_aux_incr_find_pushy_read_; L; b
+
+write_aux_incr_find_pushy_read_1_move.1:
+	a -> write_aux_incr_incr_read_; -; a
+	b -> write_aux_incr_incr_read_; -; b
+
+write_aux_incr_find_pushy_read_b:
+	a -> write_aux_incr_find_pushy_read_H_write.1; L; a
+	b -> write_aux_incr_find_pushy_read_E_move.1; L; b
+
+write_aux_incr_find_pushy_read_H_write.1:
+	a -> write_aux_incr_find_pushy_read_H_move.1; R; a
+	b -> write_aux_incr_find_pushy_read_H_move.1; R; a
+
+write_aux_incr_find_pushy_read_H_move.1:
+	a -> write_aux_incr_move_H_read_; R; a
+	b -> write_aux_incr_move_H_read_; R; b
+
+write_aux_incr_find_pushy_read_E_move.1:
+	a -> write_aux_incr_find_pushy_read_E_move_by_1; L; a
+	b -> write_aux_incr_find_pushy_read_E_move_by_1; L; b
+
+write_aux_incr_find_pushy_read_E_move_by_1:
+	a -> write_aux_incr_find_pushy_read_; L; a
+	b -> write_aux_incr_find_pushy_read_; L; b
+
+write_aux_incr_get_past_number_read_:
+	a -> write_aux_incr_get_past_number_read_a; R; a
+	b -> write_aux_incr_get_past_number_read_b; R; b
+
+write_aux_incr_get_past_number_read_a:
+	a -> write_aux_incr_get_past_number_read___move.1; L; a
+	b -> write_aux_incr_get_past_number_read_1_move.1; L; b
+
+write_aux_incr_get_past_number_read___move.1:
+	a -> write_aux_incr_get_past_number_read___move_by_1; L; a
+	b -> write_aux_incr_get_past_number_read___move_by_1; L; b
+
+write_aux_incr_get_past_number_read___move_by_1:
+	a -> write_aux_incr_incr_read_; L; a
+	b -> write_aux_incr_incr_read_; L; b
+
+write_aux_incr_get_past_number_read_1_move.1:
+	a -> write_aux_incr_get_past_number_read_1_move_by_1; L; a
+	b -> write_aux_incr_get_past_number_read_1_move_by_1; L; b
+
+write_aux_incr_get_past_number_read_1_move_by_1:
+	a -> write_aux_incr_get_past_number_read_; L; a
+	b -> write_aux_incr_get_past_number_read_; L; b
+
+write_aux_incr_get_past_number_read_b:
+	a -> write_aux_incr_get_past_number_read_H_write.1; L; a
+	b -> write_aux_incr_get_past_number_read_E_move.1; L; b
+
+write_aux_incr_get_past_number_read_H_write.1:
+	a -> write_aux_incr_get_past_number_read_H_move.1; R; a
+	b -> write_aux_incr_get_past_number_read_H_move.1; R; a
+
+write_aux_incr_get_past_number_read_H_move.1:
+	a -> write_aux_incr_move_H_read_; R; a
+	b -> write_aux_incr_move_H_read_; R; b
+
+write_aux_incr_get_past_number_read_E_move.1:
+	a -> write_aux_incr_get_past_number_read_E_move_by_1; L; a
+	b -> write_aux_incr_get_past_number_read_E_move_by_1; L; b
+
+write_aux_incr_get_past_number_read_E_move_by_1:
+	a -> write_aux_incr_get_past_number_read_; L; a
+	b -> write_aux_incr_get_past_number_read_; L; b
+
+write_aux_incr_move_H_read_:
+	a -> write_aux_incr_move_H_read_a; R; a
+	b -> write_aux_incr_move_H_read_b; R; b
+
+write_aux_incr_move_H_read_a:
+	a -> write_aux_incr_move_H_read___write.1; L; a
+	b -> write_aux_incr_move_H_read_; R; b
+
+write_aux_incr_move_H_read___write.1:
+	a -> write_aux_incr_move_H_read___move.1; R; b
+	b -> write_aux_incr_move_H_read___move.1; R; b
+
+write_aux_incr_move_H_read___move.1:
+	a -> write_aux_incr_get_to_fin_read_; R; a
+	b -> write_aux_incr_get_to_fin_read_; R; b
+
+write_aux_incr_move_H_read_b:
+	a -> write_aux_incr_move_H_read_H_write.1; L; a
+	b -> write_aux_incr_move_H_read_; R; b
+
+write_aux_incr_move_H_read_H_write.1:
+	a -> write_aux_incr_move_H_read_H_move.1; R; a
+	b -> write_aux_incr_move_H_read_H_move.1; R; a
+
+write_aux_incr_move_H_read_H_move.1:
+	a -> write_aux_incr_write_E_read_; R; a
+	b -> write_aux_incr_write_E_read_; R; b
+
+write_aux_incr_write_E_read_:
+	a -> write_aux_incr_write_E_write_next; R; b
+	b -> ERROR; -; b
+
+write_aux_incr_write_E_write_next:
+	a -> write_aux_incr_underscore_1_read_; R; b
+	b -> ERROR; -; b
+
+write_aux_incr_underscore_1_read_:
+	a -> write_aux_incr_underscore_1_move; R; a
+	b -> ERROR; -; b
+
+write_aux_incr_underscore_1_move:
+	a -> write_aux_incr_underscore_2_read_; R; a
+	b -> write_aux_incr_underscore_2_read_; R; b
+
+write_aux_incr_underscore_2_read_:
+	a -> write_aux_incr_underscore_2_move; R; a
+	b -> ERROR; -; b
+
+write_aux_incr_underscore_2_move:
+	a -> write_aux_incr_write_H_2_read_; R; a
+	b -> write_aux_incr_write_H_2_read_; R; b
+
+write_aux_incr_write_H_2_read_:
+	a -> write_aux_incr_write_H_2_move; R; b
+	b -> ERROR; -; b
+
+write_aux_incr_write_H_2_move:
+	a -> OUT; R; a
+	b -> OUT; R; b
+
+write_aux_incr_go_right_twice_move_by_1_read_:
+	a -> write_aux_incr_go_right_twice_move_by_1_read_a; R; a
+	b -> write_aux_incr_go_right_twice_move_by_1_read_b; R; b
+
+write_aux_incr_go_right_twice_move_by_1_read_a:
+	a -> write_aux_incr_write_H_1_read_; R; a
+	b -> write_aux_incr_write_H_1_read_; R; b
+
+write_aux_incr_go_right_twice_move_by_1_read_b:
+	a -> write_aux_incr_write_H_1_read_; R; a
+	b -> write_aux_incr_write_H_1_read_; R; b
+

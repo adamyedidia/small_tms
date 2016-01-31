@@ -48,14 +48,17 @@ class FunctionGroup:
 		
 		if firstFunction:
 			self.inState.set3("_", funcName_State2, "R", "H")
+			self.charString = "H"
 		else:
 			self.inState.set3("_", funcName_State2, "R", "_")
+			self.charString = "_"
 			
 		funcName_State2.set3("_", funcName_State3, "R", "H")
 
+		# I think the bar code is always E, and we come back and increment it later...
 		functionBarCode = "E"
 		
-		self.charString = "___" + functionBarCode
+		self.charString += "HH" + functionBarCode
 		
 		listOfBarCodeStates = []
 		
@@ -152,7 +155,7 @@ class LineGroup:
 			
 			varName1State = State(name + "_varname_preamble_1")
 			
-			self.charString += "_1" + variableBarCode
+			self.charString += "1" + variableBarCode
 			
 			lineNumberHState.set3("_", varName1State, "R", "H")
 			
@@ -202,7 +205,7 @@ class LineGroup:
 			            
 			functionBarCode = convertNumberToBarCode(functionDictionary[splitLine[1]])
 			
-			self.charString += "_E" + functionBarCode
+			self.charString += "E" + functionBarCode
 			
 			listOfBarCodeStates = []
 			

@@ -662,8 +662,6 @@ func reduces(X, Y, graph, edges, numVertices, x, y, c1, c2, h1, h2, h3, output) 
     return;
 }
 
-/* TEST SUITE NECESSARY */
-
 /*----------------------------------------------------------*/
 
 /* A free set of vertices is one with no edges in between any pair of vertices
@@ -1544,8 +1542,6 @@ func checkGraphForOrderInvariance(graph, edges, numVertices, a, b, c, d,
     return;
 } 
 
-/* TEST SUITE NECESSARY */
-
 /*----------------------------------------------------------*/
 
 /* each {x_1, ..., x_{8kni!}} reducing [x_1 U ... U x_i U {0, ..., n}]^{<=k} */
@@ -1710,7 +1706,7 @@ ushFreeSet: hold list2
 /* This is the third of the Great Functions. This is also the One That Halts. */
 
 func hasAFree(graph, edges, numVertices, eightKN, eightKNRFacFac, k, n, r, h1, h2, h3, h4, h5, 
-    h6, h7, h8, h9, hl1, hl2, hl3, hl4, hl5, hl6, viFreeSet, standardFreeSet, ushFreeSet) {
+    h6, h7, h8, hl1, hl2, hl3, hl4, hl5, hl6, viFreeSet, standardFreeSet, ushFreeSet, output) {
     
     /* initialize freeSet to [0]*(#* graph) */
     zeroAndEmpty(h2, viFreeSet);
@@ -1743,9 +1739,9 @@ func hasAFree(graph, edges, numVertices, eightKN, eightKNRFacFac, k, n, r, h1, h
             if (h5) {
                 /* does each {x_1, ..., x_{8kni!}} reduce [x_1 U ... U x_i U {0, ..., n}]^{<=k}? */
                 eachReducing(hl3, graph, edges, numVertices, k, n, eightKN, h1, h2, h3, h4, h5, h6, h7, h8,
-                    hl1, hl2, hl4, hl5, hl6, h9);
+                    hl1, hl2, hl4, hl5, hl6, output);
                     
-                if (h9) {
+                if (output) {
                     /* Then this order invariant graph does indeed have the property we wanted! */ 
                     return;
                 }
@@ -1760,7 +1756,8 @@ func hasAFree(graph, edges, numVertices, eightKN, eightKNRFacFac, k, n, r, h1, h
     
     /* OHH SNAP */
     
-    halt;
+    zero(output);
+    return;
     
     /* SNAPPP */
 } 
@@ -1922,8 +1919,11 @@ while (maxKNR) {
                         /* It MUST then contain a set with the right properties, or the machine will halt. */
                         
                         hasAFree(graph, edges, numVertices, eightKN, eightKNRFacFac, k, n, r, h1, h2, h3, h4, h5, 
-                            h6, h7, h8, h9, hl1, hl2, hl3, hl4, hl5, hl6, hl7, hl8, hll);
-                                
+                            h6, h7, h8, hl1, hl2, hl3, hl4, hl5, hl6, hl7, hl8, hll, h9);
+                            
+                        if (!h9) {
+                            halt;
+                        }        
                     }
                     
                 

@@ -19,9 +19,9 @@ def main():
 ###################################################################
 
     try:
-    	initValueString = string.strip(open(path + "initvar", "r").read()) + "H"
+        initValueString = string.strip(open(path + "initvar", "r").read()) + "H"
     except:
-    	raise Exception("No initvar file found in directory " + path)
+        raise Exception("No initvar file found in directory " + path)
 
 ###################################################################
 
@@ -29,15 +29,17 @@ def main():
     inState.makeStartState()
 
     listOfStates = []
-
-    numberOfVariables = 10
+    
+    mainFunctionInputLine = open(path + functions[0] + ".tfn", "r").readlines()[0]
+    
+    numberOfVariables = len(string.split(mainFunctionInputLine)) - 1
     numberOfFunctions = len(functions)
     
     inState = write(listOfStates, inState, numberOfVariables, initValueString, numberOfFunctions, \
-    	functions, functionVariableDictionary, functionLabelDictionary, functionDictionary, path)
+        functions, functionVariableDictionary, functionLabelDictionary, functionDictionary, path)
     inState = processCentrally(inState, listOfStates)
     
-    convertStatesToString(listOfStates, open("ZFC_indep_4symbol.txt", "w"))
+    convertStatesToString(listOfStates, open(sys.argv[2], "w"))
     
 if __name__ == "__main__":    
     main()
